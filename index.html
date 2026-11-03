@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Tulpar and the Thinking Machine: an interactive AI Fundamentals e-book told as a Kazakh steppe tale.">
 <meta property="og:title" content="Tulpar and the Thinking Machine">
-<meta property="og:description" content="An interactive AI Fundamentals e-book with 10 chapters, live experiments and quizzes.">
 <title>Tulpar and the Thinking Machine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,482 +12,197 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 :root{
---paper:#EEF3F2;--page:#FBFCFB;--ink:#14213D;--muted:#566577;--line:#CBD8D8;
---sky:#00809A;--sky-soft:#D5ECEF;--gold:#A8780B;--gold-soft:#F6E7BD;--felt:#A9362B;--felt-soft:#F5DEDA;
---ok:#1C7C4A;--bad:#B3261E;
+--leaf:#FAF6EC;--paper:#F1EBDD;--page:#FFFDF7;--ink:#1B2238;--muted:#5E6474;--line:#DDD3BF;
+--sky:#0A7A92;--sky-soft:#DCEDEE;--gold:#94660A;--gold-soft:#F3E3B5;--felt:#A9362B;--felt-soft:#F4DCD6;
+--ok:#1C7C4A;--bad:#B3261E;--desk:#0B1324;--desk-hi:#1B2C52;--bar-ink:#E7EDF4;--bar-mut:#9AA9BB;--brass:#E9BC4C;
 --display:"Poppins","Trebuchet MS",system-ui,sans-serif;
 --serif:"Lora",Georgia,"Times New Roman",serif;
 --mono:"JetBrains Mono","DejaVu Sans Mono",Consolas,monospace;
+--fs:16px;--pw:560px;--ph:760px;
+color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
---paper:#0B1324;--page:#111C33;--ink:#E7EDF4;--muted:#9AA9BB;--line:#26365A;
---sky:#4CC7DE;--sky-soft:#12324A;--gold:#E9BC4C;--gold-soft:#3A3014;--felt:#EE7A6C;--felt-soft:#3D1F1D;
---ok:#5ACB8C;--bad:#FF8A80;color-scheme:dark}}
-:root[data-theme="dark"]{
---paper:#0B1324;--page:#111C33;--ink:#E7EDF4;--muted:#9AA9BB;--line:#26365A;
---sky:#4CC7DE;--sky-soft:#12324A;--gold:#E9BC4C;--gold-soft:#3A3014;--felt:#EE7A6C;--felt-soft:#3D1F1D;
---ok:#5ACB8C;--bad:#FF8A80;color-scheme:dark}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:64px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
-body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.7}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--page)}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--page);border-bottom:1px solid var(--line);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:14px}
-.bar .brand{font-weight:700;letter-spacing:.06em;color:var(--ink);text-decoration:none;white-space:nowrap}
-.bar .brand span{color:var(--gold)}
-.bar .where{color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar select{font:inherit;font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--page);color:var(--ink);max-width:46vw}
-.progress{position:absolute;left:0;bottom:-1px;height:3px;background:var(--gold);width:0}
-.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,var(--desk-hi) 0,var(--desk) 68%);background-color:var(--desk);color:var(--ink);font-family:var(--serif)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.bar{height:52px;display:flex;align-items:center;gap:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-family:var(--display);font-size:14px;color:var(--bar-ink);background:rgba(6,11,26,.55);border-bottom:1px solid rgba(255,255,255,.08);position:relative;z-index:20}
+.bar .brand{font-weight:700;letter-spacing:.08em;color:var(--bar-ink);text-decoration:none;white-space:nowrap}
+.bar .brand span{color:var(--brass)}
+.bar .where{color:var(--bar-mut);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar select{font:inherit;font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:#14203B;color:var(--bar-ink);max-width:46vw}
+.stage{position:relative;height:calc(100% - 52px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.loading{font-family:var(--display);color:var(--bar-mut);font-size:15px}
+.book{position:relative;flex:none;transition:transform .7s cubic-bezier(.3,.1,.2,1)}
+.book.dbl{perspective:2800px}
+.sheet{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.3,.1,.2,1)}
+.sheet.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face.back{transform:rotateY(180deg)}
+.leaf{position:absolute;inset:0;display:none}
+.leaf.on{display:block}
+.leaf.in-next{animation:slideNext .35s ease}
+.leaf.in-prev{animation:slidePrev .35s ease}
+@keyframes slideNext{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes slidePrev{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+.navrow{display:flex;align-items:center;gap:14px;font-family:var(--display);font-size:13.5px;color:var(--bar-ink);font-variant-numeric:tabular-nums}
+.navrow button{font:inherit;font-weight:600;width:44px;height:36px;border-radius:18px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:var(--bar-ink);cursor:pointer;font-size:18px;line-height:1}
+.navrow button:disabled{opacity:.3;cursor:default}
+.navrow .pgl{min-width:170px;text-align:center;color:var(--bar-mut)}
+#measure{position:absolute;left:-20000px;top:0;visibility:hidden}
+
+.pg{position:relative;width:var(--pw);height:var(--ph);background:var(--leaf);display:flex;flex-direction:column;padding:26px 42px 18px;font-size:var(--fs);line-height:1.6;overflow:hidden}
+.face.front .pg{border-radius:0 6px 6px 0;box-shadow:inset 22px 0 26px -20px rgba(60,40,10,.28)}
+.face.back .pg{border-radius:6px 0 0 6px;box-shadow:inset -22px 0 26px -20px rgba(60,40,10,.28)}
+.book.dbl::before{content:"";position:absolute;top:0;bottom:0;left:0;right:0;border-radius:6px;box-shadow:0 18px 44px rgba(0,0,0,.5),0 2px 0 3px rgba(0,0,0,.18);transition:left .7s,right .7s}
+.book.dbl.cf::before{left:50%}.book.dbl.cb::before{right:50%}
+.leaf .pg{border-radius:6px;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.rh{flex:none;height:24px;display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--display);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.pc{flex:1;min-height:0;overflow:hidden;padding-top:14px}
+.pg.scroll .pc{overflow:auto}
+.pf{flex:none;height:24px;display:flex;align-items:flex-end;justify-content:center;font-family:var(--display);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pg.left .pf{justify-content:flex-start}.pg.right .pf{justify-content:flex-end}
+.pg.noh .rh{border-color:transparent;color:transparent}
+.pc>:first-child{margin-top:0}
+.pc p{margin:0 0 .7em;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.special{padding:0}
+.special .rh,.special .pf{display:none}
+.cover{background:#0E1838;cursor:pointer}
+.cover svg{display:block;width:100%;height:100%}
+.cover{background:#0B1430}
+.endpaper{background-color:var(--felt);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64' viewBox='-48 -40 96 64'%3E%3Cg fill='none' stroke='%23E9BC4C' stroke-opacity='.45' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M0 4 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12'/%3E%3Cpath d='M0 4 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12'/%3E%3C/g%3E%3C/svg%3E");background-size:96px 64px;cursor:pointer}
+.backcover{background:#0E1838;color:#E7EDF4;display:flex;flex-direction:column;justify-content:center;padding:48px;gap:16px;font-family:var(--display);cursor:pointer}
+.backcover h3{font-size:30px;color:var(--brass);letter-spacing:.08em;margin:0}
+.backcover p{font-family:var(--serif);font-size:16px;line-height:1.6;margin:0;color:#D3DCE8}
+.backcover small{font-size:12.5px;color:#9AA9BB;letter-spacing:.06em;line-height:1.7}
+.blank .pc{display:flex;align-items:center;justify-content:center}
+.orn-blank svg,.tp-orn svg{width:110px;height:30px;color:var(--gold);opacity:.55}
+.blank,.blank *{cursor:pointer}
+
 h1,h2,h3,h4{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
-h2{font-size:clamp(28px,5vw,40px);font-weight:700}
-h3{font-size:22px;font-weight:600;margin-top:40px}
-h4{font-size:17px;font-weight:600}
-p{margin:14px 0}
+h3{font-size:calc(var(--fs)*1.18);font-weight:600;margin:1.1em 0 .5em}
+h4{font-size:calc(var(--fs)*.95);font-weight:600}
 a{color:var(--sky)}
-:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.hero{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:40px;align-items:center;padding-block:48px 32px}
-.hero .cover svg{width:100%;height:auto;display:block;border-radius:4px 10px 10px 4px;box-shadow:-6px 0 0 #0E1838 inset,0 18px 40px rgba(10,20,50,.35)}
-.hero .kick{font-family:var(--display);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--sky);font-weight:600}
-.hero h1{font-size:clamp(34px,6vw,54px);font-weight:700;margin-top:8px}
-.hero h1 em{font-family:var(--serif);font-weight:400;display:block;font-size:.55em;color:var(--muted)}
-.hero .lede{font-size:19px}
-.hero .meta{font-family:var(--display);font-size:14px;color:var(--muted);display:grid;gap:4px;margin-top:18px}
-.btn{font-family:var(--display);font-size:14px;font-weight:600;border:1px solid var(--sky);background:var(--sky);color:var(--page);padding:9px 16px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-.btn.ghost{background:transparent;color:var(--sky)}
-.btn:disabled{opacity:.5;cursor:default}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-@media (max-width:720px){.hero{grid-template-columns:1fr;padding-top:24px}.hero .cover{max-width:300px;margin:0 auto}body{font-size:17px}}
-.orn{display:flex;justify-content:center;margin:48px 0 8px;color:var(--gold)}
-.orn svg{width:120px;height:28px}
-.route{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;counter-reset:stop}
-.route li{min-width:0}
-.route a{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;text-decoration:none;color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;height:100%}
-.route a:hover{border-color:var(--sky)}
-.route .n{font-family:var(--display);font-weight:700;font-size:15px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--sky-soft);color:var(--sky)}
-.route b{font-family:var(--display);font-size:15px;display:block;line-height:1.3}
-.route small{font-family:var(--display);color:var(--muted);font-size:12.5px;line-height:1.4;display:block;margin-top:3px}
-.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
-.cast div{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:16px}
-.cast b{font-family:var(--display);display:block}
-section.ch{padding-block:24px 8px}
-.chead{border-top:2px solid var(--ink);padding-top:18px;margin-top:40px}
-.chead .stop{font-family:var(--display);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--felt);font-weight:600;display:flex;gap:10px;flex-wrap:wrap}
+.chead{text-align:center;padding:10px 0 16px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.chead::before{content:"";display:block;width:110px;height:30px;margin:0 auto 12px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -40 160 56'%3E%3Cg fill='none' stroke='%2394660A' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M0 4 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12'/%3E%3Cpath d='M0 4 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12'/%3E%3Cpath d='M42 -2 H78 M-42 -2 H-78'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+.chead .stop{font-family:var(--display);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--felt);font-weight:600;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .chead .stop span+span::before{content:"·";margin-right:10px;color:var(--muted)}
-.chead h2{margin-top:6px}
-.chead .goal{font-family:var(--display);font-size:14.5px;color:var(--muted);margin-top:10px;line-height:1.55}
-.story{font-style:italic;border-left:3px solid var(--gold);padding:4px 0 4px 18px;margin:22px 0;color:var(--ink)}
-.story .who{font-style:normal;font-family:var(--display);font-weight:600;font-size:.88em;color:var(--sky)}
+.chead h2{font-size:calc(var(--fs)*1.8);font-weight:700;margin-top:8px}
+.chead .goal{font-family:var(--display);font-size:calc(var(--fs)*.78);color:var(--muted);margin:10px 0 0;line-height:1.55;text-align:center}
+.tp{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.pk-titlepage .pc{display:flex;flex-direction:column;justify-content:center}
+.tp .tp-kick{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sky);font-weight:600}
+.tp h1{font-size:calc(var(--fs)*3.6);letter-spacing:.08em;font-weight:700;color:var(--ink)}
+.tp .tp-sub{font-style:italic;font-size:calc(var(--fs)*1.5);color:var(--muted);margin-top:-6px;text-align:center}
+.tp .tp-by{font-family:var(--display);font-size:13.5px;line-height:1.8;color:var(--ink);text-align:center;margin:18px 0 0}
+.tp .tp-meta{font-family:var(--display);font-size:12px;color:var(--muted);letter-spacing:.06em;text-align:center;line-height:1.7;margin:0}
+.story{font-style:italic;border-left:3px solid var(--gold);padding:2px 0 2px 14px;margin:0 0 1em}
+.story p{text-align:left}
+.story .who{font-style:normal;font-family:var(--display);font-weight:600;font-size:.86em;color:var(--sky)}
 .story .who.aru{color:var(--felt)}
 .term{font-weight:600;color:var(--ink);background:linear-gradient(transparent 62%,var(--gold-soft) 62%)}
-.box{border-radius:10px;padding:14px 18px;margin:22px 0;font-size:16.5px;border:1px solid var(--line);background:var(--page)}
-.box h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.box{border-radius:8px;padding:10px 14px;margin:0 0 1em;font-size:calc(var(--fs)*.9);border:1px solid var(--line);background:var(--page)}
+.box h4{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
 .box.know{background:var(--gold-soft);border-color:transparent}.box.know h4{color:var(--gold)}
 .box.case{background:var(--sky-soft);border-color:transparent}.box.case h4{color:var(--sky)}
 .box.myth{background:var(--felt-soft);border-color:transparent}.box.myth h4{color:var(--felt)}
-.box p{margin:6px 0}
-figure{margin:26px 0}
-figure .fig{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto}
-figure svg{display:block;width:100%;height:auto;min-width:480px}
-figcaption{font-family:var(--display);font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5}
+.box p{margin:4px 0;text-align:left}
+figure{margin:0 0 1em}
+figure .fig{background:var(--page);border:1px solid var(--line);border-radius:8px;padding:8px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-family:var(--display);font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
 svg text{font-family:var(--display)}
 .s-ink{fill:var(--ink)}.s-mut{fill:var(--muted)}.s-sky{fill:var(--sky)}.s-gold{fill:var(--gold)}.s-felt{fill:var(--felt)}.s-page{fill:var(--page)}.s-skys{fill:var(--sky-soft)}.s-golds{fill:var(--gold-soft)}.s-felts{fill:var(--felt-soft)}
 .k-ink{stroke:var(--ink)}.k-mut{stroke:var(--muted)}.k-sky{stroke:var(--sky)}.k-gold{stroke:var(--gold)}.k-felt{stroke:var(--felt)}.k-line{stroke:var(--line)}
-pre,code{font-family:var(--mono);font-size:14px}
-pre{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;line-height:1.55}
-.formula{font-family:var(--mono);font-size:15px;background:var(--page);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:16px 0;overflow-x:auto;white-space:nowrap}
-.tbl{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:10px;background:var(--page)}
-table{border-collapse:collapse;width:100%;font-family:var(--display);font-size:14px;line-height:1.45}
-th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+pre,code{font-family:var(--mono);font-size:12px}
+pre{background:var(--page);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;line-height:1.5;margin:0 0 1em}
+.formula{font-family:var(--mono);font-size:12.5px;background:var(--page);border:1px dashed var(--line);border-radius:6px;padding:8px 12px;margin:0 0 1em;overflow-x:auto;white-space:nowrap}
+.tbl{overflow-x:auto;margin:0 0 1em;border:1px solid var(--line);border-radius:8px;background:var(--page)}
+table{border-collapse:collapse;width:100%;font-family:var(--display);font-size:12px;line-height:1.4}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-weight:600;background:var(--sky-soft)}
 tr:last-child td{border-bottom:0}
-ul.tight,ol.tight{padding-left:22px}ul.tight li,ol.tight li{margin:6px 0}
-.lab{margin:28px 0;border:2px solid var(--sky);border-radius:12px;background:var(--page);overflow:hidden}
-.lab .lh{background:var(--sky);color:var(--page);font-family:var(--display);font-weight:600;font-size:14px;padding:8px 14px;letter-spacing:.04em}
-.lab .lb{padding:14px;display:grid;gap:12px}
-.lab .lb p{margin:0;font-size:15.5px}
-.lab canvas{width:100%;height:auto;display:block;border-radius:8px;background:var(--paper);touch-action:manipulation}
-.lab label{font-family:var(--display);font-size:13.5px;display:grid;gap:2px}
+ul,ol{margin:0 0 1em}
+ul.tight,ol.tight{padding-left:20px}ul.tight li,ol.tight li{margin:.3em 0}
+.btn{font-family:var(--display);font-size:12.5px;font-weight:600;border:1px solid var(--sky);background:var(--sky);color:var(--page);padding:6px 12px;border-radius:7px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--sky)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lab{margin:0 0 1em;border:1.5px solid var(--sky);border-radius:10px;background:var(--page);overflow:hidden}
+.lab .lh{background:var(--sky);color:var(--page);font-family:var(--display);font-weight:600;font-size:12.5px;padding:6px 12px;letter-spacing:.03em}
+.lab .lb{padding:10px 12px;display:grid;gap:8px}
+.lab .lb p{margin:0;font-size:13px;line-height:1.45;text-align:left}
+.lab canvas{width:100%;height:auto;display:block;border-radius:6px;background:var(--paper);touch-action:manipulation}
+.lab label{font-family:var(--display);font-size:12px;display:grid;gap:0}
 .lab input[type=range]{width:100%;accent-color:var(--sky)}
-.lab select{font:inherit;font-family:var(--display);font-size:14px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--page);color:var(--ink)}
-.stats{font-family:var(--display);font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;font-variant-numeric:tabular-nums}
+.lab select{font-family:var(--display);font-size:12.5px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--page);color:var(--ink)}
+.stats{font-family:var(--display);font-size:11.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;font-variant-numeric:tabular-nums}
 .stats b{color:var(--ink)}
-.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.ttt{display:grid;grid-template-columns:repeat(3,72px);gap:6px;justify-content:center}
-.ttt button{width:72px;height:72px;font-family:var(--display);font-size:34px;font-weight:700;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer}
+.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.ttt{display:grid;grid-template-columns:repeat(3,54px);gap:5px;justify-content:center}
+.ttt button{width:54px;height:54px;font-family:var(--display);font-size:26px;font-weight:700;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);cursor:pointer}
 .ttt button.o{color:var(--sky)}.ttt button.x{color:var(--felt)}
-.msg{font-family:var(--display);font-size:14.5px;font-weight:500;text-align:center}
-.quiz{margin:30px 0;border:1px solid var(--line);border-radius:12px;background:var(--page);padding:16px 18px}
-.quiz>h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-.q{margin-top:16px;font-family:var(--display);font-size:15px}
-.q p{margin:0 0 8px;font-weight:500}
-.q .opts{display:grid;gap:6px}
-.q button{text-align:left;font:inherit;font-size:14.5px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.msg{font-family:var(--display);font-size:12.5px;font-weight:500;text-align:center;line-height:1.45}
+#hmmOut{min-height:226px}#hmmMsg{min-height:2.9em}#euMsg{min-height:4.4em}#bayesMsg{min-height:2.9em}
+.quiz{margin:0 0 1em;border:1px solid var(--line);border-radius:10px;background:var(--page);padding:10px 14px}
+.quiz>h4{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.q{margin-top:10px;font-family:var(--display);font-size:13px}
+.q p{margin:0 0 6px;font-weight:500;text-align:left}
+.q .opts{display:grid;gap:4px}
+.q button{text-align:left;font:inherit;font-size:12.5px;padding:5px 10px;border-radius:7px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
 .q button.right{border-color:var(--ok);color:var(--ok);font-weight:600}
 .q button.wrong{border-color:var(--bad);color:var(--bad);text-decoration:line-through}
-.q .why{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.5}
-.timeline{list-style:none;padding:0;margin:20px 0;border-left:2px solid var(--line)}
-.timeline li{position:relative;padding:0 0 14px 22px;font-size:16px}
-.timeline li::before{content:"";position:absolute;left:-7px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.q .why{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45;visibility:hidden}
+.q .why.on{visibility:visible}
+.timeline{list-style:none;padding:0;margin:0 0 1em;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:0 0 8px 18px;font-size:calc(var(--fs)*.9)}
+.timeline li::before{content:"";position:absolute;left:-6px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
 .timeline b{font-family:var(--display);color:var(--sky);font-variant-numeric:tabular-nums}
-.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:20px 0}
-.flip{font:inherit;text-align:left;border:1px solid var(--line);background:var(--page);color:var(--ink);border-radius:10px;padding:14px;cursor:pointer;font-size:15.5px;line-height:1.5;min-height:120px}
-.flip .tag{font-family:var(--display);font-size:11.5px;letter-spacing:.14em;font-weight:700;display:block;margin-bottom:6px}
+.flips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 1em}
+.flip{font:inherit;text-align:left;border:1px solid var(--line);background:var(--page);color:var(--ink);border-radius:8px;padding:10px;cursor:pointer;font-size:13px;line-height:1.45;display:grid}
+.flip .front,.flip .back{grid-area:1/1}
+.flip .back{visibility:hidden}.flip.on .front{visibility:hidden}.flip.on .back{visibility:visible}.flip.on{border-color:var(--ok)}
+.flip .tag{font-family:var(--display);font-size:10.5px;letter-spacing:.14em;font-weight:700;display:block;margin-bottom:4px}
 .flip .tag.m{color:var(--felt)}.flip .tag.f{color:var(--ok)}
-.flip .back{display:none}.flip.on .front{display:none}.flip.on .back{display:block}.flip.on{border-color:var(--ok)}
-.gloss input{width:100%;font:inherit;font-family:var(--display);font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--page);color:var(--ink)}
-.gloss dl{margin:16px 0;display:grid;gap:0}
-.gloss dt{font-family:var(--display);font-weight:600;margin-top:12px}
-.gloss dd{margin:2px 0 0;font-size:16px;color:var(--ink)}
-.refs{font-size:15.5px;padding-left:22px}.refs li{margin:6px 0}
-.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
-.team div{font-family:var(--display);background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-weight:600}
-.team small{display:block;font-weight:400;color:var(--muted);font-size:13px}
-footer{padding-block:40px;text-align:center;font-family:var(--display);font-size:13px;color:var(--muted)}
-.nextch{display:flex;justify-content:flex-end;margin:28px 0 0}
-.nextch a{font-family:var(--display);font-size:14px;font-weight:600;text-decoration:none}
+.route{list-style:none;padding:0;margin:0 0 1em;display:grid;gap:6px}
+.route a{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;text-decoration:none;color:var(--ink);border-bottom:1px dotted var(--line);padding:5px 2px 7px}
+.route .n{font-family:var(--display);font-weight:700;font-size:12.5px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--sky-soft);color:var(--sky)}
+.route b{font-family:var(--display);font-size:13.5px;display:block;line-height:1.3}
+.route small{font-family:var(--display);color:var(--muted);font-size:11px;line-height:1.35;display:block;margin-top:1px}
+.route .pn{font-family:var(--display);font-size:13px;font-weight:600;color:var(--gold);font-variant-numeric:tabular-nums;font-style:normal}
+.cast{display:grid;gap:8px;margin:0 0 1em}
+.cast div{background:var(--page);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13.5px;line-height:1.5}
+.cast b{font-family:var(--display);display:block}
+.gl-list{margin:0 0 1em}
+.gl-list p{font-size:13.5px;line-height:1.5;margin:0 0 .45em;text-align:left}
+.gl-list b{font-family:var(--display);font-weight:600}
+.refs{font-size:13px;padding-left:22px;line-height:1.5}.refs li{margin:3px 0}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 1em}
+.team div{font-family:var(--display);background:var(--page);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-weight:600;font-size:13.5px}
+.team small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.howto{font-family:var(--display);font-size:13px;line-height:1.6}
 </style>
-<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<style>[hidden]{display:none!important}</style>
 </head>
 <body>
 
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="horn" viewBox="-80 -40 160 56"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M0 4 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12"/><path d="M0 4 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12"/><path d="M42 -2 H78 M-42 -2 H-78"/><circle cx="0" cy="12" r="2.5" fill="currentColor"/></g></symbol></defs></svg>
-
-<header class="bar">
-<a class="brand" href="#top">TULPAR<span>.</span></a>
-<span class="where" id="where">Cover</span>
-<select id="jump" aria-label="Jump to chapter">
-<option value="top">Cover</option>
-<option value="route">The Route (contents)</option>
-<option value="ch1">1 · What is AI?</option>
-<option value="ch2">2 · Intelligent Agents</option>
-<option value="ch3">3 · Uninformed Search</option>
-<option value="ch4">4 · Heuristics, A* & Local Search</option>
-<option value="ch5">5 · Adversarial Search</option>
-<option value="ch6">6 · MDPs & Reinforcement Learning</option>
-<option value="ch7">7 · Probability & Bayesian Networks</option>
-<option value="ch8">8 · Hidden Markov Models</option>
-<option value="ch9">9 · Rational Decisions & ML</option>
-<option value="ch10">10 · Perceptrons & Neural Networks</option>
-<option value="bonus">Bonus: Logic & Knowledge</option>
-<option value="epi">Epilogue: Ethics & Future</option>
-<option value="extras">Glossary & Sources</option>
-</select>
-<div class="progress" id="prog"></div>
-</header>
-
-<main class="wrap" id="top">
-
-<div class="hero">
-<div class="cover"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-label="Book cover: Tulpar and the Thinking Machine">
-<defs>
-<linearGradient id="cv-sky" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0" stop-color="#070F26"/><stop offset=".5" stop-color="#16285A"/><stop offset=".72" stop-color="#3B3F78"/><stop offset=".84" stop-color="#C9785A"/><stop offset=".9" stop-color="#F0B252"/></linearGradient>
-<radialGradient id="cv-sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".7" stop-color="#F5C04E"/><stop offset="1" stop-color="#E39A2E"/></radialGradient>
-<radialGradient id="cv-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD978" stop-opacity=".55"/><stop offset="1" stop-color="#FFD978" stop-opacity="0"/></radialGradient>
-<linearGradient id="cv-title" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8"/><stop offset="1" stop-color="#E8AE3C"/></linearGradient>
-<g id="cv-horn" fill="none" stroke-linecap="round"><path d="M0 0 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12"/><path d="M0 0 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12"/><path d="M0 0 V12"/></g>
-</defs>
-<rect width="600" height="900" fill="url(#cv-sky)"/>
-<circle cx="197.8" cy="93.0" r="1.7" fill="#FFFFFF" opacity="0.38"/>
-<circle cx="486.3" cy="61.8" r="1.3" fill="#FFFFFF" opacity="0.38"/>
-<circle cx="304.3" cy="30.6" r="1" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="149.6" cy="313.1" r="0.6" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="81.8" cy="132.8" r="1.7" fill="#FFFFFF" opacity="0.7"/>
-<circle cx="45.9" cy="332.0" r="0.6" fill="#FFFFFF" opacity="0.94"/>
-<circle cx="37.0" cy="482.2" r="1" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="323.6" cy="324.0" r="1.3" fill="#FFFFFF" opacity="0.84"/>
-<circle cx="114.8" cy="329.9" r="1.7" fill="#FFFFFF" opacity="0.46"/>
-<circle cx="66.5" cy="401.7" r="1.3" fill="#FFFFFF" opacity="0.39"/>
-<circle cx="129.5" cy="384.2" r="1" fill="#FFFFFF" opacity="0.82"/>
-<circle cx="280.0" cy="517.9" r="1" fill="#FFFFFF" opacity="0.53"/>
-<circle cx="470.7" cy="394.4" r="0.8" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="184.1" cy="282.3" r="1" fill="#FFFFFF" opacity="0.79"/>
-<circle cx="177.0" cy="549.1" r="0.6" fill="#FFFFFF" opacity="0.66"/>
-<circle cx="105.7" cy="198.1" r="1" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="568.0" cy="52.7" r="1.3" fill="#FFFFFF" opacity="0.69"/>
-<circle cx="517.8" cy="182.6" r="1.7" fill="#FFFFFF" opacity="0.56"/>
-<circle cx="298.1" cy="448.3" r="0.6" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="557.9" cy="270.8" r="1.7" fill="#FFFFFF" opacity="0.39"/>
-<circle cx="434.1" cy="180.3" r="1.3" fill="#FFFFFF" opacity="0.95"/>
-<circle cx="486.7" cy="166.5" r="1" fill="#FFFFFF" opacity="0.88"/>
-<circle cx="211.3" cy="527.4" r="1" fill="#FFFFFF" opacity="0.45"/>
-<circle cx="77.9" cy="42.4" r="1" fill="#FFFFFF" opacity="0.43"/>
-<circle cx="153.6" cy="225.0" r="1" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="270.5" cy="312.2" r="0.8" fill="#FFFFFF" opacity="0.84"/>
-<circle cx="511.1" cy="163.1" r="1" fill="#FFFFFF" opacity="0.94"/>
-<circle cx="406.0" cy="219.2" r="0.8" fill="#FFFFFF" opacity="0.44"/>
-<circle cx="112.2" cy="137.6" r="0.8" fill="#FFFFFF" opacity="0.36"/>
-<circle cx="492.0" cy="110.3" r="1" fill="#FFFFFF" opacity="0.35"/>
-<circle cx="253.0" cy="213.1" r="1.3" fill="#FFFFFF" opacity="0.54"/>
-<circle cx="82.8" cy="482.6" r="1.3" fill="#FFFFFF" opacity="0.74"/>
-<circle cx="439.1" cy="261.2" r="1.7" fill="#FFFFFF" opacity="0.83"/>
-<circle cx="237.6" cy="229.4" r="0.6" fill="#FFFFFF" opacity="0.64"/>
-<circle cx="242.3" cy="114.8" r="0.8" fill="#FFFFFF" opacity="0.61"/>
-<circle cx="73.8" cy="340.4" r="0.6" fill="#FFFFFF" opacity="0.35"/>
-<circle cx="97.7" cy="65.8" r="1" fill="#FFFFFF" opacity="0.72"/>
-<circle cx="50.8" cy="124.4" r="1" fill="#FFFFFF" opacity="0.44"/>
-<circle cx="156.3" cy="201.1" r="1" fill="#FFFFFF" opacity="0.63"/>
-<circle cx="76.9" cy="278.4" r="1" fill="#FFFFFF" opacity="0.64"/>
-<circle cx="190.9" cy="89.3" r="1.7" fill="#FFFFFF" opacity="0.56"/>
-<circle cx="163.6" cy="465.9" r="0.8" fill="#FFFFFF" opacity="0.66"/>
-<circle cx="129.0" cy="533.6" r="1" fill="#FFFFFF" opacity="0.44"/>
-<circle cx="325.0" cy="24.9" r="1.3" fill="#FFFFFF" opacity="0.53"/>
-<circle cx="382.9" cy="60.1" r="1" fill="#FFFFFF" opacity="0.66"/>
-<circle cx="536.8" cy="205.6" r="0.8" fill="#FFFFFF" opacity="0.67"/>
-<circle cx="461.9" cy="191.3" r="0.8" fill="#FFFFFF" opacity="0.72"/>
-<circle cx="467.3" cy="427.1" r="0.8" fill="#FFFFFF" opacity="0.83"/>
-<circle cx="484.6" cy="416.9" r="0.8" fill="#FFFFFF" opacity="0.47"/>
-<circle cx="295.8" cy="412.1" r="0.6" fill="#FFFFFF" opacity="0.82"/>
-<circle cx="283.9" cy="116.5" r="1.3" fill="#FFFFFF" opacity="0.92"/>
-<circle cx="269.4" cy="525.4" r="1" fill="#FFFFFF" opacity="0.92"/>
-<circle cx="221.5" cy="131.3" r="0.8" fill="#FFFFFF" opacity="0.63"/>
-<circle cx="205.9" cy="275.5" r="1.3" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="288.1" cy="369.1" r="1.7" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="393.1" cy="510.4" r="1.7" fill="#FFFFFF" opacity="0.8"/>
-<circle cx="287.3" cy="108.2" r="1.7" fill="#FFFFFF" opacity="0.55"/>
-<circle cx="474.5" cy="544.4" r="1" fill="#FFFFFF" opacity="0.63"/>
-<circle cx="441.1" cy="56.7" r="0.8" fill="#FFFFFF" opacity="0.45"/>
-<circle cx="83.7" cy="93.1" r="1" fill="#FFFFFF" opacity="0.83"/>
-<circle cx="94.8" cy="464.6" r="1" fill="#FFFFFF" opacity="0.74"/>
-<circle cx="213.2" cy="311.8" r="0.8" fill="#FFFFFF" opacity="0.36"/>
-<circle cx="473.6" cy="409.5" r="0.6" fill="#FFFFFF" opacity="0.67"/>
-<circle cx="551.5" cy="248.6" r="0.8" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="132.4" cy="148.5" r="1" fill="#FFFFFF" opacity="0.65"/>
-<circle cx="452.9" cy="189.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="86.0" cy="510.5" r="1" fill="#FFFFFF" opacity="0.89"/>
-<circle cx="394.2" cy="458.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="542.3" cy="285.9" r="1.3" fill="#FFFFFF" opacity="0.44"/>
-<circle cx="306.1" cy="490.0" r="0.8" fill="#FFFFFF" opacity="0.72"/>
-<circle cx="460.1" cy="92.4" r="0.8" fill="#FFFFFF" opacity="0.63"/>
-<circle cx="430.6" cy="316.1" r="1" fill="#FFFFFF" opacity="0.76"/>
-<circle cx="317.8" cy="275.4" r="0.6" fill="#FFFFFF" opacity="0.88"/>
-<circle cx="43.0" cy="115.2" r="0.6" fill="#FFFFFF" opacity="0.81"/>
-<circle cx="304.5" cy="319.0" r="0.6" fill="#FFFFFF" opacity="0.62"/>
-<circle cx="365.3" cy="288.1" r="1.3" fill="#FFFFFF" opacity="0.47"/>
-<circle cx="170.8" cy="289.5" r="1" fill="#FFFFFF" opacity="0.65"/>
-<circle cx="153.6" cy="297.8" r="1" fill="#FFFFFF" opacity="0.9"/>
-<circle cx="527.8" cy="121.4" r="1" fill="#FFFFFF" opacity="0.43"/>
-<circle cx="80.5" cy="253.2" r="0.6" fill="#FFFFFF" opacity="0.75"/>
-<circle cx="258.4" cy="127.0" r="1" fill="#FFFFFF" opacity="0.82"/>
-<circle cx="530.3" cy="94.9" r="1.7" fill="#FFFFFF" opacity="0.74"/>
-<circle cx="222.4" cy="149.2" r="0.8" fill="#FFFFFF" opacity="0.93"/>
-<circle cx="137.4" cy="533.9" r="1" fill="#FFFFFF" opacity="0.88"/>
-<circle cx="104.4" cy="377.3" r="0.8" fill="#FFFFFF" opacity="0.45"/>
-<circle cx="260.3" cy="293.6" r="1" fill="#FFFFFF" opacity="0.6"/>
-<circle cx="216.8" cy="60.7" r="1" fill="#FFFFFF" opacity="0.36"/>
-<circle cx="331.3" cy="252.3" r="0.6" fill="#FFFFFF" opacity="0.58"/>
-<circle cx="310.1" cy="172.5" r="0.6" fill="#FFFFFF" opacity="0.42"/>
-<circle cx="542.8" cy="135.7" r="0.6" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="167.7" cy="508.2" r="0.8" fill="#FFFFFF" opacity="0.51"/>
-<circle cx="85.1" cy="242.2" r="1.7" fill="#FFFFFF" opacity="0.84"/>
-<circle cx="160.0" cy="92.2" r="1.3" fill="#FFFFFF" opacity="0.69"/>
-<circle cx="416.2" cy="59.2" r="0.6" fill="#FFFFFF" opacity="0.83"/>
-<circle cx="116.3" cy="502.4" r="1" fill="#FFFFFF" opacity="0.91"/>
-<circle cx="378.0" cy="450.9" r="0.6" fill="#FFFFFF" opacity="0.71"/>
-<circle cx="139.0" cy="155.4" r="0.6" fill="#FFFFFF" opacity="0.62"/>
-<circle cx="206.7" cy="314.2" r="1" fill="#FFFFFF" opacity="0.72"/>
-<circle cx="35.1" cy="400.2" r="0.6" fill="#FFFFFF" opacity="0.93"/>
-<circle cx="161.9" cy="109.6" r="1" fill="#FFFFFF" opacity="0.73"/>
-<circle cx="318.0" cy="123.2" r="1" fill="#FFFFFF" opacity="0.65"/>
-<circle cx="113.2" cy="200.9" r="0.6" fill="#FFFFFF" opacity="0.95"/>
-<circle cx="31.4" cy="20.1" r="1.3" fill="#FFFFFF" opacity="0.68"/>
-<circle cx="119.9" cy="271.1" r="1" fill="#FFFFFF" opacity="0.41"/>
-<circle cx="485.0" cy="247.7" r="1" fill="#FFFFFF" opacity="0.68"/>
-<circle cx="525.5" cy="543.7" r="1" fill="#FFFFFF" opacity="0.76"/>
-<circle cx="579.8" cy="198.5" r="1.7" fill="#FFFFFF" opacity="0.79"/>
-<circle cx="91.0" cy="554.2" r="0.6" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="18.3" cy="354.0" r="1" fill="#FFFFFF" opacity="0.61"/>
-<circle cx="42.1" cy="375.9" r="1" fill="#FFFFFF" opacity="0.87"/>
-<circle cx="398.9" cy="165.1" r="0.8" fill="#FFFFFF" opacity="0.77"/>
-<circle cx="36.2" cy="111.9" r="1" fill="#FFFFFF" opacity="0.62"/>
-<circle cx="162.7" cy="539.0" r="1.3" fill="#FFFFFF" opacity="0.54"/>
-<circle cx="30.0" cy="495.3" r="0.8" fill="#FFFFFF" opacity="0.56"/>
-<circle cx="10.6" cy="219.9" r="1" fill="#FFFFFF" opacity="0.52"/>
-<circle cx="390.5" cy="146.5" r="0.6" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="483.9" cy="89.1" r="1.3" fill="#FFFFFF" opacity="0.38"/>
-<circle cx="23.0" cy="177.3" r="0.8" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="565.4" cy="479.3" r="0.8" fill="#FFFFFF" opacity="0.74"/>
-<circle cx="425.3" cy="493.5" r="1" fill="#FFFFFF" opacity="0.81"/>
-<circle cx="428.0" cy="281.8" r="1" fill="#FFFFFF" opacity="0.78"/>
-<circle cx="383.1" cy="34.1" r="1.7" fill="#FFFFFF" opacity="0.89"/>
-<circle cx="373.9" cy="413.6" r="1.3" fill="#FFFFFF" opacity="0.43"/>
-<circle cx="313.8" cy="287.4" r="0.6" fill="#FFFFFF" opacity="0.85"/>
-<circle cx="348.8" cy="501.1" r="1.7" fill="#FFFFFF" opacity="0.92"/>
-<circle cx="382.9" cy="56.8" r="0.6" fill="#FFFFFF" opacity="0.43"/>
-<circle cx="219.2" cy="67.7" r="1" fill="#FFFFFF" opacity="0.69"/>
-<circle cx="374.1" cy="354.4" r="1.7" fill="#FFFFFF" opacity="0.5"/>
-<circle cx="163.0" cy="261.3" r="0.6" fill="#FFFFFF" opacity="0.8"/>
-<circle cx="301.7" cy="304.4" r="1.7" fill="#FFFFFF" opacity="0.67"/>
-<circle cx="442.5" cy="270.6" r="0.6" fill="#FFFFFF" opacity="0.86"/>
-<circle cx="146.2" cy="426.0" r="0.8" fill="#FFFFFF" opacity="0.79"/>
-<circle cx="575.9" cy="281.7" r="1" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="538.1" cy="168.0" r="0.6" fill="#FFFFFF" opacity="0.72"/>
-<circle cx="382.8" cy="52.6" r="0.8" fill="#FFFFFF" opacity="0.55"/>
-<circle cx="387.9" cy="391.1" r="1.3" fill="#FFFFFF" opacity="0.69"/>
-<circle cx="17.2" cy="43.4" r="1" fill="#FFFFFF" opacity="0.93"/>
-<circle cx="67.7" cy="129.7" r="1" fill="#FFFFFF" opacity="0.52"/>
-<circle cx="309.6" cy="265.6" r="1" fill="#FFFFFF" opacity="0.81"/>
-<circle cx="586.1" cy="312.0" r="1" fill="#FFFFFF" opacity="0.94"/>
-<circle cx="553.0" cy="19.6" r="1" fill="#FFFFFF" opacity="0.4"/>
-<circle cx="303.8" cy="557.0" r="1" fill="#FFFFFF" opacity="0.58"/>
-<circle cx="541.6" cy="521.8" r="0.6" fill="#FFFFFF" opacity="0.7"/>
-<circle cx="92.2" cy="298.2" r="1" fill="#FFFFFF" opacity="0.43"/>
-<circle cx="485.7" cy="289.8" r="0.6" fill="#FFFFFF" opacity="0.77"/>
-<circle cx="144.2" cy="503.7" r="1" fill="#FFFFFF" opacity="0.59"/>
-<circle cx="102.3" cy="532.5" r="1.7" fill="#FFFFFF" opacity="0.62"/>
-<circle cx="185.1" cy="87.4" r="1" fill="#FFFFFF" opacity="0.58"/>
-<circle cx="80.1" cy="192.2" r="1" fill="#FFFFFF" opacity="0.8"/>
-<circle cx="496.7" cy="76.0" r="0.8" fill="#FFFFFF" opacity="0.78"/>
-<circle cx="300" cy="400" r="230" fill="url(#cv-glow)" opacity=".35"/>
-<g stroke="#F3CF73" stroke-width="1.1" opacity=".55">
-<line x1="110.0" y1="364.7" x2="205.0" y2="274.9"/>
-<line x1="110.0" y1="364.7" x2="205.0" y2="330.9"/>
-<line x1="110.0" y1="364.7" x2="205.0" y2="386.9"/>
-<line x1="110.0" y1="364.7" x2="205.0" y2="442.9"/>
-<line x1="110.0" y1="364.7" x2="205.0" y2="498.9"/>
-<line x1="110.0" y1="420.7" x2="205.0" y2="274.9"/>
-<line x1="110.0" y1="420.7" x2="205.0" y2="330.9"/>
-<line x1="110.0" y1="420.7" x2="205.0" y2="386.9"/>
-<line x1="110.0" y1="420.7" x2="205.0" y2="442.9"/>
-<line x1="110.0" y1="420.7" x2="205.0" y2="498.9"/>
-<line x1="110.0" y1="476.7" x2="205.0" y2="274.9"/>
-<line x1="110.0" y1="476.7" x2="205.0" y2="330.9"/>
-<line x1="110.0" y1="476.7" x2="205.0" y2="386.9"/>
-<line x1="110.0" y1="476.7" x2="205.0" y2="442.9"/>
-<line x1="110.0" y1="476.7" x2="205.0" y2="498.9"/>
-<line x1="205.0" y1="274.9" x2="300.0" y2="265.0"/>
-<line x1="205.0" y1="274.9" x2="300.0" y2="321.0"/>
-<line x1="205.0" y1="274.9" x2="300.0" y2="377.0"/>
-<line x1="205.0" y1="274.9" x2="300.0" y2="433.0"/>
-<line x1="205.0" y1="274.9" x2="300.0" y2="489.0"/>
-<line x1="205.0" y1="330.9" x2="300.0" y2="265.0"/>
-<line x1="205.0" y1="330.9" x2="300.0" y2="321.0"/>
-<line x1="205.0" y1="330.9" x2="300.0" y2="377.0"/>
-<line x1="205.0" y1="330.9" x2="300.0" y2="433.0"/>
-<line x1="205.0" y1="330.9" x2="300.0" y2="489.0"/>
-<line x1="205.0" y1="386.9" x2="300.0" y2="265.0"/>
-<line x1="205.0" y1="386.9" x2="300.0" y2="321.0"/>
-<line x1="205.0" y1="386.9" x2="300.0" y2="377.0"/>
-<line x1="205.0" y1="386.9" x2="300.0" y2="433.0"/>
-<line x1="205.0" y1="386.9" x2="300.0" y2="489.0"/>
-<line x1="205.0" y1="442.9" x2="300.0" y2="265.0"/>
-<line x1="205.0" y1="442.9" x2="300.0" y2="321.0"/>
-<line x1="205.0" y1="442.9" x2="300.0" y2="377.0"/>
-<line x1="205.0" y1="442.9" x2="300.0" y2="433.0"/>
-<line x1="205.0" y1="442.9" x2="300.0" y2="489.0"/>
-<line x1="205.0" y1="498.9" x2="300.0" y2="265.0"/>
-<line x1="205.0" y1="498.9" x2="300.0" y2="321.0"/>
-<line x1="205.0" y1="498.9" x2="300.0" y2="377.0"/>
-<line x1="205.0" y1="498.9" x2="300.0" y2="433.0"/>
-<line x1="205.0" y1="498.9" x2="300.0" y2="489.0"/>
-<line x1="300.0" y1="265.0" x2="395.0" y2="334.9"/>
-<line x1="300.0" y1="265.0" x2="395.0" y2="390.9"/>
-<line x1="300.0" y1="265.0" x2="395.0" y2="446.9"/>
-<line x1="300.0" y1="321.0" x2="395.0" y2="334.9"/>
-<line x1="300.0" y1="321.0" x2="395.0" y2="390.9"/>
-<line x1="300.0" y1="321.0" x2="395.0" y2="446.9"/>
-<line x1="300.0" y1="377.0" x2="395.0" y2="334.9"/>
-<line x1="300.0" y1="377.0" x2="395.0" y2="390.9"/>
-<line x1="300.0" y1="377.0" x2="395.0" y2="446.9"/>
-<line x1="300.0" y1="433.0" x2="395.0" y2="334.9"/>
-<line x1="300.0" y1="433.0" x2="395.0" y2="390.9"/>
-<line x1="300.0" y1="433.0" x2="395.0" y2="446.9"/>
-<line x1="300.0" y1="489.0" x2="395.0" y2="334.9"/>
-<line x1="300.0" y1="489.0" x2="395.0" y2="390.9"/>
-<line x1="300.0" y1="489.0" x2="395.0" y2="446.9"/>
-<line x1="395.0" y1="334.9" x2="490.0" y2="424.7"/>
-<line x1="395.0" y1="390.9" x2="490.0" y2="424.7"/>
-<line x1="395.0" y1="446.9" x2="490.0" y2="424.7"/>
-</g>
-<circle cx="110.0" cy="364.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="364.7" r="5.5" fill="#FFF1C4"/>
-<circle cx="110.0" cy="420.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="420.7" r="5.5" fill="#FFF1C4"/>
-<circle cx="110.0" cy="476.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="476.7" r="5.5" fill="#FFF1C4"/>
-<circle cx="205.0" cy="274.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="274.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="205.0" cy="330.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="330.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="205.0" cy="386.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="386.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="205.0" cy="442.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="442.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="205.0" cy="498.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="498.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="300.0" cy="265.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="265.0" r="5.5" fill="#FFF1C4"/>
-<circle cx="300.0" cy="321.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="321.0" r="5.5" fill="#FFF1C4"/>
-<circle cx="300.0" cy="377.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="377.0" r="5.5" fill="#FFF1C4"/>
-<circle cx="300.0" cy="433.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="433.0" r="5.5" fill="#FFF1C4"/>
-<circle cx="300.0" cy="489.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="489.0" r="5.5" fill="#FFF1C4"/>
-<circle cx="395.0" cy="334.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="334.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="395.0" cy="390.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="390.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="395.0" cy="446.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="446.9" r="5.5" fill="#FFF1C4"/>
-<circle cx="490.0" cy="424.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="490.0" cy="424.7" r="5.5" fill="#FFF1C4"/>
-<circle cx="300" cy="700" r="190" fill="url(#cv-glow)"/>
-<circle cx="300" cy="700" r="120" fill="url(#cv-sun)"/>
-<g fill="none" stroke="#B9661F" stroke-width="3" opacity=".5"><circle cx="300" cy="700" r="106"/>
-<path d="M196 662 Q300 632 404 662"/>
-<path d="M262 596 Q292 700 262 804"/>
-<path d="M196 700 Q300 670 404 700"/>
-<path d="M300 596 Q330 700 300 804"/>
-<path d="M196 738 Q300 708 404 738"/>
-<path d="M338 596 Q368 700 338 804"/>
-</g>
-<path fill="#2A3768" d="M0 900 L0 690 L40 664 L80 630 L120 649 L160 624 L200 621 L240 683 L280 689 L320 598 L360 661 L400 664 L440 580 L480 638 L520 598 L560 638 L600 620 L600 900 Z"/>
-<path fill="#17214A" d="M0 900 L0 760 L60 720 L120 742 L190 690 L250 735 L330 705 L400 748 L470 700 L540 736 L600 712 L600 900 Z"/>
-<rect y="780" width="600" height="120" fill="#0C142F"/>
-<path d="M0 782 Q300 768 600 782" fill="none" stroke="#33407A" stroke-width="2"/>
-<g transform="translate(455 790)">
-<path d="M-62 0 V-34 Q-60 -78 0 -86 Q60 -78 62 -34 V0 Z" fill="#EDE6D6"/>
-<rect x="-62" y="-40" width="124" height="10" fill="#B23A2E"/>
-<g stroke="#B23A2E" stroke-width="1.6" fill="none"><path d="M-56 -26 l6 -6 l6 6"/><path d="M-42 -26 l6 -6 l6 6"/><path d="M-28 -26 l6 -6 l6 6"/><path d="M-14 -26 l6 -6 l6 6"/><path d="M0 -26 l6 -6 l6 6"/><path d="M14 -26 l6 -6 l6 6"/><path d="M28 -26 l6 -6 l6 6"/><path d="M42 -26 l6 -6 l6 6"/></g>
-<path d="M-14 0 V-26 H14 V0 Z" fill="#B23A2E"/><path d="M-10 0 V-22 H10 V0" fill="none" stroke="#F0C35A" stroke-width="1.5"/>
-<ellipse cx="0" cy="-84" rx="16" ry="5" fill="#F0C35A"/>
-<path d="M-16 -84 L0 -95 L16 -84" stroke="#F0C35A" stroke-width="2" fill="none"/>
-</g>
-<g transform="translate(150 782)" fill="#0A1027">
-<circle cx="0" cy="-56" r="9"/><path d="M-10 -46 Q0 -50 10 -46 L14 -14 L8 -14 L6 0 H-6 L-8 -14 L-14 -14 Z"/>
-<path d="M9 -42 L26 -64" stroke="#0A1027" stroke-width="5" stroke-linecap="round"/>
-<path d="M-9 -60 Q-16 -40 -12 -24" stroke="#0A1027" stroke-width="5" fill="none" stroke-linecap="round"/>
-</g>
-<g fill="#3A4A86" opacity=".7"><rect x="12" y="824" width="2" height="8"/><rect x="35" y="835" width="2" height="6"/><rect x="58" y="846" width="2" height="9"/><rect x="81" y="857" width="2" height="7"/><rect x="104" y="808" width="2" height="10"/><rect x="127" y="819" width="2" height="8"/><rect x="150" y="830" width="2" height="6"/><rect x="173" y="841" width="2" height="9"/><rect x="196" y="852" width="2" height="7"/><rect x="219" y="803" width="2" height="10"/><rect x="242" y="814" width="2" height="8"/><rect x="265" y="825" width="2" height="6"/><rect x="288" y="836" width="2" height="9"/><rect x="311" y="847" width="2" height="7"/><rect x="334" y="858" width="2" height="10"/><rect x="357" y="809" width="2" height="8"/><rect x="380" y="820" width="2" height="6"/><rect x="403" y="831" width="2" height="9"/><rect x="426" y="842" width="2" height="7"/><rect x="449" y="853" width="2" height="10"/><rect x="472" y="804" width="2" height="8"/><rect x="495" y="815" width="2" height="6"/><rect x="518" y="826" width="2" height="9"/><rect x="541" y="837" width="2" height="7"/><rect x="564" y="848" width="2" height="10"/><rect x="587" y="859" width="2" height="8"/></g>
-<rect x="16" y="16" width="568" height="868" fill="none" stroke="#E8B93A" stroke-opacity=".55" stroke-width="1.5"/>
-<rect x="24" y="24" width="552" height="852" fill="none" stroke="#E8B93A" stroke-opacity=".25" stroke-width="1"/>
-<use href="#cv-horn" transform="translate(46 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
-<use href="#cv-horn" transform="translate(554 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
-<use href="#cv-horn" transform="translate(46 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
-<use href="#cv-horn" transform="translate(554 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
-<text x="300" y="76" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="13" letter-spacing="4.5" fill="#BFD3F2">A STEPPE TALE OF ARTIFICIAL INTELLIGENCE</text>
-<text x="300" y="168" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="104" letter-spacing="6" fill="url(#cv-title)">TULPAR</text>
-<text x="300" y="216" text-anchor="middle" font-family="Lora, Georgia, serif" font-style="italic" font-size="31" fill="#F4F0E6">and the Thinking Machine</text>
-<g transform="translate(300 246)"><use href="#cv-horn" transform="scale(.5)" stroke="#E8B93A" stroke-width="3" opacity=".9"/></g>
-<text x="300" y="852" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="12.5" letter-spacing="3.5" fill="#9FB2D9">AI FUNDAMENTALS · QAIRU · 2026</text>
-</svg></div>
-<div>
-<div class="kick">An illustrated, interactive e-book</div>
-<h1>Tulpar <em>and the Thinking Machine</em></h1>
-<p class="lede">Aru is a first-year student from a village near the Alatau mountains. One night she builds a small AI and names it Tulpar, after the winged horse of Kazakh legend. Together they cross the steppe, and at every stop Tulpar learns a new way to think.</p>
-<p>Ten stops, ten ideas from the AI Fundamentals course. Every chapter has a short story, a clear explanation, a diagram or a live experiment you can play with, and a mini-quiz with answers.</p>
-<div class="row" style="margin-top:18px"><a class="btn" href="#route">Start the journey</a><a class="btn ghost" href="#extras">Glossary</a></div>
-<div class="meta"><span>AI Fundamentals · QAIRU · Endterm Creative AI Book · 2026</span><span>By Esmankhan Baizhanov, Sultanhan Temirtasov, Temirlan Altynbekuly, Madiyar Nisanbayev</span></div>
+<header class="bar"><a class="brand" href="#" id="brand">TULPAR<span>.</span></a><span class="where" id="where">Cover</span><select id="jump" aria-label="Go to chapter"><option value="cover">Cover</option><option value="about">About this book</option><option value="route">Contents</option><option value="ch1">1 · What is AI?</option><option value="ch2">2 · Intelligent Agents</option><option value="ch3">3 · Uninformed Search</option><option value="ch4">4 · Heuristics, A* & Local Search</option><option value="ch5">5 · Adversarial Search</option><option value="ch6">6 · MDPs & Reinforcement Learning</option><option value="ch7">7 · Probability & Bayesian Networks</option><option value="ch8">8 · Hidden Markov Models</option><option value="ch9">9 · Rational Decisions & ML</option><option value="ch10">10 · Perceptrons & Neural Networks</option><option value="bonus">Bonus · Logic & Knowledge</option><option value="epi">Epilogue · Ethics & Future</option><option value="extras">Glossary & Sources</option></select></header>
+<div class="stage" id="stage">
+<div class="loading" id="loading">Opening the book…</div>
+<div class="book" id="book"></div>
+<div class="navrow"><button id="prevPg" aria-label="Previous page">←</button><span class="pgl" id="pgl"></span><button id="nextPg" aria-label="Next page">→</button></div>
+<div id="measure"></div>
 </div>
-</div>
-
-<div class="orn"><svg><use href="#horn"/></svg></div>
-
-<section id="route">
-<h2>The Route</h2>
-<p>The book follows the order of the course lectures: each stop builds on the one before. The bonus stop on logic is extra reading. You can read it straight through or jump to any stop.</p>
-<ol class="route">
-<li><a href="#ch1"><span class="n">1</span><span><b>What is AI?</b><small>The aul at dawn · definitions, history, types of AI</small></span></a></li>
-<li><a href="#ch2"><span class="n">2</span><span><b>Intelligent Agents</b><small>Shymkent bazaar · PEAS, environments, agent types</small></span></a></li>
-<li><a href="#ch3"><span class="n">3</span><span><b>Uninformed Search</b><small>Charyn Canyon · state spaces, BFS, DFS, UCS, IDS</small></span></a></li>
-<li><a href="#ch4"><span class="n">4</span><span><b>Heuristics, A* & Local Search</b><small>Singing Dune · greedy, A*, hill climbing, annealing</small></span></a></li>
-<li><a href="#ch5"><span class="n">5</span><span><b>Adversarial Search</b><small>Togyz kumalak tournament · minimax, alpha-beta, expectimax, CSP</small></span></a></li>
-<li><a href="#ch6"><span class="n">6</span><span><b>MDPs & Reinforcement Learning</b><small>Eagle hunters of the Altai · Bellman, value iteration, Q-learning</small></span></a></li>
-<li><a href="#ch7"><span class="n">7</span><span><b>Probability & Bayesian Networks</b><small>Shepherd's camp · Bayes' rule, CPTs, inference, sampling</small></span></a></li>
-<li><a href="#ch8"><span class="n">8</span><span><b>Hidden Markov Models</b><small>The old well pump · filtering, smoothing, Viterbi</small></span></a></li>
-<li><a href="#ch9"><span class="n">9</span><span><b>Rational Decisions & ML</b><small>The great flock · expected utility, regression, trees, k-means</small></span></a></li>
-<li><a href="#ch10"><span class="n">10</span><span><b>Perceptrons & Neural Networks</b><small>Baikonur · perceptron, backprop, overfitting, CNN</small></span></a></li>
-<li><a href="#bonus"><span class="n">+</span><span><b>Bonus: Logic & Knowledge</b><small>Library of Otrar · propositional and first-order logic</small></span></a></li>
-<li><a href="#epi"><span class="n">★</span><span><b>Epilogue: Ethics & Future</b><small>Astana · bias, privacy, safety, regulation</small></span></a></li>
-<li><a href="#extras"><span class="n">A</span><span><b>Glossary & Sources</b><small>Searchable terms, references, AI use declaration</small></span></a></li>
-</ol>
+<div id="src" hidden>
+<section id="titlepage" data-run="">
+<div class="tp"><div class="tp-orn"><svg><use href="#horn"/></svg></div><div class="tp-kick">A steppe tale of artificial intelligence</div><h1>TULPAR</h1><p class="tp-sub">and the Thinking Machine</p><p class="tp-by">Esmankhan Baizhanov<br>Sultanhan Temirtasov<br>Temirlan Altynbekuly<br>Madiyar Nisanbayev</p><p class="tp-meta">AI Fundamentals · QAIRU · 2026<br>Lecturer: Aizhan Sydykova · Instructor: Dlinura Alikyzy</p></div>
+</section>
+<section id="about" data-run="About this book">
+<div class="chead"><div class="stop"><span>Before the journey</span></div><h2>About this Book</h2></div>
+<p>Aru is a first-year student from a village near the Alatau mountains. One night she builds a small AI and names it Tulpar, after the winged horse of Kazakh legend. Together they cross the steppe, and at every stop Tulpar learns a new way to think.</p>
+<p>Ten stops, ten ideas from the AI Fundamentals course. Every chapter has a short story, a clear explanation, diagrams or a live experiment you can play with, and a mini-quiz with answers.</p>
+<h3>How to read it</h3>
+<ul class="tight howto"><li>Turn pages with the arrows under the book, the ← and → keys, or a swipe on a phone.</li><li>The contents page lists every stop with its page number. Tap a line to go there.</li><li>Blue panels are live experiments. Press the buttons and play.</li><li>Every stop ends with a mini-quiz. Tap an answer to check it.</li></ul>
 <h3>The characters</h3>
 <div class="cast">
 <div><b>Aru</b>A curious student who asks the questions a beginner would ask. Her lines are marked in red.</div>
@@ -496,8 +210,25 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 <div><b>Ata (Grandfather)</b>A shepherd and togyz kumalak master. He keeps checking that the machine stays wise and not only clever.</div>
 </div>
 </section>
-
-<section class="ch" id="ch1" data-title="1 · What is AI?">
+<section id="route" data-run="Contents">
+<div class="chead"><div class="stop"><span>The route</span></div><h2>Contents</h2></div>
+<ol class="route">
+<li><a href="#ch1"><span class="n">1</span><span><b>What is AI?</b><small>The aul at dawn · definitions, history, types of AI</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch2"><span class="n">2</span><span><b>Intelligent Agents</b><small>Shymkent bazaar · PEAS, environments, agent types</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch3"><span class="n">3</span><span><b>Uninformed Search</b><small>Charyn Canyon · state spaces, BFS, DFS, UCS, IDS</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch4"><span class="n">4</span><span><b>Heuristics, A* & Local Search</b><small>Singing Dune · greedy, A*, hill climbing, annealing</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch5"><span class="n">5</span><span><b>Adversarial Search</b><small>Togyz kumalak tournament · minimax, alpha-beta, expectimax, CSP</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch6"><span class="n">6</span><span><b>MDPs & Reinforcement Learning</b><small>Eagle hunters of the Altai · Bellman, value iteration, Q-learning</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch7"><span class="n">7</span><span><b>Probability & Bayesian Networks</b><small>Shepherd's camp · Bayes' rule, CPTs, inference, sampling</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch8"><span class="n">8</span><span><b>Hidden Markov Models</b><small>The old well pump · filtering, smoothing, Viterbi</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch9"><span class="n">9</span><span><b>Rational Decisions & ML</b><small>The great flock · expected utility, regression, trees, k-means</small></span><em class="pn">00</em></a></li>
+<li><a href="#ch10"><span class="n">10</span><span><b>Perceptrons & Neural Networks</b><small>Baikonur · perceptron, backprop, overfitting, CNN</small></span><em class="pn">00</em></a></li>
+<li><a href="#bonus"><span class="n">+</span><span><b>Bonus: Logic & Knowledge</b><small>Library of Otrar · propositional and first-order logic</small></span><em class="pn">00</em></a></li>
+<li><a href="#epi"><span class="n">★</span><span><b>Epilogue: Ethics & Future</b><small>Astana · bias, privacy, safety, regulation</small></span><em class="pn">00</em></a></li>
+<li><a href="#extras"><span class="n">A</span><span><b>Glossary & Sources</b><small>Searchable terms, references, AI use declaration</small></span><em class="pn">00</em></a></li>
+</ol>
+</section>
+<section class="ch" id="ch1" data-run="1 · What is AI?">
 <div class="chead"><div class="stop"><span>Stop 1</span><span>The aul at dawn</span></div><h2>What is Artificial Intelligence?</h2><p class="goal">You will learn: common definitions of AI, the Turing test, narrow vs. general AI, and the key moments in AI history.</p></div>
 <div class="story"><p><span class="who aru">Aru:</span> “Tulpar, are you intelligent?”</p><p><span class="who">Tulpar:</span> “That depends on what you mean by ‘intelligent’. Scientists have argued about that for seventy years. Let me show you the four main answers.”</p></div>
 <p><span class="term">Artificial Intelligence (AI)</span> is the field of computer science that builds systems able to do tasks that normally require human intelligence: perceiving, reasoning, learning, planning, understanding language and making decisions. The term was coined by John McCarthy in the 1955 proposal for the <b>Dartmouth Summer Research Project</b>, held in 1956. That workshop is usually counted as the birth of AI as a field.</p>
@@ -547,10 +278,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </ul>
 <div class="box know"><h4>Did you know?</h4><p>About 1,100 years ago, the philosopher <b>al-Farabi</b> was born near Otrar, in today's South Kazakhstan. He wrote major works on logic and was called “the Second Teacher”, after Aristotle. Logic is one of the oldest foundations of AI. We visit his city in the Bonus stop.</p></div>
 <div class="quiz" data-q="1"><h4>Mini-quiz · Stop 1</h4></div>
-<div class="nextch"><a href="#ch2">Next stop: the bazaar →</a></div>
 </section>
 
-<section class="ch" id="ch2" data-title="2 · Intelligent Agents">
+<section class="ch" id="ch2" data-run="2 · Intelligent Agents">
 <div class="chead"><div class="stop"><span>Stop 2</span><span>Shymkent bazaar</span></div><h2>Intelligent Agents</h2><p class="goal">You will learn: what an agent is, how to describe a task with PEAS, the properties of environments, and the five classic types of agents.</p></div>
 <div class="story"><p>The bazaar is loud. A merchant watches customers, checks prices and decides how much to charge.</p><p><span class="who">Tulpar:</span> “Look, Aru, the merchant is an <i>agent</i>. Eyes and ears are his sensors, his hands and voice are his actuators, and profit is his performance measure. I am an agent too, only made of code.”</p></div>
 <p>An <span class="term">agent</span> is anything that <b>perceives</b> its environment through <b>sensors</b> and <b>acts</b> on it through <b>actuators</b>. What the agent has perceived so far is its <span class="term">percept sequence</span>. The <span class="term">agent function</span> maps percept sequences to actions; the <span class="term">agent program</span> is the code that implements it.</p>
@@ -597,10 +327,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </ol>
 <div class="box case"><h4>Real-world case</h4><p>A robot vacuum is a model-based agent. Bump and cliff sensors are its percepts; it keeps a map of rooms already cleaned (its internal state) and uses that map to choose where to go next.</p></div>
 <div class="quiz" data-q="2"><h4>Mini-quiz · Stop 2</h4></div>
-<div class="nextch"><a href="#ch3">Next stop: Charyn Canyon →</a></div>
 </section>
 
-<section class="ch" id="ch3" data-title="3 · Uninformed Search">
+<section class="ch" id="ch3" data-run="3 · Uninformed Search">
 <div class="chead"><div class="stop"><span>Stop 3</span><span>Charyn Canyon</span></div><h2>Solving Problems by Searching</h2><p class="goal">You will learn: how to formulate a search problem, search trees, and the uninformed strategies BFS, DFS, uniform-cost search and iterative deepening.</p></div>
 <div class="story"><p>Charyn Canyon is a maze of red rock. Somewhere inside is a spring of fresh water.</p><p><span class="who aru">Aru:</span> “We have no map. How do we find the spring?”</p><p><span class="who">Tulpar:</span> “We search. I don't know which way is closer, so I'll explore systematically. That is called <i>uninformed</i> or <i>blind</i> search.”</p></div>
 <h3>Formulating a problem</h3>
@@ -645,10 +374,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 <div class="box know"><h4>Did you know?</h4><p>With b = 10 and d = 12, BFS would have to store about 10<sup>12</sup> nodes. At 1 KB per node that is about 1 petabyte of memory. Memory, not time, is usually the first wall that BFS hits.</p></div>
 <p>You can watch BFS and DFS race through the canyon in the experiment in the next chapter.</p>
 <div class="quiz" data-q="3"><h4>Mini-quiz · Stop 3</h4></div>
-<div class="nextch"><a href="#ch4">Next stop: the Singing Dune →</a></div>
 </section>
 
-<section class="ch" id="ch4" data-title="4 · Heuristics, A* & Local Search">
+<section class="ch" id="ch4" data-run="4 · Heuristics, A* & Local Search">
 <div class="chead"><div class="stop"><span>Stop 4</span><span>Singing Dune, Altyn-Emel</span></div><h2>Informed Search, A* and Local Search</h2><p class="goal">You will learn: heuristics, greedy best-first search, A* and when it is optimal, then hill climbing, simulated annealing and genetic algorithms.</p></div>
 <div class="story"><p>From the canyon rim Aru can see the shining spring far away.</p><p><span class="who aru">Aru:</span> “Now we know roughly where it is. Can't we use that?”</p><p><span class="who">Tulpar:</span> “Yes! A guess about the remaining distance is called a <i>heuristic</i>. With it I can search much smarter.”</p></div>
 <p>A <span class="term">heuristic function h(n)</span> estimates the cost of the cheapest path from node <i>n</i> to the goal. On a grid where we move up/down/left/right, a classic heuristic is the <b>Manhattan distance</b>: |x₁ − x₂| + |y₁ − y₂|.</p>
@@ -689,10 +417,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </ul>
 <div class="box case"><h4>Real-world case</h4><p>Navigation apps find routes on road graphs with many millions of nodes. They use A*-style search with good heuristics plus heavy pre-computation (such as contraction hierarchies) so that a route across a country is found in milliseconds.</p></div>
 <div class="quiz" data-q="4"><h4>Mini-quiz · Stop 4</h4></div>
-<div class="nextch"><a href="#ch5">Next stop: the tournament →</a></div>
 </section>
 
-<section class="ch" id="ch5" data-title="5 · Adversarial Search">
+<section class="ch" id="ch5" data-run="5 · Adversarial Search">
 <div class="chead"><div class="stop"><span>Stop 5</span><span>Togyz kumalak tournament</span></div><h2>Adversarial Search and Game Trees</h2><p class="goal">You will learn: types of games, game trees, minimax, alpha-beta pruning, evaluation functions and the horizon effect, expectimax for chance, and (as an extra) constraint satisfaction problems.</p></div>
 <div class="story"><p>In a felt yurt, Ata is playing <i>togyz kumalak</i>, the Kazakh game of nine pits and 162 stones.</p><p><span class="who">Ata:</span> “In the canyon, the rocks did not fight back. Here, every move I make, my opponent answers with the move that hurts me most.”</p><p><span class="who">Tulpar:</span> “Then I must think about his best reply, and my reply to that, and so on. That is <i>minimax</i>.”</p></div>
 <p>Games like chess, Go, togyz kumalak and tic-tac-toe are <b>two-player, zero-sum, deterministic, fully observable</b> games: what one player wins, the other loses. We model them with a <span class="term">game tree</span>: nodes are positions, edges are moves, and leaves have a <span class="term">utility</span> (+1 win, 0 draw, −1 loss).</p>
@@ -760,10 +487,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 <li><b>Forward checking</b> and <b>arc consistency (AC-3)</b>: after each assignment, remove values from neighbours' domains that can no longer work, and detect dead ends early.</li>
 </ul>
 <div class="quiz" data-q="5"><h4>Mini-quiz · Stop 5</h4></div>
-<div class="nextch"><a href="#ch6">Next stop: the Altai eagle hunters →</a></div>
 </section>
 
-<section class="ch" id="ch6" data-title="6 · MDPs & Reinforcement Learning">
+<section class="ch" id="ch6" data-run="6 · MDPs & Reinforcement Learning">
 <div class="chead"><div class="stop"><span>Stop 6</span><span>Eagle hunters of the Altai</span></div><h2>Markov Decision Processes and Reinforcement Learning</h2><p class="goal">You will learn: MDPs, return and discounting, V and Q, the Bellman equation, value and policy iteration, Monte Carlo and TD learning, Q-learning, SARSA, exploration, and deep RL.</p></div>
 <div class="story"><p>A <i>berkutchi</i>, an eagle hunter, trains a golden eagle. He never explains the rules. When the eagle does well, it gets meat; when it fails, it gets nothing.</p><p><span class="who">Tulpar:</span> “That is how I can learn to act too: by trial, error and reward.”</p></div>
 <p>In <span class="term">reinforcement learning (RL)</span> an agent interacts with an environment. At each step it observes a <b>state</b> s, takes an <b>action</b> a, receives a <b>reward</b> r and moves to a new state s′. Its goal is to learn a <span class="term">policy</span> π(s) that maximises the total <b>discounted reward</b> r₀ + γr₁ + γ²r₂ + …, where the discount factor 0 ≤ γ &lt; 1 makes near rewards worth more than far ones.</p>
@@ -813,10 +539,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </div></div>
 <div class="box case"><h4>Real-world case</h4><p>DeepMind combined Q-learning with a deep network (DQN, 2015) and learned to play dozens of Atari games from raw pixels. AlphaGo (2016) combined RL, neural networks and tree search. RL with human feedback (RLHF) is also used to fine-tune chat assistants.</p></div>
 <div class="quiz" data-q="10"><h4>Mini-quiz · Stop 6</h4></div>
-<div class="nextch"><a href="#ch7">Next stop: the shepherd's camp →</a></div>
 </section>
 
-<section class="ch" id="ch7" data-title="7 · Probability & Bayesian Networks">
+<section class="ch" id="ch7" data-run="7 · Probability & Bayesian Networks">
 <div class="chead"><div class="stop"><span>Stop 7</span><span>Shepherd's camp</span></div><h2>Reasoning under Uncertainty</h2><p class="goal">You will learn: probability basics, conditional probability, Bayes' rule, the base-rate trap, naive Bayes, Bayesian networks, chains, forks and colliders, exact inference and sampling.</p></div>
 <div class="story"><p>A vet's quick test says one of Ata's lambs has a rare illness.</p><p><span class="who aru">Aru:</span> “The test is 90% accurate, so the lamb is 90% likely to be sick, right?”</p><p><span class="who">Tulpar:</span> “Not at all! Logic said true or false. The real world says <i>probably</i>. Let me reason with probabilities.”</p></div>
 <p>Real agents rarely know everything: sensors are noisy and the world is random. <span class="term">Probability</span> gives a degree of belief between 0 and 1.</p>
@@ -873,10 +598,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </ul>
 <div class="box case"><h4>Real-world case</h4><p>Predictive maintenance: a network links hidden causes (bearing wear, overheating) to sensor readings (vibration, temperature, alarm). Given today's readings, inference gives the probability of each fault, so engineers can repair a machine before it breaks.</p></div>
 <div class="quiz" data-q="7"><h4>Mini-quiz · Stop 7</h4></div>
-<div class="nextch"><a href="#ch8">Next stop: the old well →</a></div>
 </section>
 
-<section class="ch" id="ch8" data-title="8 · Hidden Markov Models">
+<section class="ch" id="ch8" data-run="8 · Hidden Markov Models">
 <div class="chead"><div class="stop"><span>Stop 8</span><span>The old well pump</span></div><h2>Hidden Markov Models</h2><p class="goal">You will learn: hidden states vs. observations, Markov chains and transition matrices, emission tables, filtering, prediction, smoothing and the Viterbi algorithm.</p></div>
 <div class="story"><p>The camp's water comes from an old pump. Nobody can see inside it, but a small sensor shows its temperature: <i>Normal</i> or <i>High</i>.</p><p><span class="who aru">Aru:</span> “The sensor says High. So the pump is broken?”</p><p><span class="who">Tulpar:</span> “Not necessarily. Sensors give false alarms, and a fault can exist before any alarm. The pump's true condition is <i>hidden</i>. I have to reason about it over time.”</p></div>
 <p>Many problems have a <b>hidden state</b> that changes over time and produces <b>noisy observations</b>: a machine's health and its sensor readings, the words someone says and the sound we hear, the weather and whether people carry umbrellas.</p>
@@ -941,10 +665,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 </div></div>
 <div class="box case"><h4>Real-world case</h4><p>HMMs powered speech recognition for decades (hidden words, observed sounds). They are still used for gene finding in DNA, part-of-speech tagging, and machine-health monitoring.</p></div>
 <div class="quiz" data-q="hmm"><h4>Mini-quiz · Stop 8</h4></div>
-<div class="nextch"><a href="#ch9">Next stop: the great flock →</a></div>
 </section>
 
-<section class="ch" id="ch9" data-title="9 · Rational Decisions & ML">
+<section class="ch" id="ch9" data-run="9 · Rational Decisions & ML">
 <div class="chead"><div class="stop"><span>Stop 9</span><span>The great flock</span></div><h2>Rational Decisions and Classical Machine Learning</h2><p class="goal">You will learn: rational action and expected utility, decision thresholds, rules vs. learning, the three types of learning, linear and logistic regression, decision trees and random forests, k-means, and how to evaluate a model before trusting its decisions.</p></div>
 <div class="story"><p>Ata can tell a Kazakh fat-tailed sheep from a merino at a glance, but he cannot write down the rule.</p><p><span class="who">Tulpar:</span> “Then I won't ask for rules. Show me thousands of examples, and I'll find the pattern myself. That is <i>machine learning</i>.”</p></div>
 <h3>Part 1 · Rational decisions</h3>
@@ -1050,10 +773,9 @@ footer{padding-block:40px;text-align:center;font-family:var(--display);font-size
 <div class="formula">a* = argminₐ Σₒ P(o | x, a) · C(o, a)</div>
 <p>This is why <b>high accuracy ≠ good decisions</b>. Model A: 95% accuracy but 60% failure recall. Model B: 92% accuracy but 90% recall. If missed failures are expensive, Model B is the better choice. Other risks: <b>data leakage</b> (training on information not available at prediction time), <b>distribution shift</b> (new conditions differ from training data) and <b>poor calibration</b> (predicted probabilities that do not match real frequencies).</p>
 <div class="quiz" data-q="8"><h4>Mini-quiz · Stop 9</h4></div>
-<div class="nextch"><a href="#ch10">Next stop: Baikonur →</a></div>
 </section>
 
-<section class="ch" id="ch10" data-title="10 · Perceptrons & Neural Networks">
+<section class="ch" id="ch10" data-run="10 · Perceptrons & Neural Networks">
 <div class="chead"><div class="stop"><span>Stop 10</span><span>Baikonur Cosmodrome</span></div><h2>Perceptrons and Neural Networks</h2><p class="goal">You will learn: the artificial neuron and perceptron, how a perceptron learns from an error, linear separability, hidden layers and activation functions, gradient descent and backpropagation, train/validation/test, overfitting and generalisation, CNNs and modern deep learning.</p></div>
 <div class="story"><p>At Baikonur, where Yuri Gagarin's rocket launched in 1961, engineers are testing a camera that spots damaged rocket tiles.</p><p><span class="who">Tulpar:</span> “Nobody can write rules for every crack. So the engineers built a network of simple units, a bit like neurons in a brain, and let it learn from photos.”</p></div>
 <h3>The artificial neuron</h3>
@@ -1121,10 +843,9 @@ accuracy = model.score(X_test, y_test)</pre>
 <div class="box know"><h4>Did you know?</h4><p>A “parameter” is one weight or bias. LeNet-5 had about 60,000 parameters; AlexNet about 60 million; today's largest language models have hundreds of billions.</p></div>
 <div class="box myth"><h4>Myth vs fact</h4><p><b>Myth:</b> Neural networks work just like the human brain.<br><b>Fact:</b> They were inspired by neurons, but real neurons are far more complex, the brain does not learn with backpropagation as far as we know, and a human brain uses about 20 watts.</p></div>
 <div class="quiz" data-q="9"><h4>Mini-quiz · Stop 10</h4></div>
-<div class="nextch"><a href="#bonus">Bonus stop: the Library of Otrar →</a></div>
 </section>
 
-<section class="ch" id="bonus" data-title="Bonus · Logic & Knowledge">
+<section class="ch" id="bonus" data-run="Bonus · Logic & Knowledge">
 <div class="chead"><div class="stop"><span>Bonus stop</span><span>Library of Otrar</span></div><h2>Logic and Knowledge Representation</h2><p class="goal">You will learn: knowledge-based agents, propositional logic, truth tables, entailment, inference rules, forward and backward chaining, first-order logic and expert systems.</p></div>
 <div class="story"><p>Among the ruins of Otrar, the city of al-Farabi, Aru finds old pages about reasoning.</p><p><span class="who">Tulpar:</span> “Search tells me <i>how</i> to reach a goal. Logic lets me <i>know</i> things and <i>prove</i> new things from what I know.”</p></div>
 <p>A <span class="term">knowledge-based agent</span> has a <b>knowledge base (KB)</b>: a set of sentences in a formal language. It can TELL the KB new facts and ASK it questions. An <b>inference engine</b> derives new sentences from old ones.</p>
@@ -1163,10 +884,9 @@ Sheep(Akbas)                       "Akbas is a sheep"
 <div class="box case"><h4>Real-world case</h4><p><b>Expert systems</b> store expert knowledge as IF–THEN rules plus an inference engine. MYCIN (Stanford, 1970s) used about 600 rules to suggest antibiotics for blood infections and performed about as well as specialists in tests. Expert systems are easy to explain but hard to maintain, because every rule must be written by hand.</p></div>
 <div class="box myth"><h4>Myth vs fact</h4><p><b>Myth:</b> Modern AI no longer uses logic.<br><b>Fact:</b> Logic lives on in database query engines, chip and software verification, planning systems, knowledge graphs, and rule engines for law and tax. Research on “neuro-symbolic” AI combines logic with neural networks.</p></div>
 <div class="quiz" data-q="6"><h4>Mini-quiz · Bonus stop</h4></div>
-<div class="nextch"><a href="#epi">Final stop: Astana →</a></div>
 </section>
 
-<section class="ch" id="epi" data-title="Epilogue · Ethics & Future">
+<section class="ch" id="epi" data-run="Epilogue · Ethics & Future">
 <div class="chead"><div class="stop"><span>Epilogue</span><span>Astana</span></div><h2>Ethics, Safety and the Future of AI</h2><p class="goal">You will learn: the main ethical risks of AI, principles for responsible AI, how regulation works, and how AI compares with human intelligence.</p></div>
 <div class="story"><p>At the end of the journey, Ata looks at Tulpar for a long time.</p><p><span class="who">Ata:</span> “A strong horse without a good rider is dangerous. You are clever now, Tulpar. But are you fair? Are you honest? Who answers for your mistakes?”</p><p><span class="who aru">Aru:</span> “Those questions are our job, Ata. Not only the machine's.”</p></div>
 <h3>Key risks</h3>
@@ -1201,13 +921,10 @@ Sheep(Akbas)                       "Akbas is a sheep"
 <div class="quiz" data-q="11"><h4>Final quiz · Epilogue</h4></div>
 </section>
 
-<section class="ch" id="extras" data-title="Glossary & Sources">
+<section class="ch" id="extras" data-run="Glossary & Sources">
 <div class="chead"><div class="stop"><span>Appendix</span><span>For the road</span></div><h2>Glossary, Sources and Credits</h2></div>
-<div class="gloss">
 <h3>Glossary</h3>
-<input id="gq" type="search" placeholder="Search a term, e.g. heuristic" aria-label="Search glossary">
-<dl id="gl"></dl>
-</div>
+<div class="gl-list" id="gl"></div>
 <h3>Sources and further reading</h3>
 <ol class="refs">
 <li>Russell, S., & Norvig, P. (2021). <i>Artificial Intelligence: A Modern Approach</i> (4th ed.). Pearson.</li>
@@ -1238,34 +955,303 @@ Sheep(Akbas)                       "Akbas is a sheep"
 <div>Temirlan Altynbekuly<small>Team member</small></div>
 <div>Madiyar Nisanbayev<small>Team member</small></div>
 </div>
-<p style="font-family:var(--display);font-size:15px">Course: AI Fundamentals, QAIRU · Lecturer: Aizhan Sydykova · Instructor: Dlinura Alikyzy</p>
+<p style="font-family:var(--display);font-size:13px;text-align:left">Course: AI Fundamentals, QAIRU · Lecturer: Aizhan Sydykova · Instructor: Dlinura Alikyzy</p>
 <div class="box"><h4>AI use declaration</h4><p>We used Claude (Anthropic) as a supporting tool throughout the project. It assisted us in refining explanations, creating illustrations and diagrams, and developing interactive experiments. However, the ideas, story, characters, and overall structure were developed by our team. We also carefully reviewed all explanations, formulas, dates, and examples to ensure their accuracy using course lectures and the sources listed above.</p></div>
 </section>
 
-<footer>Tulpar and the Thinking Machine · AI Fundamentals Endterm · QAIRU 2026</footer>
-</main>
-
+</div>
+<template id="coverTpl"><svg preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 666 900" role="img" aria-label="Book cover: Tulpar and the Thinking Machine">
+<defs>
+<linearGradient id="cv-sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#070F26"/><stop offset=".5" stop-color="#16285A"/><stop offset=".72" stop-color="#3B3F78"/><stop offset=".84" stop-color="#C9785A"/><stop offset=".9" stop-color="#F0B252"/></linearGradient>
+<radialGradient id="cv-sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".7" stop-color="#F5C04E"/><stop offset="1" stop-color="#E39A2E"/></radialGradient>
+<radialGradient id="cv-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD978" stop-opacity=".55"/><stop offset="1" stop-color="#FFD978" stop-opacity="0"/></radialGradient>
+<linearGradient id="cv-title" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8"/><stop offset="1" stop-color="#E8AE3C"/></linearGradient>
+<g id="cv-horn" fill="none" stroke-linecap="round"><path d="M0 0 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12"/><path d="M0 0 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12"/><path d="M0 0 V12"/></g>
+</defs>
+<rect width="666" height="900" fill="url(#cv-sky)"/>
+<circle cx="219.2" cy="93.0" r="1.7" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="540.5" cy="61.8" r="1.3" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="337.8" cy="30.6" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="165.5" cy="313.1" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="90.0" cy="132.8" r="1.7" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="50.0" cy="332.0" r="0.6" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="40.1" cy="482.2" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="359.3" cy="324.0" r="1.3" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="126.7" cy="329.9" r="1.7" fill="#FFFFFF" opacity="0.46"/>
+<circle cx="72.9" cy="401.7" r="1.3" fill="#FFFFFF" opacity="0.39"/>
+<circle cx="143.0" cy="384.2" r="1" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="310.8" cy="517.9" r="1" fill="#FFFFFF" opacity="0.53"/>
+<circle cx="523.2" cy="394.4" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="204.0" cy="282.3" r="1" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="196.0" cy="549.1" r="0.6" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="116.6" cy="198.1" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="631.5" cy="52.7" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="575.6" cy="182.6" r="1.7" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="330.9" cy="448.3" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="620.3" cy="270.8" r="1.7" fill="#FFFFFF" opacity="0.39"/>
+<circle cx="482.3" cy="180.3" r="1.3" fill="#FFFFFF" opacity="0.95"/>
+<circle cx="541.0" cy="166.5" r="1" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="234.2" cy="527.4" r="1" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="85.6" cy="42.4" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="170.0" cy="225.0" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="300.2" cy="312.2" r="0.8" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="568.1" cy="163.1" r="1" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="451.0" cy="219.2" r="0.8" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="123.8" cy="137.6" r="0.8" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="546.9" cy="110.3" r="1" fill="#FFFFFF" opacity="0.35"/>
+<circle cx="280.6" cy="213.1" r="1.3" fill="#FFFFFF" opacity="0.54"/>
+<circle cx="91.1" cy="482.6" r="1.3" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="487.9" cy="261.2" r="1.7" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="263.5" cy="229.4" r="0.6" fill="#FFFFFF" opacity="0.64"/>
+<circle cx="268.7" cy="114.8" r="0.8" fill="#FFFFFF" opacity="0.61"/>
+<circle cx="81.0" cy="340.4" r="0.6" fill="#FFFFFF" opacity="0.35"/>
+<circle cx="107.7" cy="65.8" r="1" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="55.4" cy="124.4" r="1" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="173.0" cy="201.1" r="1" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="84.5" cy="278.4" r="1" fill="#FFFFFF" opacity="0.64"/>
+<circle cx="211.5" cy="89.3" r="1.7" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="181.0" cy="465.9" r="0.8" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="142.6" cy="533.6" r="1" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="360.9" cy="24.9" r="1.3" fill="#FFFFFF" opacity="0.53"/>
+<circle cx="425.3" cy="60.1" r="1" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="596.7" cy="205.6" r="0.8" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="513.3" cy="191.3" r="0.8" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="519.3" cy="427.1" r="0.8" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="538.6" cy="416.9" r="0.8" fill="#FFFFFF" opacity="0.47"/>
+<circle cx="328.3" cy="412.1" r="0.6" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="315.1" cy="116.5" r="1.3" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="298.9" cy="525.4" r="1" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="245.6" cy="131.3" r="0.8" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="228.2" cy="275.5" r="1.3" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="319.7" cy="369.1" r="1.7" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="436.7" cy="510.4" r="1.7" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="318.8" cy="108.2" r="1.7" fill="#FFFFFF" opacity="0.55"/>
+<circle cx="527.3" cy="544.4" r="1" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="490.2" cy="56.7" r="0.8" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="92.1" cy="93.1" r="1" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="104.4" cy="464.6" r="1" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="236.4" cy="311.8" r="0.8" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="526.4" cy="409.5" r="0.6" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="613.1" cy="248.6" r="0.8" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="146.3" cy="148.5" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="503.3" cy="189.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="94.7" cy="510.5" r="1" fill="#FFFFFF" opacity="0.89"/>
+<circle cx="438.0" cy="458.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="602.8" cy="285.9" r="1.3" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="339.8" cy="490.0" r="0.8" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="511.3" cy="92.4" r="0.8" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="478.5" cy="316.1" r="1" fill="#FFFFFF" opacity="0.76"/>
+<circle cx="352.8" cy="275.4" r="0.6" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="46.7" cy="115.2" r="0.6" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="338.0" cy="319.0" r="0.6" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="405.7" cy="288.1" r="1.3" fill="#FFFFFF" opacity="0.47"/>
+<circle cx="189.1" cy="289.5" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="170.0" cy="297.8" r="1" fill="#FFFFFF" opacity="0.9"/>
+<circle cx="586.7" cy="121.4" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="88.6" cy="253.2" r="0.6" fill="#FFFFFF" opacity="0.75"/>
+<circle cx="286.7" cy="127.0" r="1" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="589.5" cy="94.9" r="1.7" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="246.6" cy="149.2" r="0.8" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="151.9" cy="533.9" r="1" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="115.2" cy="377.3" r="0.8" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="288.8" cy="293.6" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="240.4" cy="60.7" r="1" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="367.9" cy="252.3" r="0.6" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="344.3" cy="172.5" r="0.6" fill="#FFFFFF" opacity="0.42"/>
+<circle cx="603.4" cy="135.7" r="0.6" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="185.7" cy="508.2" r="0.8" fill="#FFFFFF" opacity="0.51"/>
+<circle cx="93.7" cy="242.2" r="1.7" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="177.1" cy="92.2" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="462.5" cy="59.2" r="0.6" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="128.4" cy="502.4" r="1" fill="#FFFFFF" opacity="0.91"/>
+<circle cx="419.8" cy="450.9" r="0.6" fill="#FFFFFF" opacity="0.71"/>
+<circle cx="153.7" cy="155.4" r="0.6" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="229.1" cy="314.2" r="1" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="37.9" cy="400.2" r="0.6" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="179.2" cy="109.6" r="1" fill="#FFFFFF" opacity="0.73"/>
+<circle cx="353.1" cy="123.2" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="124.9" cy="200.9" r="0.6" fill="#FFFFFF" opacity="0.95"/>
+<circle cx="33.9" cy="20.1" r="1.3" fill="#FFFFFF" opacity="0.68"/>
+<circle cx="132.4" cy="271.1" r="1" fill="#FFFFFF" opacity="0.41"/>
+<circle cx="539.0" cy="247.7" r="1" fill="#FFFFFF" opacity="0.68"/>
+<circle cx="584.1" cy="543.7" r="1" fill="#FFFFFF" opacity="0.76"/>
+<circle cx="644.7" cy="198.5" r="1.7" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="100.3" cy="554.2" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="19.2" cy="354.0" r="1" fill="#FFFFFF" opacity="0.61"/>
+<circle cx="45.8" cy="375.9" r="1" fill="#FFFFFF" opacity="0.87"/>
+<circle cx="443.2" cy="165.1" r="0.8" fill="#FFFFFF" opacity="0.77"/>
+<circle cx="39.2" cy="111.9" r="1" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="180.1" cy="539.0" r="1.3" fill="#FFFFFF" opacity="0.54"/>
+<circle cx="32.3" cy="495.3" r="0.8" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="10.7" cy="219.9" r="1" fill="#FFFFFF" opacity="0.52"/>
+<circle cx="433.8" cy="146.5" r="0.6" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="537.8" cy="89.1" r="1.3" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="24.5" cy="177.3" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="628.6" cy="479.3" r="0.8" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="472.5" cy="493.5" r="1" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="475.6" cy="281.8" r="1" fill="#FFFFFF" opacity="0.78"/>
+<circle cx="425.5" cy="34.1" r="1.7" fill="#FFFFFF" opacity="0.89"/>
+<circle cx="415.3" cy="413.6" r="1.3" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="348.3" cy="287.4" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="387.3" cy="501.1" r="1.7" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="425.3" cy="56.8" r="0.6" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="243.0" cy="67.7" r="1" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="415.5" cy="354.4" r="1.7" fill="#FFFFFF" opacity="0.5"/>
+<circle cx="180.4" cy="261.3" r="0.6" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="334.9" cy="304.4" r="1.7" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="491.7" cy="270.6" r="0.6" fill="#FFFFFF" opacity="0.86"/>
+<circle cx="161.7" cy="426.0" r="0.8" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="640.3" cy="281.7" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="598.2" cy="168.0" r="0.6" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="425.2" cy="52.6" r="0.8" fill="#FFFFFF" opacity="0.55"/>
+<circle cx="430.9" cy="391.1" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="18.1" cy="43.4" r="1" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="74.3" cy="129.7" r="1" fill="#FFFFFF" opacity="0.52"/>
+<circle cx="343.7" cy="265.6" r="1" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="651.7" cy="312.0" r="1" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="614.8" cy="19.6" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="337.3" cy="557.0" r="1" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="602.1" cy="521.8" r="0.6" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="101.6" cy="298.2" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="539.9" cy="289.8" r="0.6" fill="#FFFFFF" opacity="0.77"/>
+<circle cx="159.5" cy="503.7" r="1" fill="#FFFFFF" opacity="0.59"/>
+<circle cx="112.8" cy="532.5" r="1.7" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="205.1" cy="87.4" r="1" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="88.1" cy="192.2" r="1" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="552.1" cy="76.0" r="0.8" fill="#FFFFFF" opacity="0.78"/>
+<g transform="translate(33.0 0)">
+<circle cx="300" cy="400" r="230" fill="url(#cv-glow)" opacity=".35"/>
+<g stroke="#F3CF73" stroke-width="1.1" opacity=".55">
+<line x1="110.0" y1="364.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="498.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="498.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="498.9"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="489.0"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="446.9"/>
+<line x1="395.0" y1="334.9" x2="490.0" y2="424.7"/>
+<line x1="395.0" y1="390.9" x2="490.0" y2="424.7"/>
+<line x1="395.0" y1="446.9" x2="490.0" y2="424.7"/>
+</g>
+<circle cx="110.0" cy="364.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="364.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="110.0" cy="420.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="420.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="110.0" cy="476.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="476.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="274.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="274.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="330.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="330.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="386.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="386.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="442.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="442.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="498.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="498.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="265.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="265.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="321.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="321.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="377.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="377.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="433.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="433.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="489.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="489.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="334.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="334.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="390.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="390.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="446.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="446.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="490.0" cy="424.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="490.0" cy="424.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="333.0" cy="700" r="190" fill="url(#cv-glow)"/>
+<circle cx="333.0" cy="700" r="120" fill="url(#cv-sun)"/>
+<g fill="none" stroke="#B9661F" stroke-width="3" opacity=".5"><circle cx="333.0" cy="700" r="106"/>
+<path d="M229.0 662 Q333.0 632 437.0 662"/>
+<path d="M295.0 596 Q325.0 700 295.0 804"/>
+<path d="M229.0 700 Q333.0 670 437.0 700"/>
+<path d="M333.0 596 Q363.0 700 333.0 804"/>
+<path d="M229.0 738 Q333.0 708 437.0 738"/>
+<path d="M371.0 596 Q401.0 700 371.0 804"/>
+</g>
+</g>
+<path fill="#2A3768" d="M0 900 L0 690 L40 664 L80 630 L120 649 L160 624 L200 621 L240 683 L280 689 L320 598 L360 661 L400 664 L440 580 L480 638 L520 598 L560 638 L600 620 L640 673 L680 620 L666 900 Z"/>
+<path fill="#17214A" d="M0 900 L0 760 L67 720 L133 742 L211 690 L278 735 L366 705 L444 748 L522 700 L599 736 L666 712 L666 900 Z"/>
+<rect y="780" width="666" height="120" fill="#0C142F"/>
+<path d="M0 782 Q333.0 768 666 782" fill="none" stroke="#33407A" stroke-width="2"/>
+<g transform="translate(488.0 790)">
+<path d="M-62 0 V-34 Q-60 -78 0 -86 Q60 -78 62 -34 V0 Z" fill="#EDE6D6"/>
+<rect x="-62" y="-40" width="124" height="10" fill="#B23A2E"/>
+<g stroke="#B23A2E" stroke-width="1.6" fill="none"><path d="M-56 -26 l6 -6 l6 6"/><path d="M-42 -26 l6 -6 l6 6"/><path d="M-28 -26 l6 -6 l6 6"/><path d="M-14 -26 l6 -6 l6 6"/><path d="M0 -26 l6 -6 l6 6"/><path d="M14 -26 l6 -6 l6 6"/><path d="M28 -26 l6 -6 l6 6"/><path d="M42 -26 l6 -6 l6 6"/></g>
+<path d="M-14 0 V-26 H14 V0 Z" fill="#B23A2E"/><path d="M-10 0 V-22 H10 V0" fill="none" stroke="#F0C35A" stroke-width="1.5"/>
+<ellipse cx="0" cy="-84" rx="16" ry="5" fill="#F0C35A"/>
+<path d="M-16 -84 L0 -95 L16 -84" stroke="#F0C35A" stroke-width="2" fill="none"/>
+</g>
+<g transform="translate(183.0 782)" fill="#0A1027">
+<circle cx="0" cy="-56" r="9"/><path d="M-10 -46 Q0 -50 10 -46 L14 -14 L8 -14 L6 0 H-6 L-8 -14 L-14 -14 Z"/>
+<path d="M9 -42 L26 -64" stroke="#0A1027" stroke-width="5" stroke-linecap="round"/>
+<path d="M-9 -60 Q-16 -40 -12 -24" stroke="#0A1027" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g>
+<g fill="#3A4A86" opacity=".7"><rect x="12" y="824" width="2" height="8"/><rect x="35" y="835" width="2" height="6"/><rect x="58" y="846" width="2" height="9"/><rect x="81" y="857" width="2" height="7"/><rect x="104" y="808" width="2" height="10"/><rect x="127" y="819" width="2" height="8"/><rect x="150" y="830" width="2" height="6"/><rect x="173" y="841" width="2" height="9"/><rect x="196" y="852" width="2" height="7"/><rect x="219" y="803" width="2" height="10"/><rect x="242" y="814" width="2" height="8"/><rect x="265" y="825" width="2" height="6"/><rect x="288" y="836" width="2" height="9"/><rect x="311" y="847" width="2" height="7"/><rect x="334" y="858" width="2" height="10"/><rect x="357" y="809" width="2" height="8"/><rect x="380" y="820" width="2" height="6"/><rect x="403" y="831" width="2" height="9"/><rect x="426" y="842" width="2" height="7"/><rect x="449" y="853" width="2" height="10"/><rect x="472" y="804" width="2" height="8"/><rect x="495" y="815" width="2" height="6"/><rect x="518" y="826" width="2" height="9"/><rect x="541" y="837" width="2" height="7"/><rect x="564" y="848" width="2" height="10"/><rect x="587" y="859" width="2" height="8"/><rect x="610" y="810" width="2" height="6"/><rect x="633" y="821" width="2" height="9"/><rect x="656" y="832" width="2" height="7"/></g>
+<rect x="16" y="16" width="634" height="868" fill="none" stroke="#E8B93A" stroke-opacity=".55" stroke-width="1.5"/>
+<rect x="24" y="24" width="618" height="852" fill="none" stroke="#E8B93A" stroke-opacity=".25" stroke-width="1"/>
+<use href="#cv-horn" transform="translate(46 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(620 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(46 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(620 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<g transform="translate(33.0 0)">
+<text x="300" y="76" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="13" letter-spacing="4.5" fill="#BFD3F2">A STEPPE TALE OF ARTIFICIAL INTELLIGENCE</text>
+<text x="300" y="168" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="104" letter-spacing="6" fill="url(#cv-title)">TULPAR</text>
+<text x="300" y="216" text-anchor="middle" font-family="Lora, Georgia, serif" font-style="italic" font-size="31" fill="#F4F0E6">and the Thinking Machine</text>
+<g transform="translate(300 246)"><use href="#cv-horn" transform="scale(.5)" stroke="#E8B93A" stroke-width="3" opacity=".9"/></g>
+<text x="300" y="852" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="12.5" letter-spacing="3.5" fill="#9FB2D9">AI FUNDAMENTALS · QAIRU · 2026</text>
+</g>
+</svg></template>
+<template id="backTpl"><h3>TULPAR</h3><p>A student and her small AI cross Kazakhstan, from Charyn Canyon to Baikonur. At every stop the machine learns a new way to think: searching, playing, planning under uncertainty, reasoning with probabilities, learning from data, and finally asking what it means to be fair.</p><p>Ten stops of the AI Fundamentals course, with stories, diagrams, live experiments and quizzes.</p><small>Esmankhan Baizhanov · Sultanhan Temirtasov · Temirlan Altynbekuly · Madiyar Nisanbayev<br>AI Fundamentals · QAIRU · 2026</small></template>
 <script>
 (function(){
 var css=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()};
 var C={};function readColors(){["paper","page","ink","muted","line","sky","sky-soft","gold","gold-soft","felt","felt-soft","ok","bad"].forEach(function(k){C[k]=css("--"+k)})}
 readColors();
 var redraws=[];
-var mq=window.matchMedia("(prefers-color-scheme: dark)");
-function recolor(){readColors();redraws.forEach(function(f){f()})}
-if(mq.addEventListener)mq.addEventListener("change",recolor);
-new MutationObserver(recolor).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
 
 function canvasPoint(cv,e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}}
 
-var secs=[].slice.call(document.querySelectorAll("section[id]"));
-var where=document.getElementById("where"),prog=document.getElementById("prog"),jump=document.getElementById("jump");
-function onScroll(){var y=window.scrollY+90,cur=null;secs.forEach(function(s){if(s.offsetTop<=y)cur=s});
-where.textContent=cur?(cur.dataset.title||"The Route"):"Cover";
-var opt=cur?cur.id:"top";if(jump.value!==opt)jump.value=opt;
-var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?Math.min(100,window.scrollY/h*100):0)+"%"}
-window.addEventListener("scroll",onScroll,{passive:true});onScroll();
-jump.addEventListener("change",function(){var t=document.getElementById(jump.value);if(t)t.scrollIntoView();location.hash=jump.value==="top"?"":jump.value});
 
 var nn=document.getElementById("nn-lines"),nd=document.getElementById("nn-nodes");
 var L=[[120,[70,125,180]],[320,[50,100,150,200]],[520,[95,155]]],ns="http://www.w3.org/2000/svg";
@@ -1312,17 +1298,15 @@ hmm:[["In an HMM, what do emission probabilities describe?",["How the hidden sta
 };
 [].forEach.call(document.querySelectorAll(".quiz"),function(box){var arr=Q[box.dataset.q];if(!arr)return;
 arr.forEach(function(it,qi){var d=document.createElement("div");d.className="q";var p=document.createElement("p");p.textContent=(qi+1)+". "+it[0];d.appendChild(p);
-var o=document.createElement("div");o.className="opts";var why=document.createElement("div");why.className="why";why.hidden=true;why.textContent=it[3];
+var o=document.createElement("div");o.className="opts";var why=document.createElement("div");why.className="why";why.textContent="Correct. "+it[3];
 it[1].forEach(function(t,i){var b=document.createElement("button");b.type="button";b.textContent=String.fromCharCode(65+i)+") "+t;
-b.addEventListener("click",function(){if(i===it[2]){b.classList.add("right");why.hidden=false;why.textContent="Correct. "+it[3]}else{b.classList.add("wrong");why.hidden=false;why.textContent="Not quite, try another option."}});o.appendChild(b)});
+b.addEventListener("click",function(){if(i===it[2]){b.classList.add("right");why.classList.add("on")}else{b.classList.add("wrong")}});o.appendChild(b)});
 d.appendChild(o);d.appendChild(why);box.appendChild(d)})});
 
 [].forEach.call(document.querySelectorAll(".flip"),function(f){f.addEventListener("click",function(){f.classList.toggle("on")})});
 
 var G=[["Agent","Anything that perceives its environment through sensors and acts on it through actuators."],["Rational agent","An agent that chooses actions expected to maximise its performance measure."],["PEAS","Performance, Environment, Actuators, Sensors: a template for describing an agent's task."],["State space","The set of all states reachable from the initial state."],["Frontier","The set of generated but not yet expanded nodes in a search."],["Breadth-first search (BFS)","Expands the shallowest node first using a FIFO queue."],["Depth-first search (DFS)","Expands the deepest node first using a LIFO stack."],["Uniform-cost search (UCS)","Expands the node with the lowest path cost g(n)."],["Iterative deepening","Repeated depth-limited DFS with increasing limits."],["Heuristic","An estimate h(n) of the cost from n to the goal."],["Admissible heuristic","A heuristic that never overestimates the true cost."],["A* search","Best-first search on f(n) = g(n) + h(n); optimal with an admissible (tree) or consistent (graph) heuristic."],["Hill climbing","Local search that always moves to a better neighbour."],["Simulated annealing","Local search that sometimes accepts worse moves, less often as temperature drops."],["Genetic algorithm","Evolves a population of solutions using selection, crossover and mutation."],["Minimax","Game search where MAX maximises and MIN minimises the utility."],["Alpha-beta pruning","Skips branches that cannot affect the minimax decision."],["Evaluation function","A heuristic score of a non-terminal game position."],["CSP","Constraint satisfaction problem: variables, domains and constraints."],["Backtracking","Depth-first assignment of variables that undoes choices that break constraints."],["Arc consistency","Every value in a variable's domain has a compatible value in each neighbour's domain."],["Knowledge base","A set of sentences in a formal language that an agent knows."],["Entailment","KB ⊨ α: α is true in every model where KB is true."],["Modus ponens","From P ⇒ Q and P, infer Q."],["First-order logic","Logic with objects, predicates, variables and quantifiers ∀, ∃."],["Bayes' rule","P(H|E) = P(E|H)·P(H) / P(E)."],["Bayesian network","A directed acyclic graph of variables with conditional probability tables."],["Naive Bayes","A classifier assuming features are independent given the class."],["Utility","A number that scores how desirable an outcome is."],["Expected utility","EU(a) = Σ P(o|a)·U(o): the probability-weighted average utility of an action."],["Maximum Expected Utility (MEU)","Choose the action with the highest expected utility."],["Decision threshold","The probability above which an action becomes worthwhile, e.g. repair if p > C_maint / C_failure."],["Logistic regression","A classifier that passes a linear score through the sigmoid to output a probability."],["Sigmoid","σ(z) = 1/(1+e^(−z)); maps any number to a value between 0 and 1."],["Random forest","An ensemble of decision trees trained on random samples and features, combined by voting or averaging."],["Data leakage","Training with information that would not be available when the model is used."],["Generalisation","Performing well on new, unseen data, not just on training data."],["Supervised learning","Learning from labelled input–output examples."],["Unsupervised learning","Finding structure in data without labels."],["Classification","Predicting a category."],["Regression","Predicting a number."],["Gradient descent","Minimising a loss by stepping against its gradient."],["Entropy","A measure of uncertainty: H = −Σ p log₂ p."],["k-NN","Classifies by majority vote of the k nearest training examples."],["k-means","Clustering by repeatedly assigning points to the nearest centroid and moving centroids to the mean."],["Overfitting","Fitting training data, noise included, so well that the model generalises poorly."],["Precision","TP / (TP + FP)."],["Recall","TP / (TP + FN)."],["Perceptron","A single neuron with a step activation and a simple learning rule."],["Activation function","A non-linear function applied to a neuron's weighted sum, e.g. ReLU, sigmoid."],["Backpropagation","Computing gradients of the loss for every weight using the chain rule."],["CNN","Convolutional neural network, specialised for images."],["Transformer","A neural architecture based on self-attention."],["Large language model (LLM)","A very large Transformer trained to predict the next token."],["Reinforcement learning","Learning a policy from rewards by interacting with an environment."],["MDP","Markov decision process: states, actions, transitions and rewards."],["Policy","A mapping from states to actions."],["Q-learning","Model-free RL that learns action values Q(s, a)."],["Discount factor γ","How much future rewards count compared with immediate ones."],["Hallucination","When a generative model produces confident but false content."],["Explainable AI (XAI)","Methods that make a model's decisions understandable to people."]];
-var gl=document.getElementById("gl"),gq=document.getElementById("gq");
-function drawGloss(){var q=gq.value.trim().toLowerCase();gl.innerHTML="";var n=0;G.forEach(function(g){if(q&&(g[0]+" "+g[1]).toLowerCase().indexOf(q)<0)return;n++;var dt=document.createElement("dt");dt.textContent=g[0];var dd=document.createElement("dd");dd.textContent=g[1];gl.appendChild(dt);gl.appendChild(dd)});if(!n){var dd=document.createElement("dd");dd.textContent="No term matches. Try a shorter word.";gl.appendChild(dd)}}
-gq.addEventListener("input",drawGloss);drawGloss();
+var gl=document.getElementById("gl");G.forEach(function(x){var p=document.createElement("p");var b=document.createElement("b");b.textContent=x[0];p.appendChild(b);p.appendChild(document.createTextNode(" · "+x[1]));gl.appendChild(p)});
 
 (function(){
 var cv=document.getElementById("pathCanvas"),ctx=cv.getContext("2d"),COLS=25,ROWS=15,cs=28;
@@ -1476,8 +1460,8 @@ function render(){if(!obs.length){out.innerHTML="";msg.textContent="No readings 
 var f=filter(),v=viterbi(),h="<table><tr><th>Time</th><th>Reading</th><th>P(Healthy)</th><th>P(Faulty)</th><th>Viterbi state</th></tr>";
 f.forEach(function(b,t){h+="<tr><td>"+(t+1)+"</td><td>"+(obs[t]==="H"?"<b style='color:var(--felt)'>High</b>":"Normal")+"</td><td><div style='display:flex;align-items:center;gap:8px'><span style='display:inline-block;height:10px;border-radius:5px;background:var(--sky);width:"+Math.round(b[0]*90)+"px'></span>"+(b[0]*100).toFixed(1)+"%</div></td><td><div style='display:flex;align-items:center;gap:8px'><span style='display:inline-block;height:10px;border-radius:5px;background:var(--felt);width:"+Math.round(b[1]*90)+"px'></span>"+(b[1]*100).toFixed(1)+"%</div></td><td><b>"+(v[t]?"Faulty":"Healthy")+"</b></td></tr>"});
 out.innerHTML=h+"</table>";var last=f[f.length-1];msg.textContent="Now: "+(last[1]>.5?"the pump is probably faulty":"the pump is probably healthy")+" ("+(last[1]*100).toFixed(1)+"% faulty). Next step prediction: "+((last[0]*T[0][1]+last[1]*T[1][1])*100).toFixed(1)+"% faulty."}
-document.getElementById("hmmN").onclick=function(){if(obs.length<10){obs.push("N");render()}};
-document.getElementById("hmmH").onclick=function(){if(obs.length<10){obs.push("H");render()}};
+document.getElementById("hmmN").onclick=function(){if(obs.length<6){obs.push("N");render()}};
+document.getElementById("hmmH").onclick=function(){if(obs.length<6){obs.push("H");render()}};
 document.getElementById("hmmR").onclick=function(){obs=[];render()};
 render();
 })();
@@ -1493,6 +1477,124 @@ ctx.fillStyle=C.ink;ctx.fillText("$"+Math.round(r[1]).toLocaleString("en-US")+(b
 document.getElementById("euMsg").textContent="Expected cost of waiting = "+Math.round(p*100)+"% × $"+f.toLocaleString("en-US")+" = $"+Math.round(wait).toLocaleString("en-US")+". Threshold = $"+m.toLocaleString("en-US")+" / $"+f.toLocaleString("en-US")+" = "+(m/f*100).toFixed(1)+"%. Rational choice: "+(wait>m?"repair now.":"wait.")}
 [P,F,M].forEach(function(r){r.addEventListener("input",draw)});draw();redraws.push(draw);
 })();
+})();
+(function(){
+var BAR=52;
+var root=document.documentElement,stage=document.getElementById("stage"),book=document.getElementById("book"),src=document.getElementById("src"),host=document.getElementById("measure");
+var prevB=document.getElementById("prevPg"),nextB=document.getElementById("nextPg"),pgl=document.getElementById("pgl"),where=document.getElementById("where"),jump=document.getElementById("jump"),loading=document.getElementById("loading");
+var SPLIT="ul,ol,.timeline,.refs,.route,.quiz,.gl-list,.cast,.flips,.team";
+var TITLE="Tulpar and the Thinking Machine";
+var blocks=[],anchors={};
+[].forEach.call(src.querySelectorAll("section"),function(sec){
+[].slice.call(sec.children).forEach(function(k,i){blocks.push({el:k,run:sec.getAttribute("data-run")||"",sec:sec.id,start:i===0,shells:[]});if(i===0)anchors[sec.id]=k});
+});
+[].forEach.call(src.querySelectorAll("[id]"),function(e){if(e.tagName!=="SECTION"&&!anchors[e.id])anchors[e.id]=e});
+var pages=[],sheets=[],dbl=true,f=0,idx=0,cur=null,curPc=null,dim=null,busy=false;
+
+function realKids(el){var n=0;[].forEach.call(el.children,function(c){if(c.tagName!=="H4")n++});return n}
+function fits(pc){return pc.scrollHeight<=pc.clientHeight+1}
+function makePage(){var pg=document.createElement("div");pg.className="pg";pg.innerHTML='<div class="rh"><span></span><span></span></div><div class="pc"></div><div class="pf"></div>';host.appendChild(pg);return pg}
+function special(cls,html){var pg=document.createElement("div");pg.className="pg special "+cls;pg.innerHTML=html;host.appendChild(pg);return pg}
+function blank(){var pg=makePage();pg.classList.add("blank","noh");pg.querySelector(".pc").innerHTML='<div class="orn-blank"><svg><use href="#horn"/></svg></div>';pages.push({el:pg,run:"",blank:true})}
+function newPage(b){
+if(b.start&&dbl&&pages.length%2===1)blank();
+cur=makePage();curPc=cur.querySelector(".pc");var p={el:cur,run:b.run,sec:b.sec,opener:false};pages.push(p);
+if(b.start){cur.classList.add("pk-"+b.sec);if(b.el.classList.contains("chead")||b.sec==="titlepage")p.opener=true}
+}
+function cont(b){return{el:b.el,run:b.run,sec:b.sec,start:false,shells:b.shells}}
+function place(b,el){
+curPc.appendChild(el);
+if(fits(curPc))return;
+var only=curPc.children.length===1;
+if(el.matches(SPLIT)&&realKids(el)>1){
+curPc.removeChild(el);
+var shell=el.cloneNode(false);curPc.appendChild(shell);var moved=0;
+while(el.firstChild){var c=el.firstChild;shell.appendChild(c);if(c.nodeType===1&&!fits(curPc)){el.insertBefore(c,el.firstChild);break}if(c.nodeType===1&&c.tagName!=="H4")moved++}
+if(moved===0){while(shell.lastChild)el.insertBefore(shell.lastChild,el.firstChild);curPc.removeChild(shell);
+if(only){curPc.appendChild(el);cur.classList.add("scroll");return}
+breakTo(b,el);return}
+b.shells.push(shell);
+if(el.tagName==="OL"){var st=parseInt(el.getAttribute("start")||"1",10);el.setAttribute("start",st+shell.children.length)}
+newPage(cont(b));place(b,el);return}
+if(only){cur.classList.add("scroll");return}
+curPc.removeChild(el);breakTo(b,el);
+}
+function breakTo(b,el){var carry=null,last=curPc.lastElementChild;
+if(last&&/^H[34]$/.test(last.tagName)&&curPc.children.length>1){carry=last;curPc.removeChild(last)}
+newPage(cont(b));if(carry)curPc.appendChild(carry);place(b,el)}
+function restore(){blocks.forEach(function(b){if(!b.shells.length)return;var fr=document.createDocumentFragment();
+b.shells.forEach(function(s){while(s.firstChild)fr.appendChild(s.firstChild);if(s.parentNode)s.parentNode.removeChild(s)});
+while(b.el.firstChild)fr.appendChild(b.el.firstChild);b.el.appendChild(fr);b.shells=[];if(b.el.tagName==="OL")b.el.removeAttribute("start")})}
+function dims(){var W=window.innerWidth,H=window.innerHeight-BAR;var d={dbl:true};var ph=Math.min(H-74,980),ratio=ph<700?0.8:0.74,pw=Math.round(ph*ratio);
+if(2*pw>W-60){pw=Math.floor((W-60)/2);ph=Math.round(pw/ratio)}
+if(pw<430||W<900){d.dbl=false;pw=Math.min(W-16,640);ph=Math.max(420,H-62)}
+d.pw=pw;d.ph=ph;d.fs=pw>=560?16.5:pw>=480?16:15;return d}
+function paginate(){
+restore();book.innerHTML="";host.innerHTML="";pages=[];sheets=[];
+root.style.setProperty("--pw",dim.pw+"px");root.style.setProperty("--ph",dim.ph+"px");root.style.setProperty("--fs",dim.fs+"px");dbl=dim.dbl;
+pages.push({el:special("cover",document.getElementById("coverTpl").innerHTML),special:true});
+if(dbl)pages.push({el:special("endpaper",""),special:true});
+blocks.forEach(function(b){if(b.start||!cur)newPage(b);place(b,b.el)});
+if(dbl){if(pages.length%2===1)blank();pages.push({el:special("endpaper",""),special:true})}
+pages.push({el:special("backcover",document.getElementById("backTpl").innerHTML),special:true});
+if(dbl&&pages.length%2===1)blank();
+var off=dbl?1:0;
+pages.forEach(function(p,i){p.el.setAttribute("data-i",i);if(p.special)return;var n=i-off;p.num=n;
+var left=dbl&&i%2===1;p.el.classList.add(dbl?(left?"left":"right"):"right");
+if(p.blank)return;
+if(p.opener)p.el.classList.add("noh");
+var rh=p.el.querySelector(".rh");rh.children[0].textContent=dbl?(left?String(n):TITLE):p.run;rh.children[1].textContent=dbl?(left?"":p.run):String(n);
+if(dbl&&left){rh.children[0].textContent=TITLE;rh.children[1].textContent=""}
+if(dbl&&!left){rh.children[0].textContent="";rh.children[1].textContent=p.run}
+p.el.querySelector(".pf").textContent=String(n)});
+[].forEach.call(document.querySelectorAll(".route a"),function(a){var t=anchors[a.getAttribute("href").slice(1)];var pn=a.querySelector(".pn");if(!t||!pn)return;var pg=t.closest(".pg");pn.textContent=pg?pages[+pg.getAttribute("data-i")].num:""});
+cur=null;
+if(dbl){book.className="book dbl";book.style.width=2*dim.pw+"px";book.style.height=dim.ph+"px";
+for(var k=0;k<pages.length/2;k++){var s=document.createElement("div");s.className="sheet";var fr=document.createElement("div");fr.className="face front";fr.appendChild(pages[2*k].el);var bk=document.createElement("div");bk.className="face back";bk.appendChild(pages[2*k+1].el);s.appendChild(fr);s.appendChild(bk);book.appendChild(s);sheets.push(s)}}
+else{book.className="book sgl";book.style.width=dim.pw+"px";book.style.height=dim.ph+"px";book.style.transform="none";
+pages.forEach(function(p){var l=document.createElement("div");l.className="leaf";l.appendChild(p.el);book.appendChild(l)})}
+}
+function zs(){var S=sheets.length;sheets.forEach(function(s,i){s.style.zIndex=i<f?i+1:S-i+1})}
+function render(anim,dir){
+if(dbl){var S=sheets.length;
+if(!anim){sheets.forEach(function(s){s.style.transition="none"});book.style.transition="none"}
+sheets.forEach(function(s,i){s.classList.toggle("flipped",i<f)});
+if(!anim){zs();void book.offsetWidth;sheets.forEach(function(s){s.style.transition=""});book.style.transition=""}
+book.style.transform=f===0?"translateX(-25%)":f===S?"translateX(25%)":"none";book.classList.toggle("cf",f===0);book.classList.toggle("cb",f===S);
+}else{[].forEach.call(book.children,function(l,i){var on=i===idx;l.classList.toggle("on",on);l.classList.remove("in-next","in-prev");if(on&&anim)l.classList.add(dir>0?"in-next":"in-prev")})}
+label()}
+function visible(){if(dbl){var a=[];if(2*f-1>=0)a.push(2*f-1);if(2*f<pages.length)a.push(2*f);return a}return[idx]}
+function label(){var v=visible(),run="";v.forEach(function(i){if(pages[i].run)run=pages[i].run});
+var first=v[0],last=v[v.length-1];
+if(pages[first].special&&v.length===1&&first===0)pgl.textContent="Click the cover or press → to open";
+else if(last===pages.length-1&&pages[last].special)pgl.textContent="The end";
+else{var ns=v.map(function(i){return pages[i].num}).filter(function(n){return n!==undefined});pgl.textContent=ns.length?(ns.length>1?"pp. "+ns[0]+"–"+ns[1]:"p. "+ns[0]):"";}
+where.textContent=run||(first===0?"Cover":"");
+prevB.disabled=dbl?f===0:idx===0;nextB.disabled=dbl?f===sheets.length:idx===pages.length-1;
+var sec="";v.forEach(function(i){if(pages[i].sec)sec=pages[i].sec});var opt=[].some.call(jump.options,function(o){return o.value===sec});jump.value=opt?sec:(first===0?"cover":jump.value)}
+function next(){if(busy)return;if(dbl){if(f>=sheets.length)return;var s=sheets[f];s.style.zIndex=1000;f++;render(true);lock(s)}else{if(idx>=pages.length-1)return;idx++;render(true,1)}}
+function prev(){if(busy)return;if(dbl){if(f<=0)return;f--;var s=sheets[f];s.style.zIndex=1000;render(true);lock(s)}else{if(idx<=0)return;idx--;render(true,-1)}}
+function lock(){busy=true;setTimeout(function(){busy=false;zs()},430);setTimeout(zs,880)}
+function goPage(i,anim){if(i<0)i=0;if(i>pages.length-1)i=pages.length-1;
+if(dbl){var nf=Math.ceil(i/2);if(anim&&Math.abs(nf-f)===1){nf>f?next():prev();return}f=nf;render(false)}else{var d=i>idx?1:-1;idx=i;render(anim,d)}}
+function goEl(el){var pg=el&&el.closest(".pg");if(pg)goPage(+pg.getAttribute("data-i"),true)}
+function anchorNow(){var v=visible();for(var j=v.length-1;j>=0;j--){var pc=pages[v[j]].el.querySelector(".pc");if(pc&&pc.firstElementChild)return pc.firstElementChild}return null}
+function layout(force){var d=dims();if(!force&&dim&&d.dbl===dim.dbl&&Math.abs(d.pw-dim.pw)<24&&Math.abs(d.ph-dim.ph)<24)return;
+var a=dim?anchorNow():null,atCover=dim?(dbl?f===0:idx===0):true;dim=d;paginate();
+if(a&&!atCover){var pg=a.closest(".pg");var i=pg?+pg.getAttribute("data-i"):0;if(dbl)f=Math.ceil(i/2);else idx=i}else{f=0;idx=0}
+render(false)}
+document.getElementById("brand").addEventListener("click",function(e){e.preventDefault();goPage(0,false)});prevB.addEventListener("click",prev);nextB.addEventListener("click",next);
+document.addEventListener("keydown",function(e){var t=e.target.tagName;if(t==="INPUT"||t==="SELECT"||t==="TEXTAREA")return;if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();next()}else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();prev()}});
+book.addEventListener("click",function(e){var a=e.target.closest("a[href^='#']");if(a){e.preventDefault();var t=anchors[a.getAttribute("href").slice(1)];if(t)goEl(t);return}
+var pg=e.target.closest(".pg");if(!pg)return;if(pg.classList.contains("special")||pg.classList.contains("blank")){var i=+pg.getAttribute("data-i");var v=visible();if(dbl&&v.length>1&&i===v[0])prev();else next()}});
+var tx=0,ty=0,tok=false;
+stage.addEventListener("touchstart",function(e){var t=e.target;tok=!(t.closest("canvas,input,select,button,.tbl,pre,.formula"));tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+stage.addEventListener("touchend",function(e){if(!tok)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>50&&Math.abs(dy)<60){dx<0?next():prev()}},{passive:true});
+jump.addEventListener("change",function(){if(jump.value==="cover"){goPage(0,false);return}var t=anchors[jump.value];if(t){var pg=t.closest(".pg");if(pg)goPage(+pg.getAttribute("data-i"),false)}});
+var rt=null;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){layout(false)},250)});
+function start(){loading.hidden=true;layout(true);var h=location.hash.slice(1);if(h&&anchors[h]){var pg=anchors[h].closest(".pg");if(pg)goPage(+pg.getAttribute("data-i"),false)}}
+var started=false;function go(){if(started)return;started=true;start()}
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go);setTimeout(go,2500)}else go();
 })();
 </script>
 
