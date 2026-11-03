@@ -1,0 +1,1500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Tulpar and the Thinking Machine: an interactive AI Fundamentals e-book told as a Kazakh steppe tale.">
+<meta property="og:title" content="Tulpar and the Thinking Machine">
+<meta property="og:description" content="An interactive AI Fundamentals e-book with 10 chapters, live experiments and quizzes.">
+<title>Tulpar and the Thinking Machine</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+--paper:#EEF3F2;--page:#FBFCFB;--ink:#14213D;--muted:#566577;--line:#CBD8D8;
+--sky:#00809A;--sky-soft:#D5ECEF;--gold:#A8780B;--gold-soft:#F6E7BD;--felt:#A9362B;--felt-soft:#F5DEDA;
+--ok:#1C7C4A;--bad:#B3261E;
+--display:"Poppins","Trebuchet MS",system-ui,sans-serif;
+--serif:"Lora",Georgia,"Times New Roman",serif;
+--mono:"JetBrains Mono","DejaVu Sans Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--paper:#0B1324;--page:#111C33;--ink:#E7EDF4;--muted:#9AA9BB;--line:#26365A;
+--sky:#4CC7DE;--sky-soft:#12324A;--gold:#E9BC4C;--gold-soft:#3A3014;--felt:#EE7A6C;--felt-soft:#3D1F1D;
+--ok:#5ACB8C;--bad:#FF8A80;color-scheme:dark}}
+:root[data-theme="dark"]{
+--paper:#0B1324;--page:#111C33;--ink:#E7EDF4;--muted:#9AA9BB;--line:#26365A;
+--sky:#4CC7DE;--sky-soft:#12324A;--gold:#E9BC4C;--gold-soft:#3A3014;--felt:#EE7A6C;--felt-soft:#3D1F1D;
+--ok:#5ACB8C;--bad:#FF8A80;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.7}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--page)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--page);border-bottom:1px solid var(--line);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:14px}
+.bar .brand{font-weight:700;letter-spacing:.06em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.bar .brand span{color:var(--gold)}
+.bar .where{color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar select{font:inherit;font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--page);color:var(--ink);max-width:46vw}
+.progress{position:absolute;left:0;bottom:-1px;height:3px;background:var(--gold);width:0}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,5vw,40px);font-weight:700}
+h3{font-size:22px;font-weight:600;margin-top:40px}
+h4{font-size:17px;font-weight:600}
+p{margin:14px 0}
+a{color:var(--sky)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hero{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:40px;align-items:center;padding-block:48px 32px}
+.hero .cover svg{width:100%;height:auto;display:block;border-radius:4px 10px 10px 4px;box-shadow:-6px 0 0 #0E1838 inset,0 18px 40px rgba(10,20,50,.35)}
+.hero .kick{font-family:var(--display);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--sky);font-weight:600}
+.hero h1{font-size:clamp(34px,6vw,54px);font-weight:700;margin-top:8px}
+.hero h1 em{font-family:var(--serif);font-weight:400;display:block;font-size:.55em;color:var(--muted)}
+.hero .lede{font-size:19px}
+.hero .meta{font-family:var(--display);font-size:14px;color:var(--muted);display:grid;gap:4px;margin-top:18px}
+.btn{font-family:var(--display);font-size:14px;font-weight:600;border:1px solid var(--sky);background:var(--sky);color:var(--page);padding:9px 16px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--sky)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+@media (max-width:720px){.hero{grid-template-columns:1fr;padding-top:24px}.hero .cover{max-width:300px;margin:0 auto}body{font-size:17px}}
+.orn{display:flex;justify-content:center;margin:48px 0 8px;color:var(--gold)}
+.orn svg{width:120px;height:28px}
+.route{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;counter-reset:stop}
+.route li{min-width:0}
+.route a{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;text-decoration:none;color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;height:100%}
+.route a:hover{border-color:var(--sky)}
+.route .n{font-family:var(--display);font-weight:700;font-size:15px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--sky-soft);color:var(--sky)}
+.route b{font-family:var(--display);font-size:15px;display:block;line-height:1.3}
+.route small{font-family:var(--display);color:var(--muted);font-size:12.5px;line-height:1.4;display:block;margin-top:3px}
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+.cast div{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:16px}
+.cast b{font-family:var(--display);display:block}
+section.ch{padding-block:24px 8px}
+.chead{border-top:2px solid var(--ink);padding-top:18px;margin-top:40px}
+.chead .stop{font-family:var(--display);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--felt);font-weight:600;display:flex;gap:10px;flex-wrap:wrap}
+.chead .stop span+span::before{content:"·";margin-right:10px;color:var(--muted)}
+.chead h2{margin-top:6px}
+.chead .goal{font-family:var(--display);font-size:14.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+.story{font-style:italic;border-left:3px solid var(--gold);padding:4px 0 4px 18px;margin:22px 0;color:var(--ink)}
+.story .who{font-style:normal;font-family:var(--display);font-weight:600;font-size:.88em;color:var(--sky)}
+.story .who.aru{color:var(--felt)}
+.term{font-weight:600;color:var(--ink);background:linear-gradient(transparent 62%,var(--gold-soft) 62%)}
+.box{border-radius:10px;padding:14px 18px;margin:22px 0;font-size:16.5px;border:1px solid var(--line);background:var(--page)}
+.box h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.box.know{background:var(--gold-soft);border-color:transparent}.box.know h4{color:var(--gold)}
+.box.case{background:var(--sky-soft);border-color:transparent}.box.case h4{color:var(--sky)}
+.box.myth{background:var(--felt-soft);border-color:transparent}.box.myth h4{color:var(--felt)}
+.box p{margin:6px 0}
+figure{margin:26px 0}
+figure .fig{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;min-width:480px}
+figcaption{font-family:var(--display);font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5}
+svg text{font-family:var(--display)}
+.s-ink{fill:var(--ink)}.s-mut{fill:var(--muted)}.s-sky{fill:var(--sky)}.s-gold{fill:var(--gold)}.s-felt{fill:var(--felt)}.s-page{fill:var(--page)}.s-skys{fill:var(--sky-soft)}.s-golds{fill:var(--gold-soft)}.s-felts{fill:var(--felt-soft)}
+.k-ink{stroke:var(--ink)}.k-mut{stroke:var(--muted)}.k-sky{stroke:var(--sky)}.k-gold{stroke:var(--gold)}.k-felt{stroke:var(--felt)}.k-line{stroke:var(--line)}
+pre,code{font-family:var(--mono);font-size:14px}
+pre{background:var(--page);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;line-height:1.55}
+.formula{font-family:var(--mono);font-size:15px;background:var(--page);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:16px 0;overflow-x:auto;white-space:nowrap}
+.tbl{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:10px;background:var(--page)}
+table{border-collapse:collapse;width:100%;font-family:var(--display);font-size:14px;line-height:1.45}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;background:var(--sky-soft)}
+tr:last-child td{border-bottom:0}
+ul.tight,ol.tight{padding-left:22px}ul.tight li,ol.tight li{margin:6px 0}
+.lab{margin:28px 0;border:2px solid var(--sky);border-radius:12px;background:var(--page);overflow:hidden}
+.lab .lh{background:var(--sky);color:var(--page);font-family:var(--display);font-weight:600;font-size:14px;padding:8px 14px;letter-spacing:.04em}
+.lab .lb{padding:14px;display:grid;gap:12px}
+.lab .lb p{margin:0;font-size:15.5px}
+.lab canvas{width:100%;height:auto;display:block;border-radius:8px;background:var(--paper);touch-action:manipulation}
+.lab label{font-family:var(--display);font-size:13.5px;display:grid;gap:2px}
+.lab input[type=range]{width:100%;accent-color:var(--sky)}
+.lab select{font:inherit;font-family:var(--display);font-size:14px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--page);color:var(--ink)}
+.stats{font-family:var(--display);font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink)}
+.sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.ttt{display:grid;grid-template-columns:repeat(3,72px);gap:6px;justify-content:center}
+.ttt button{width:72px;height:72px;font-family:var(--display);font-size:34px;font-weight:700;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer}
+.ttt button.o{color:var(--sky)}.ttt button.x{color:var(--felt)}
+.msg{font-family:var(--display);font-size:14.5px;font-weight:500;text-align:center}
+.quiz{margin:30px 0;border:1px solid var(--line);border-radius:12px;background:var(--page);padding:16px 18px}
+.quiz>h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.q{margin-top:16px;font-family:var(--display);font-size:15px}
+.q p{margin:0 0 8px;font-weight:500}
+.q .opts{display:grid;gap:6px}
+.q button{text-align:left;font:inherit;font-size:14.5px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.q button.right{border-color:var(--ok);color:var(--ok);font-weight:600}
+.q button.wrong{border-color:var(--bad);color:var(--bad);text-decoration:line-through}
+.q .why{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.5}
+.timeline{list-style:none;padding:0;margin:20px 0;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:0 0 14px 22px;font-size:16px}
+.timeline li::before{content:"";position:absolute;left:-7px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.timeline b{font-family:var(--display);color:var(--sky);font-variant-numeric:tabular-nums}
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:20px 0}
+.flip{font:inherit;text-align:left;border:1px solid var(--line);background:var(--page);color:var(--ink);border-radius:10px;padding:14px;cursor:pointer;font-size:15.5px;line-height:1.5;min-height:120px}
+.flip .tag{font-family:var(--display);font-size:11.5px;letter-spacing:.14em;font-weight:700;display:block;margin-bottom:6px}
+.flip .tag.m{color:var(--felt)}.flip .tag.f{color:var(--ok)}
+.flip .back{display:none}.flip.on .front{display:none}.flip.on .back{display:block}.flip.on{border-color:var(--ok)}
+.gloss input{width:100%;font:inherit;font-family:var(--display);font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--page);color:var(--ink)}
+.gloss dl{margin:16px 0;display:grid;gap:0}
+.gloss dt{font-family:var(--display);font-weight:600;margin-top:12px}
+.gloss dd{margin:2px 0 0;font-size:16px;color:var(--ink)}
+.refs{font-size:15.5px;padding-left:22px}.refs li{margin:6px 0}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
+.team div{font-family:var(--display);background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-weight:600}
+.team small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+footer{padding-block:40px;text-align:center;font-family:var(--display);font-size:13px;color:var(--muted)}
+.nextch{display:flex;justify-content:flex-end;margin:28px 0 0}
+.nextch a{font-family:var(--display);font-size:14px;font-weight:600;text-decoration:none}
+</style>
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="horn" viewBox="-80 -40 160 56"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M0 4 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12"/><path d="M0 4 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12"/><path d="M42 -2 H78 M-42 -2 H-78"/><circle cx="0" cy="12" r="2.5" fill="currentColor"/></g></symbol></defs></svg>
+
+<header class="bar">
+<a class="brand" href="#top">TULPAR<span>.</span></a>
+<span class="where" id="where">Cover</span>
+<select id="jump" aria-label="Jump to chapter">
+<option value="top">Cover</option>
+<option value="route">The Route (contents)</option>
+<option value="ch1">1 · What is AI?</option>
+<option value="ch2">2 · Intelligent Agents</option>
+<option value="ch3">3 · Uninformed Search</option>
+<option value="ch4">4 · Heuristics, A* & Local Search</option>
+<option value="ch5">5 · Adversarial Search</option>
+<option value="ch6">6 · MDPs & Reinforcement Learning</option>
+<option value="ch7">7 · Probability & Bayesian Networks</option>
+<option value="ch8">8 · Hidden Markov Models</option>
+<option value="ch9">9 · Rational Decisions & ML</option>
+<option value="ch10">10 · Perceptrons & Neural Networks</option>
+<option value="bonus">Bonus: Logic & Knowledge</option>
+<option value="epi">Epilogue: Ethics & Future</option>
+<option value="extras">Glossary & Sources</option>
+</select>
+<div class="progress" id="prog"></div>
+</header>
+
+<main class="wrap" id="top">
+
+<div class="hero">
+<div class="cover"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-label="Book cover: Tulpar and the Thinking Machine">
+<defs>
+<linearGradient id="cv-sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#070F26"/><stop offset=".5" stop-color="#16285A"/><stop offset=".72" stop-color="#3B3F78"/><stop offset=".84" stop-color="#C9785A"/><stop offset=".9" stop-color="#F0B252"/></linearGradient>
+<radialGradient id="cv-sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".7" stop-color="#F5C04E"/><stop offset="1" stop-color="#E39A2E"/></radialGradient>
+<radialGradient id="cv-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD978" stop-opacity=".55"/><stop offset="1" stop-color="#FFD978" stop-opacity="0"/></radialGradient>
+<linearGradient id="cv-title" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8"/><stop offset="1" stop-color="#E8AE3C"/></linearGradient>
+<g id="cv-horn" fill="none" stroke-linecap="round"><path d="M0 0 C0 -22 26 -34 34 -16 C40 -2 24 4 20 -6 C17 -13 24 -16 26 -12"/><path d="M0 0 C0 -22 -26 -34 -34 -16 C-40 -2 -24 4 -20 -6 C-17 -13 -24 -16 -26 -12"/><path d="M0 0 V12"/></g>
+</defs>
+<rect width="600" height="900" fill="url(#cv-sky)"/>
+<circle cx="197.8" cy="93.0" r="1.7" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="486.3" cy="61.8" r="1.3" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="304.3" cy="30.6" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="149.6" cy="313.1" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="81.8" cy="132.8" r="1.7" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="45.9" cy="332.0" r="0.6" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="37.0" cy="482.2" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="323.6" cy="324.0" r="1.3" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="114.8" cy="329.9" r="1.7" fill="#FFFFFF" opacity="0.46"/>
+<circle cx="66.5" cy="401.7" r="1.3" fill="#FFFFFF" opacity="0.39"/>
+<circle cx="129.5" cy="384.2" r="1" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="280.0" cy="517.9" r="1" fill="#FFFFFF" opacity="0.53"/>
+<circle cx="470.7" cy="394.4" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="184.1" cy="282.3" r="1" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="177.0" cy="549.1" r="0.6" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="105.7" cy="198.1" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="568.0" cy="52.7" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="517.8" cy="182.6" r="1.7" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="298.1" cy="448.3" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="557.9" cy="270.8" r="1.7" fill="#FFFFFF" opacity="0.39"/>
+<circle cx="434.1" cy="180.3" r="1.3" fill="#FFFFFF" opacity="0.95"/>
+<circle cx="486.7" cy="166.5" r="1" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="211.3" cy="527.4" r="1" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="77.9" cy="42.4" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="153.6" cy="225.0" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="270.5" cy="312.2" r="0.8" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="511.1" cy="163.1" r="1" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="406.0" cy="219.2" r="0.8" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="112.2" cy="137.6" r="0.8" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="492.0" cy="110.3" r="1" fill="#FFFFFF" opacity="0.35"/>
+<circle cx="253.0" cy="213.1" r="1.3" fill="#FFFFFF" opacity="0.54"/>
+<circle cx="82.8" cy="482.6" r="1.3" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="439.1" cy="261.2" r="1.7" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="237.6" cy="229.4" r="0.6" fill="#FFFFFF" opacity="0.64"/>
+<circle cx="242.3" cy="114.8" r="0.8" fill="#FFFFFF" opacity="0.61"/>
+<circle cx="73.8" cy="340.4" r="0.6" fill="#FFFFFF" opacity="0.35"/>
+<circle cx="97.7" cy="65.8" r="1" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="50.8" cy="124.4" r="1" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="156.3" cy="201.1" r="1" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="76.9" cy="278.4" r="1" fill="#FFFFFF" opacity="0.64"/>
+<circle cx="190.9" cy="89.3" r="1.7" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="163.6" cy="465.9" r="0.8" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="129.0" cy="533.6" r="1" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="325.0" cy="24.9" r="1.3" fill="#FFFFFF" opacity="0.53"/>
+<circle cx="382.9" cy="60.1" r="1" fill="#FFFFFF" opacity="0.66"/>
+<circle cx="536.8" cy="205.6" r="0.8" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="461.9" cy="191.3" r="0.8" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="467.3" cy="427.1" r="0.8" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="484.6" cy="416.9" r="0.8" fill="#FFFFFF" opacity="0.47"/>
+<circle cx="295.8" cy="412.1" r="0.6" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="283.9" cy="116.5" r="1.3" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="269.4" cy="525.4" r="1" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="221.5" cy="131.3" r="0.8" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="205.9" cy="275.5" r="1.3" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="288.1" cy="369.1" r="1.7" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="393.1" cy="510.4" r="1.7" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="287.3" cy="108.2" r="1.7" fill="#FFFFFF" opacity="0.55"/>
+<circle cx="474.5" cy="544.4" r="1" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="441.1" cy="56.7" r="0.8" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="83.7" cy="93.1" r="1" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="94.8" cy="464.6" r="1" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="213.2" cy="311.8" r="0.8" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="473.6" cy="409.5" r="0.6" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="551.5" cy="248.6" r="0.8" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="132.4" cy="148.5" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="452.9" cy="189.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="86.0" cy="510.5" r="1" fill="#FFFFFF" opacity="0.89"/>
+<circle cx="394.2" cy="458.3" r="1.3" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="542.3" cy="285.9" r="1.3" fill="#FFFFFF" opacity="0.44"/>
+<circle cx="306.1" cy="490.0" r="0.8" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="460.1" cy="92.4" r="0.8" fill="#FFFFFF" opacity="0.63"/>
+<circle cx="430.6" cy="316.1" r="1" fill="#FFFFFF" opacity="0.76"/>
+<circle cx="317.8" cy="275.4" r="0.6" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="43.0" cy="115.2" r="0.6" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="304.5" cy="319.0" r="0.6" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="365.3" cy="288.1" r="1.3" fill="#FFFFFF" opacity="0.47"/>
+<circle cx="170.8" cy="289.5" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="153.6" cy="297.8" r="1" fill="#FFFFFF" opacity="0.9"/>
+<circle cx="527.8" cy="121.4" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="80.5" cy="253.2" r="0.6" fill="#FFFFFF" opacity="0.75"/>
+<circle cx="258.4" cy="127.0" r="1" fill="#FFFFFF" opacity="0.82"/>
+<circle cx="530.3" cy="94.9" r="1.7" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="222.4" cy="149.2" r="0.8" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="137.4" cy="533.9" r="1" fill="#FFFFFF" opacity="0.88"/>
+<circle cx="104.4" cy="377.3" r="0.8" fill="#FFFFFF" opacity="0.45"/>
+<circle cx="260.3" cy="293.6" r="1" fill="#FFFFFF" opacity="0.6"/>
+<circle cx="216.8" cy="60.7" r="1" fill="#FFFFFF" opacity="0.36"/>
+<circle cx="331.3" cy="252.3" r="0.6" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="310.1" cy="172.5" r="0.6" fill="#FFFFFF" opacity="0.42"/>
+<circle cx="542.8" cy="135.7" r="0.6" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="167.7" cy="508.2" r="0.8" fill="#FFFFFF" opacity="0.51"/>
+<circle cx="85.1" cy="242.2" r="1.7" fill="#FFFFFF" opacity="0.84"/>
+<circle cx="160.0" cy="92.2" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="416.2" cy="59.2" r="0.6" fill="#FFFFFF" opacity="0.83"/>
+<circle cx="116.3" cy="502.4" r="1" fill="#FFFFFF" opacity="0.91"/>
+<circle cx="378.0" cy="450.9" r="0.6" fill="#FFFFFF" opacity="0.71"/>
+<circle cx="139.0" cy="155.4" r="0.6" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="206.7" cy="314.2" r="1" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="35.1" cy="400.2" r="0.6" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="161.9" cy="109.6" r="1" fill="#FFFFFF" opacity="0.73"/>
+<circle cx="318.0" cy="123.2" r="1" fill="#FFFFFF" opacity="0.65"/>
+<circle cx="113.2" cy="200.9" r="0.6" fill="#FFFFFF" opacity="0.95"/>
+<circle cx="31.4" cy="20.1" r="1.3" fill="#FFFFFF" opacity="0.68"/>
+<circle cx="119.9" cy="271.1" r="1" fill="#FFFFFF" opacity="0.41"/>
+<circle cx="485.0" cy="247.7" r="1" fill="#FFFFFF" opacity="0.68"/>
+<circle cx="525.5" cy="543.7" r="1" fill="#FFFFFF" opacity="0.76"/>
+<circle cx="579.8" cy="198.5" r="1.7" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="91.0" cy="554.2" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="18.3" cy="354.0" r="1" fill="#FFFFFF" opacity="0.61"/>
+<circle cx="42.1" cy="375.9" r="1" fill="#FFFFFF" opacity="0.87"/>
+<circle cx="398.9" cy="165.1" r="0.8" fill="#FFFFFF" opacity="0.77"/>
+<circle cx="36.2" cy="111.9" r="1" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="162.7" cy="539.0" r="1.3" fill="#FFFFFF" opacity="0.54"/>
+<circle cx="30.0" cy="495.3" r="0.8" fill="#FFFFFF" opacity="0.56"/>
+<circle cx="10.6" cy="219.9" r="1" fill="#FFFFFF" opacity="0.52"/>
+<circle cx="390.5" cy="146.5" r="0.6" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="483.9" cy="89.1" r="1.3" fill="#FFFFFF" opacity="0.38"/>
+<circle cx="23.0" cy="177.3" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="565.4" cy="479.3" r="0.8" fill="#FFFFFF" opacity="0.74"/>
+<circle cx="425.3" cy="493.5" r="1" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="428.0" cy="281.8" r="1" fill="#FFFFFF" opacity="0.78"/>
+<circle cx="383.1" cy="34.1" r="1.7" fill="#FFFFFF" opacity="0.89"/>
+<circle cx="373.9" cy="413.6" r="1.3" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="313.8" cy="287.4" r="0.6" fill="#FFFFFF" opacity="0.85"/>
+<circle cx="348.8" cy="501.1" r="1.7" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="382.9" cy="56.8" r="0.6" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="219.2" cy="67.7" r="1" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="374.1" cy="354.4" r="1.7" fill="#FFFFFF" opacity="0.5"/>
+<circle cx="163.0" cy="261.3" r="0.6" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="301.7" cy="304.4" r="1.7" fill="#FFFFFF" opacity="0.67"/>
+<circle cx="442.5" cy="270.6" r="0.6" fill="#FFFFFF" opacity="0.86"/>
+<circle cx="146.2" cy="426.0" r="0.8" fill="#FFFFFF" opacity="0.79"/>
+<circle cx="575.9" cy="281.7" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="538.1" cy="168.0" r="0.6" fill="#FFFFFF" opacity="0.72"/>
+<circle cx="382.8" cy="52.6" r="0.8" fill="#FFFFFF" opacity="0.55"/>
+<circle cx="387.9" cy="391.1" r="1.3" fill="#FFFFFF" opacity="0.69"/>
+<circle cx="17.2" cy="43.4" r="1" fill="#FFFFFF" opacity="0.93"/>
+<circle cx="67.7" cy="129.7" r="1" fill="#FFFFFF" opacity="0.52"/>
+<circle cx="309.6" cy="265.6" r="1" fill="#FFFFFF" opacity="0.81"/>
+<circle cx="586.1" cy="312.0" r="1" fill="#FFFFFF" opacity="0.94"/>
+<circle cx="553.0" cy="19.6" r="1" fill="#FFFFFF" opacity="0.4"/>
+<circle cx="303.8" cy="557.0" r="1" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="541.6" cy="521.8" r="0.6" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="92.2" cy="298.2" r="1" fill="#FFFFFF" opacity="0.43"/>
+<circle cx="485.7" cy="289.8" r="0.6" fill="#FFFFFF" opacity="0.77"/>
+<circle cx="144.2" cy="503.7" r="1" fill="#FFFFFF" opacity="0.59"/>
+<circle cx="102.3" cy="532.5" r="1.7" fill="#FFFFFF" opacity="0.62"/>
+<circle cx="185.1" cy="87.4" r="1" fill="#FFFFFF" opacity="0.58"/>
+<circle cx="80.1" cy="192.2" r="1" fill="#FFFFFF" opacity="0.8"/>
+<circle cx="496.7" cy="76.0" r="0.8" fill="#FFFFFF" opacity="0.78"/>
+<circle cx="300" cy="400" r="230" fill="url(#cv-glow)" opacity=".35"/>
+<g stroke="#F3CF73" stroke-width="1.1" opacity=".55">
+<line x1="110.0" y1="364.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="364.7" x2="205.0" y2="498.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="420.7" x2="205.0" y2="498.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="274.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="330.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="386.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="442.9"/>
+<line x1="110.0" y1="476.7" x2="205.0" y2="498.9"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="274.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="330.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="386.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="442.9" x2="300.0" y2="489.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="265.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="321.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="377.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="433.0"/>
+<line x1="205.0" y1="498.9" x2="300.0" y2="489.0"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="265.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="321.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="377.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="433.0" x2="395.0" y2="446.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="334.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="390.9"/>
+<line x1="300.0" y1="489.0" x2="395.0" y2="446.9"/>
+<line x1="395.0" y1="334.9" x2="490.0" y2="424.7"/>
+<line x1="395.0" y1="390.9" x2="490.0" y2="424.7"/>
+<line x1="395.0" y1="446.9" x2="490.0" y2="424.7"/>
+</g>
+<circle cx="110.0" cy="364.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="364.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="110.0" cy="420.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="420.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="110.0" cy="476.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="110.0" cy="476.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="274.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="274.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="330.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="330.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="386.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="386.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="442.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="442.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="205.0" cy="498.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="205.0" cy="498.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="265.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="265.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="321.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="321.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="377.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="377.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="433.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="433.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="300.0" cy="489.0" r="11" fill="#FFD978" opacity=".18"/><circle cx="300.0" cy="489.0" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="334.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="334.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="390.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="390.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="395.0" cy="446.9" r="11" fill="#FFD978" opacity=".18"/><circle cx="395.0" cy="446.9" r="5.5" fill="#FFF1C4"/>
+<circle cx="490.0" cy="424.7" r="11" fill="#FFD978" opacity=".18"/><circle cx="490.0" cy="424.7" r="5.5" fill="#FFF1C4"/>
+<circle cx="300" cy="700" r="190" fill="url(#cv-glow)"/>
+<circle cx="300" cy="700" r="120" fill="url(#cv-sun)"/>
+<g fill="none" stroke="#B9661F" stroke-width="3" opacity=".5"><circle cx="300" cy="700" r="106"/>
+<path d="M196 662 Q300 632 404 662"/>
+<path d="M262 596 Q292 700 262 804"/>
+<path d="M196 700 Q300 670 404 700"/>
+<path d="M300 596 Q330 700 300 804"/>
+<path d="M196 738 Q300 708 404 738"/>
+<path d="M338 596 Q368 700 338 804"/>
+</g>
+<path fill="#2A3768" d="M0 900 L0 690 L40 664 L80 630 L120 649 L160 624 L200 621 L240 683 L280 689 L320 598 L360 661 L400 664 L440 580 L480 638 L520 598 L560 638 L600 620 L600 900 Z"/>
+<path fill="#17214A" d="M0 900 L0 760 L60 720 L120 742 L190 690 L250 735 L330 705 L400 748 L470 700 L540 736 L600 712 L600 900 Z"/>
+<rect y="780" width="600" height="120" fill="#0C142F"/>
+<path d="M0 782 Q300 768 600 782" fill="none" stroke="#33407A" stroke-width="2"/>
+<g transform="translate(455 790)">
+<path d="M-62 0 V-34 Q-60 -78 0 -86 Q60 -78 62 -34 V0 Z" fill="#EDE6D6"/>
+<rect x="-62" y="-40" width="124" height="10" fill="#B23A2E"/>
+<g stroke="#B23A2E" stroke-width="1.6" fill="none"><path d="M-56 -26 l6 -6 l6 6"/><path d="M-42 -26 l6 -6 l6 6"/><path d="M-28 -26 l6 -6 l6 6"/><path d="M-14 -26 l6 -6 l6 6"/><path d="M0 -26 l6 -6 l6 6"/><path d="M14 -26 l6 -6 l6 6"/><path d="M28 -26 l6 -6 l6 6"/><path d="M42 -26 l6 -6 l6 6"/></g>
+<path d="M-14 0 V-26 H14 V0 Z" fill="#B23A2E"/><path d="M-10 0 V-22 H10 V0" fill="none" stroke="#F0C35A" stroke-width="1.5"/>
+<ellipse cx="0" cy="-84" rx="16" ry="5" fill="#F0C35A"/>
+<path d="M-16 -84 L0 -95 L16 -84" stroke="#F0C35A" stroke-width="2" fill="none"/>
+</g>
+<g transform="translate(150 782)" fill="#0A1027">
+<circle cx="0" cy="-56" r="9"/><path d="M-10 -46 Q0 -50 10 -46 L14 -14 L8 -14 L6 0 H-6 L-8 -14 L-14 -14 Z"/>
+<path d="M9 -42 L26 -64" stroke="#0A1027" stroke-width="5" stroke-linecap="round"/>
+<path d="M-9 -60 Q-16 -40 -12 -24" stroke="#0A1027" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g>
+<g fill="#3A4A86" opacity=".7"><rect x="12" y="824" width="2" height="8"/><rect x="35" y="835" width="2" height="6"/><rect x="58" y="846" width="2" height="9"/><rect x="81" y="857" width="2" height="7"/><rect x="104" y="808" width="2" height="10"/><rect x="127" y="819" width="2" height="8"/><rect x="150" y="830" width="2" height="6"/><rect x="173" y="841" width="2" height="9"/><rect x="196" y="852" width="2" height="7"/><rect x="219" y="803" width="2" height="10"/><rect x="242" y="814" width="2" height="8"/><rect x="265" y="825" width="2" height="6"/><rect x="288" y="836" width="2" height="9"/><rect x="311" y="847" width="2" height="7"/><rect x="334" y="858" width="2" height="10"/><rect x="357" y="809" width="2" height="8"/><rect x="380" y="820" width="2" height="6"/><rect x="403" y="831" width="2" height="9"/><rect x="426" y="842" width="2" height="7"/><rect x="449" y="853" width="2" height="10"/><rect x="472" y="804" width="2" height="8"/><rect x="495" y="815" width="2" height="6"/><rect x="518" y="826" width="2" height="9"/><rect x="541" y="837" width="2" height="7"/><rect x="564" y="848" width="2" height="10"/><rect x="587" y="859" width="2" height="8"/></g>
+<rect x="16" y="16" width="568" height="868" fill="none" stroke="#E8B93A" stroke-opacity=".55" stroke-width="1.5"/>
+<rect x="24" y="24" width="552" height="852" fill="none" stroke="#E8B93A" stroke-opacity=".25" stroke-width="1"/>
+<use href="#cv-horn" transform="translate(46 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(554 52) rotate(0) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(46 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<use href="#cv-horn" transform="translate(554 856) rotate(180) scale(.55)" stroke="#E8B93A" stroke-width="3.5" opacity=".8"/>
+<text x="300" y="76" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="13" letter-spacing="4.5" fill="#BFD3F2">A STEPPE TALE OF ARTIFICIAL INTELLIGENCE</text>
+<text x="300" y="168" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="104" letter-spacing="6" fill="url(#cv-title)">TULPAR</text>
+<text x="300" y="216" text-anchor="middle" font-family="Lora, Georgia, serif" font-style="italic" font-size="31" fill="#F4F0E6">and the Thinking Machine</text>
+<g transform="translate(300 246)"><use href="#cv-horn" transform="scale(.5)" stroke="#E8B93A" stroke-width="3" opacity=".9"/></g>
+<text x="300" y="852" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="500" font-size="12.5" letter-spacing="3.5" fill="#9FB2D9">AI FUNDAMENTALS · QAIRU · 2026</text>
+</svg></div>
+<div>
+<div class="kick">An illustrated, interactive e-book</div>
+<h1>Tulpar <em>and the Thinking Machine</em></h1>
+<p class="lede">Aru is a first-year student from a village near the Alatau mountains. One night she builds a small AI and names it Tulpar, after the winged horse of Kazakh legend. Together they cross the steppe, and at every stop Tulpar learns a new way to think.</p>
+<p>Ten stops, ten ideas from the AI Fundamentals course. Every chapter has a short story, a clear explanation, a diagram or a live experiment you can play with, and a mini-quiz with answers.</p>
+<div class="row" style="margin-top:18px"><a class="btn" href="#route">Start the journey</a><a class="btn ghost" href="#extras">Glossary</a></div>
+<div class="meta"><span>AI Fundamentals · QAIRU · Endterm Creative AI Book · 2026</span><span>By Esmankhan Baizhanov, Sultanhan Temirtasov, Temirlan Altynbekuly, Madiyar Nisanbayev</span></div>
+</div>
+</div>
+
+<div class="orn"><svg><use href="#horn"/></svg></div>
+
+<section id="route">
+<h2>The Route</h2>
+<p>The book follows the order of the course lectures: each stop builds on the one before. The bonus stop on logic is extra reading. You can read it straight through or jump to any stop.</p>
+<ol class="route">
+<li><a href="#ch1"><span class="n">1</span><span><b>What is AI?</b><small>The aul at dawn · definitions, history, types of AI</small></span></a></li>
+<li><a href="#ch2"><span class="n">2</span><span><b>Intelligent Agents</b><small>Shymkent bazaar · PEAS, environments, agent types</small></span></a></li>
+<li><a href="#ch3"><span class="n">3</span><span><b>Uninformed Search</b><small>Charyn Canyon · state spaces, BFS, DFS, UCS, IDS</small></span></a></li>
+<li><a href="#ch4"><span class="n">4</span><span><b>Heuristics, A* & Local Search</b><small>Singing Dune · greedy, A*, hill climbing, annealing</small></span></a></li>
+<li><a href="#ch5"><span class="n">5</span><span><b>Adversarial Search</b><small>Togyz kumalak tournament · minimax, alpha-beta, expectimax, CSP</small></span></a></li>
+<li><a href="#ch6"><span class="n">6</span><span><b>MDPs & Reinforcement Learning</b><small>Eagle hunters of the Altai · Bellman, value iteration, Q-learning</small></span></a></li>
+<li><a href="#ch7"><span class="n">7</span><span><b>Probability & Bayesian Networks</b><small>Shepherd's camp · Bayes' rule, CPTs, inference, sampling</small></span></a></li>
+<li><a href="#ch8"><span class="n">8</span><span><b>Hidden Markov Models</b><small>The old well pump · filtering, smoothing, Viterbi</small></span></a></li>
+<li><a href="#ch9"><span class="n">9</span><span><b>Rational Decisions & ML</b><small>The great flock · expected utility, regression, trees, k-means</small></span></a></li>
+<li><a href="#ch10"><span class="n">10</span><span><b>Perceptrons & Neural Networks</b><small>Baikonur · perceptron, backprop, overfitting, CNN</small></span></a></li>
+<li><a href="#bonus"><span class="n">+</span><span><b>Bonus: Logic & Knowledge</b><small>Library of Otrar · propositional and first-order logic</small></span></a></li>
+<li><a href="#epi"><span class="n">★</span><span><b>Epilogue: Ethics & Future</b><small>Astana · bias, privacy, safety, regulation</small></span></a></li>
+<li><a href="#extras"><span class="n">A</span><span><b>Glossary & Sources</b><small>Searchable terms, references, AI use declaration</small></span></a></li>
+</ol>
+<h3>The characters</h3>
+<div class="cast">
+<div><b>Aru</b>A curious student who asks the questions a beginner would ask. Her lines are marked in red.</div>
+<div><b>Tulpar</b>Aru's AI. It starts out knowing almost nothing and grows smarter with every chapter. Its lines are marked in blue.</div>
+<div><b>Ata (Grandfather)</b>A shepherd and togyz kumalak master. He keeps checking that the machine stays wise and not only clever.</div>
+</div>
+</section>
+
+<section class="ch" id="ch1" data-title="1 · What is AI?">
+<div class="chead"><div class="stop"><span>Stop 1</span><span>The aul at dawn</span></div><h2>What is Artificial Intelligence?</h2><p class="goal">You will learn: common definitions of AI, the Turing test, narrow vs. general AI, and the key moments in AI history.</p></div>
+<div class="story"><p><span class="who aru">Aru:</span> “Tulpar, are you intelligent?”</p><p><span class="who">Tulpar:</span> “That depends on what you mean by ‘intelligent’. Scientists have argued about that for seventy years. Let me show you the four main answers.”</p></div>
+<p><span class="term">Artificial Intelligence (AI)</span> is the field of computer science that builds systems able to do tasks that normally require human intelligence: perceiving, reasoning, learning, planning, understanding language and making decisions. The term was coined by John McCarthy in the 1955 proposal for the <b>Dartmouth Summer Research Project</b>, held in 1956. That workshop is usually counted as the birth of AI as a field.</p>
+<p>Russell and Norvig, authors of the standard AI textbook, sort definitions along two questions: does the system think or act, and do we measure it against humans or against an ideal standard of <i>rationality</i>?</p>
+<div class="tbl"><table>
+<tr><th></th><th>Measured against humans</th><th>Measured against rationality</th></tr>
+<tr><th>Thinking</th><td><b>Thinking humanly</b>: model how people think (cognitive science)</td><td><b>Thinking rationally</b>: “laws of thought”, correct logical reasoning</td></tr>
+<tr><th>Acting</th><td><b>Acting humanly</b>: behave so that people cannot tell it is a machine (Turing test)</td><td><b>Acting rationally</b>: the <i>rational agent</i> approach. Do the action expected to give the best outcome. Modern AI mostly follows this view.</td></tr>
+</table></div>
+<h3>The Turing test</h3>
+<p>In 1950 Alan Turing published <i>Computing Machinery and Intelligence</i>. Instead of asking “Can machines think?”, he proposed the <span class="term">imitation game</span>: a human judge chats in text with a hidden human and a hidden machine. If the judge cannot reliably tell which is which, the machine passes. To pass, a machine needs natural language processing, knowledge representation, automated reasoning and machine learning.</p>
+<h3>Narrow, general and super AI</h3>
+<ul class="tight">
+<li><span class="term">Narrow (weak) AI</span> does one task well: face unlock, spam filtering, chess, translation. All AI in real use today is narrow, including large language models, even though they cover many tasks.</li>
+<li><span class="term">Artificial General Intelligence (AGI)</span> is a hypothetical system that could learn and perform any intellectual task a human can.</li>
+<li><span class="term">Superintelligence</span> is a hypothetical system that is far more capable than humans in almost every area.</li>
+</ul>
+<p>AI also has subfields, nested like the rings of a yurt's shanyrak:</p>
+<figure><div class="fig"><svg viewBox="0 0 640 300" role="img" aria-label="Nested circles: AI contains machine learning, which contains deep learning, which contains generative AI">
+<circle cx="320" cy="150" r="140" class="s-skys k-sky" stroke-width="2"/>
+<circle cx="360" cy="165" r="100" class="s-golds k-gold" stroke-width="2"/>
+<circle cx="392" cy="178" r="64" class="s-felts k-felt" stroke-width="2"/>
+<circle cx="412" cy="186" r="30" class="s-page k-ink" stroke-width="1.5"/>
+<text x="200" y="80" class="s-sky" font-size="18" font-weight="700">Artificial Intelligence</text>
+<text x="230" y="150" class="s-gold" font-size="15" font-weight="600">Machine Learning</text>
+<text x="330" y="140" class="s-felt" font-size="13" font-weight="600">Deep Learning</text>
+<text x="412" y="190" class="s-ink" font-size="10.5" font-weight="600" text-anchor="middle">GenAI</text>
+<text x="20" y="250" class="s-mut" font-size="12">rules, search, logic,</text><text x="20" y="266" class="s-mut" font-size="12">planning (no learning needed)</text>
+</svg></div><figcaption>Figure 1.1 · Every deep-learning system is machine learning, and every ML system is AI, but not the other way round. A chess engine that only searches is AI without any learning.</figcaption></figure>
+<h3>A short history of AI</h3>
+<ul class="timeline">
+<li><b>1943</b> McCulloch & Pitts describe the first mathematical model of a neuron.</li>
+<li><b>1950</b> Turing proposes the imitation game.</li>
+<li><b>1956</b> Dartmouth workshop: “artificial intelligence” becomes a field.</li>
+<li><b>1958</b> Rosenblatt builds the perceptron, a learning neuron.</li>
+<li><b>1966</b> ELIZA, an early chatbot by Joseph Weizenbaum, imitates a therapist with simple patterns.</li>
+<li><b>1969</b> Minsky & Papert show a single perceptron cannot learn XOR. Funding cools.</li>
+<li><b>1970s–80s</b> Expert systems (e.g. MYCIN for diagnosing infections) encode human rules. Two “AI winters” follow when promises are not met (around 1974–80 and 1987–93).</li>
+<li><b>1986</b> Rumelhart, Hinton & Williams popularise backpropagation for training multi-layer networks.</li>
+<li><b>1997</b> IBM Deep Blue beats world chess champion Garry Kasparov.</li>
+<li><b>2012</b> AlexNet wins the ImageNet competition by a large margin and starts the deep-learning boom.</li>
+<li><b>2016</b> DeepMind's AlphaGo beats Lee Sedol at Go, 4–1.</li>
+<li><b>2017</b> “Attention Is All You Need” introduces the Transformer.</li>
+<li><b>2020</b> AlphaFold 2 predicts protein structures with near-experimental accuracy.</li>
+<li><b>2022</b> ChatGPT brings large language models to the public.</li>
+<li><b>2024</b> Nobel Prizes: Physics to Hopfield & Hinton for neural networks; Chemistry partly to Hassabis & Jumper for AlphaFold.</li>
+</ul>
+<div class="box know"><h4>Did you know?</h4><p>About 1,100 years ago, the philosopher <b>al-Farabi</b> was born near Otrar, in today's South Kazakhstan. He wrote major works on logic and was called “the Second Teacher”, after Aristotle. Logic is one of the oldest foundations of AI. We visit his city in the Bonus stop.</p></div>
+<div class="quiz" data-q="1"><h4>Mini-quiz · Stop 1</h4></div>
+<div class="nextch"><a href="#ch2">Next stop: the bazaar →</a></div>
+</section>
+
+<section class="ch" id="ch2" data-title="2 · Intelligent Agents">
+<div class="chead"><div class="stop"><span>Stop 2</span><span>Shymkent bazaar</span></div><h2>Intelligent Agents</h2><p class="goal">You will learn: what an agent is, how to describe a task with PEAS, the properties of environments, and the five classic types of agents.</p></div>
+<div class="story"><p>The bazaar is loud. A merchant watches customers, checks prices and decides how much to charge.</p><p><span class="who">Tulpar:</span> “Look, Aru, the merchant is an <i>agent</i>. Eyes and ears are his sensors, his hands and voice are his actuators, and profit is his performance measure. I am an agent too, only made of code.”</p></div>
+<p>An <span class="term">agent</span> is anything that <b>perceives</b> its environment through <b>sensors</b> and <b>acts</b> on it through <b>actuators</b>. What the agent has perceived so far is its <span class="term">percept sequence</span>. The <span class="term">agent function</span> maps percept sequences to actions; the <span class="term">agent program</span> is the code that implements it.</p>
+<figure><div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Agent loop: environment sends percepts through sensors to the agent program, which sends actions through actuators back to the environment">
+<rect x="20" y="40" width="240" height="150" rx="12" class="s-skys k-sky" stroke-width="2"/>
+<text x="140" y="70" text-anchor="middle" class="s-sky" font-size="16" font-weight="700">AGENT</text>
+<rect x="50" y="88" width="180" height="40" rx="8" class="s-page k-sky" stroke-width="1.5"/><text x="140" y="113" text-anchor="middle" class="s-ink" font-size="13">agent program</text>
+<text x="140" y="160" text-anchor="middle" class="s-mut" font-size="12">“what should I do now?”</text>
+<rect x="400" y="40" width="220" height="150" rx="12" class="s-golds k-gold" stroke-width="2"/>
+<text x="510" y="70" text-anchor="middle" class="s-gold" font-size="16" font-weight="700">ENVIRONMENT</text>
+<text x="510" y="112" text-anchor="middle" class="s-ink" font-size="13">the bazaar, the road,</text><text x="510" y="130" text-anchor="middle" class="s-ink" font-size="13">the chessboard…</text>
+<path d="M400 80 H270" class="k-ink" stroke-width="2" fill="none"/><path d="M276 74 L264 80 L276 86 Z" class="s-ink"/>
+<text x="335" y="70" text-anchor="middle" class="s-ink" font-size="13" font-weight="600">percepts</text><text x="335" y="98" text-anchor="middle" class="s-mut" font-size="11">via sensors</text>
+<path d="M260 150 H390" class="k-felt" stroke-width="2" fill="none"/><path d="M384 144 L396 150 L384 156 Z" class="s-felt"/>
+<text x="330" y="142" text-anchor="middle" class="s-felt" font-size="13" font-weight="600">actions</text><text x="330" y="172" text-anchor="middle" class="s-mut" font-size="11">via actuators</text>
+</svg></div><figcaption>Figure 2.1 · The perceive–think–act loop that every agent in this book follows.</figcaption></figure>
+<p>A <span class="term">rational agent</span> chooses, for every percept sequence, the action that is expected to maximise its <b>performance measure</b>, given what it has perceived and what it knows. Rational does not mean all-knowing. A rational agent can still be unlucky.</p>
+<h3>PEAS: describing the task</h3>
+<p>Before building an agent we describe its task with <b>PEAS</b>: Performance measure, Environment, Actuators, Sensors.</p>
+<div class="tbl"><table>
+<tr><th>Agent</th><th>Performance</th><th>Environment</th><th>Actuators</th><th>Sensors</th></tr>
+<tr><td>Self-driving taxi in Almaty</td><td>Safe, fast, legal, comfortable trip; low fuel</td><td>Roads, traffic, pedestrians, weather</td><td>Steering, accelerator, brake, signals</td><td>Cameras, lidar, GPS, speedometer</td></tr>
+<tr><td>Spam filter</td><td>Few spam in inbox, few real emails lost</td><td>User's mailbox, senders</td><td>Mark as spam / not spam</td><td>Email text, sender, links</td></tr>
+<tr><td>Togyz kumalak program</td><td>Wins games</td><td>Board, opponent</td><td>Choose a pit to sow</td><td>Board state</td></tr>
+</table></div>
+<h3>Properties of environments</h3>
+<div class="tbl"><table>
+<tr><th>Property</th><th>Easy side</th><th>Hard side</th></tr>
+<tr><td>Observable?</td><td>Fully: agent sees the whole state (chess)</td><td>Partially: some is hidden (cards in poker)</td></tr>
+<tr><td>Agents?</td><td>Single (crossword)</td><td>Multi-agent, cooperative or competitive (football)</td></tr>
+<tr><td>Outcome of actions?</td><td>Deterministic: next state is certain</td><td>Stochastic: outcomes have probabilities (dice)</td></tr>
+<tr><td>Episodes?</td><td>Episodic: each decision independent (sorting parts)</td><td>Sequential: choices affect the future (driving)</td></tr>
+<tr><td>Changes while thinking?</td><td>Static (crossword)</td><td>Dynamic (traffic)</td></tr>
+<tr><td>States and time?</td><td>Discrete (chess moves)</td><td>Continuous (steering angle)</td></tr>
+<tr><td>Rules known?</td><td>Known</td><td>Unknown: agent must learn how the world works</td></tr>
+</table></div>
+<h3>Five types of agent programs</h3>
+<ol class="tight">
+<li><b>Simple reflex agent</b>: acts only on the current percept with condition–action rules. “If the sheep is near the cliff, whistle.”</li>
+<li><b>Model-based reflex agent</b>: keeps an internal <i>state</i> (a model of the world) to handle what it cannot see right now.</li>
+<li><b>Goal-based agent</b>: considers future consequences and picks actions that reach a goal. This needs search and planning.</li>
+<li><b>Utility-based agent</b>: compares how good different outcomes are with a <i>utility function</i>, e.g. fast <i>and</i> safe.</li>
+<li><b>Learning agent</b>: has a learning element that improves the other parts from experience, using feedback from a critic.</li>
+</ol>
+<div class="box case"><h4>Real-world case</h4><p>A robot vacuum is a model-based agent. Bump and cliff sensors are its percepts; it keeps a map of rooms already cleaned (its internal state) and uses that map to choose where to go next.</p></div>
+<div class="quiz" data-q="2"><h4>Mini-quiz · Stop 2</h4></div>
+<div class="nextch"><a href="#ch3">Next stop: Charyn Canyon →</a></div>
+</section>
+
+<section class="ch" id="ch3" data-title="3 · Uninformed Search">
+<div class="chead"><div class="stop"><span>Stop 3</span><span>Charyn Canyon</span></div><h2>Solving Problems by Searching</h2><p class="goal">You will learn: how to formulate a search problem, search trees, and the uninformed strategies BFS, DFS, uniform-cost search and iterative deepening.</p></div>
+<div class="story"><p>Charyn Canyon is a maze of red rock. Somewhere inside is a spring of fresh water.</p><p><span class="who aru">Aru:</span> “We have no map. How do we find the spring?”</p><p><span class="who">Tulpar:</span> “We search. I don't know which way is closer, so I'll explore systematically. That is called <i>uninformed</i> or <i>blind</i> search.”</p></div>
+<h3>Formulating a problem</h3>
+<p>A search problem has six parts:</p>
+<ul class="tight">
+<li><b>States</b>: all situations the world can be in (every cell of the canyon).</li>
+<li><b>Initial state</b>: where we start (the canyon entrance).</li>
+<li><b>Actions</b>: what can be done in a state (move N, S, E, W).</li>
+<li><b>Transition model</b>: the state that results from an action.</li>
+<li><b>Goal test</b>: is this state a goal? (Is this the spring?)</li>
+<li><b>Path cost</b>: the cost of a sequence of actions (number of steps, km, time).</li>
+</ul>
+<p>Searching builds a <span class="term">search tree</span>. The root is the initial state; expanding a node generates its children. The set of nodes waiting to be expanded is the <span class="term">frontier</span>. The only difference between strategies is <b>which frontier node is expanded next</b>.</p>
+<figure><div class="fig"><svg viewBox="0 0 640 260" role="img" aria-label="A search tree with nodes labelled by BFS and DFS visiting order">
+<g class="k-mut" stroke-width="1.5">
+<line x1="320" y1="40" x2="170" y2="110"/><line x1="320" y1="40" x2="470" y2="110"/>
+<line x1="170" y1="110" x2="100" y2="190"/><line x1="170" y1="110" x2="240" y2="190"/>
+<line x1="470" y1="110" x2="400" y2="190"/><line x1="470" y1="110" x2="540" y2="190"/>
+</g>
+<g font-size="14" font-weight="700" text-anchor="middle">
+<circle cx="320" cy="40" r="20" class="s-page k-ink" stroke-width="2"/><text x="320" y="45" class="s-ink">A</text>
+<circle cx="170" cy="110" r="20" class="s-page k-ink" stroke-width="2"/><text x="170" y="115" class="s-ink">B</text>
+<circle cx="470" cy="110" r="20" class="s-page k-ink" stroke-width="2"/><text x="470" y="115" class="s-ink">C</text>
+<circle cx="100" cy="190" r="20" class="s-page k-ink" stroke-width="2"/><text x="100" y="195" class="s-ink">D</text>
+<circle cx="240" cy="190" r="20" class="s-page k-ink" stroke-width="2"/><text x="240" y="195" class="s-ink">E</text>
+<circle cx="400" cy="190" r="20" class="s-page k-ink" stroke-width="2"/><text x="400" y="195" class="s-ink">F</text>
+<circle cx="540" cy="190" r="20" class="s-felts k-felt" stroke-width="2.5"/><text x="540" y="195" class="s-felt">G</text>
+</g>
+<text x="20" y="240" class="s-sky" font-size="13" font-weight="600">BFS order: A, B, C, D, E, F, G  (level by level, uses a FIFO queue)</text>
+<text x="20" y="258" class="s-felt" font-size="13" font-weight="600">DFS order: A, B, D, E, C, F, G  (deepest first, uses a LIFO stack)</text>
+</svg></div><figcaption>Figure 3.1 · The same tree explored by two strategies. G is the goal (the spring).</figcaption></figure>
+<h3>The four uninformed strategies</h3>
+<p>We judge strategies by four criteria: <b>completeness</b> (always finds a solution if one exists), <b>optimality</b> (finds the cheapest solution), <b>time</b> and <b>space</b> complexity. Here <i>b</i> is the branching factor, <i>d</i> the depth of the shallowest goal and <i>m</i> the maximum depth.</p>
+<div class="tbl"><table>
+<tr><th>Strategy</th><th>Frontier</th><th>Complete?</th><th>Optimal?</th><th>Time</th><th>Space</th></tr>
+<tr><td>Breadth-first (BFS)</td><td>FIFO queue</td><td>Yes (finite b)</td><td>Yes, if all step costs are equal</td><td>O(b<sup>d</sup>)</td><td>O(b<sup>d</sup>)</td></tr>
+<tr><td>Uniform-cost (UCS)</td><td>Priority queue by path cost g(n)</td><td>Yes (costs ≥ ε &gt; 0)</td><td>Yes</td><td colspan="2">O(b<sup>1+⌊C*/ε⌋</sup>)</td></tr>
+<tr><td>Depth-first (DFS)</td><td>LIFO stack</td><td>No (can loop or go down an infinite path)</td><td>No</td><td>O(b<sup>m</sup>)</td><td>O(bm)</td></tr>
+<tr><td>Iterative deepening (IDS)</td><td>DFS with depth limit 0, 1, 2…</td><td>Yes</td><td>Yes, if step costs are equal</td><td>O(b<sup>d</sup>)</td><td>O(bd)</td></tr>
+</table></div>
+<p><b>IDS</b> combines the low memory of DFS with the completeness of BFS. Repeating the top levels looks wasteful, but most nodes are on the bottom level, so the extra work is small.</p>
+<div class="box know"><h4>Did you know?</h4><p>With b = 10 and d = 12, BFS would have to store about 10<sup>12</sup> nodes. At 1 KB per node that is about 1 petabyte of memory. Memory, not time, is usually the first wall that BFS hits.</p></div>
+<p>You can watch BFS and DFS race through the canyon in the experiment in the next chapter.</p>
+<div class="quiz" data-q="3"><h4>Mini-quiz · Stop 3</h4></div>
+<div class="nextch"><a href="#ch4">Next stop: the Singing Dune →</a></div>
+</section>
+
+<section class="ch" id="ch4" data-title="4 · Heuristics, A* & Local Search">
+<div class="chead"><div class="stop"><span>Stop 4</span><span>Singing Dune, Altyn-Emel</span></div><h2>Informed Search, A* and Local Search</h2><p class="goal">You will learn: heuristics, greedy best-first search, A* and when it is optimal, then hill climbing, simulated annealing and genetic algorithms.</p></div>
+<div class="story"><p>From the canyon rim Aru can see the shining spring far away.</p><p><span class="who aru">Aru:</span> “Now we know roughly where it is. Can't we use that?”</p><p><span class="who">Tulpar:</span> “Yes! A guess about the remaining distance is called a <i>heuristic</i>. With it I can search much smarter.”</p></div>
+<p>A <span class="term">heuristic function h(n)</span> estimates the cost of the cheapest path from node <i>n</i> to the goal. On a grid where we move up/down/left/right, a classic heuristic is the <b>Manhattan distance</b>: |x₁ − x₂| + |y₁ − y₂|.</p>
+<ul class="tight">
+<li><b>Greedy best-first search</b> expands the node with the smallest <b>h(n)</b>. It is often fast but not optimal: it rushes towards the goal and can be fooled by walls.</li>
+<li><b>A* search</b> expands the node with the smallest <b>f(n) = g(n) + h(n)</b>, where g(n) is the cost already paid to reach n. It balances “how far I've come” with “how far I think is left”.</li>
+</ul>
+<div class="formula">f(n) = g(n) + h(n)</div>
+<p>A heuristic is <span class="term">admissible</span> if it never overestimates the true cost. It is <span class="term">consistent</span> if h(n) ≤ cost(n, n′) + h(n′) for every step. With an admissible heuristic, A* tree search is optimal; with a consistent heuristic, A* graph search is optimal. Manhattan distance is both on our grid, because you can never reach the spring in fewer steps than that.</p>
+<div class="lab" id="lab-path">
+<div class="lh">Experiment 1 · Race through Charyn Canyon</div>
+<div class="lb">
+<p>Aru (red) must reach the spring (blue). Pick an algorithm and press <b>Search</b>. Light cells were expanded; the gold line is the path found. Tap cells to add or remove rock walls.</p>
+<canvas id="pathCanvas" width="700" height="420" aria-label="Grid pathfinding visualisation"></canvas>
+<div class="row">
+<select id="pathAlg" aria-label="Algorithm"><option value="bfs">Breadth-first (BFS)</option><option value="dfs">Depth-first (DFS)</option><option value="greedy">Greedy best-first</option><option value="astar" selected>A* (Manhattan)</option></select>
+<button class="btn" id="pathGo">Search</button>
+<button class="btn ghost" id="pathMaze">New canyon</button>
+<button class="btn ghost" id="pathClear">Clear walls</button>
+</div>
+<div class="stats" id="pathStats"><span>Expanded: <b>–</b></span><span>Path length: <b>–</b></span></div>
+<p style="font-size:14px;color:var(--muted)">Try it: BFS and A* both find the shortest path, but A* expands far fewer cells. DFS usually finds a long, winding path. Greedy is fast but not always shortest.</p>
+</div></div>
+<h3>Local search: climbing the dune</h3>
+<p>Sometimes the path does not matter, only the final state does: the best timetable, the best layout of a factory, the best weights of a model. <span class="term">Local search</span> keeps just one (or a few) current states and moves to neighbours. It uses very little memory and works on huge spaces.</p>
+<figure><div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Objective landscape with a local maximum, a plateau and a global maximum">
+<path d="M20 200 C80 200 100 120 150 110 C200 100 210 170 260 160 C300 150 300 150 340 150 C380 150 400 60 470 40 C530 25 560 150 620 190" fill="none" class="k-sky" stroke-width="3"/>
+<circle cx="150" cy="110" r="7" class="s-felt"/><text x="150" y="96" text-anchor="middle" class="s-felt" font-size="12.5" font-weight="600">local maximum</text>
+<text x="320" y="140" text-anchor="middle" class="s-mut" font-size="12.5">plateau</text>
+<circle cx="470" cy="40" r="7" class="s-gold"/><text x="470" y="26" text-anchor="middle" class="s-gold" font-size="12.5" font-weight="600">global maximum</text>
+<circle cx="90" cy="175" r="6" class="s-ink"/><path d="M98 168 L130 126" class="k-ink" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="20" y="222" class="s-mut" font-size="12">hill climbing from here gets stuck on the left peak</text>
+</svg></div><figcaption>Figure 4.1 · The “state-space landscape”. Height is the objective value. Like the Singing Dune, it has several crests.</figcaption></figure>
+<ul class="tight">
+<li><b>Hill climbing</b>: always move to the best neighbour; stop when no neighbour is better. Fast, but it gets stuck on local maxima, ridges and plateaus. <b>Random-restart</b> hill climbing simply tries again from random starts.</li>
+<li><b>Simulated annealing</b>: sometimes accept a <i>worse</i> move, with probability e<sup>ΔE/T</sup>. The “temperature” T starts high (lots of exploring) and slowly cools (more careful), like cooling metal in a forge.</li>
+<li><b>Genetic algorithms</b>: keep a population of candidate solutions. Repeatedly <i>select</i> the fittest, <i>cross over</i> pairs to make children and <i>mutate</i> them a little. Inspired by natural evolution.</li>
+</ul>
+<div class="box case"><h4>Real-world case</h4><p>Navigation apps find routes on road graphs with many millions of nodes. They use A*-style search with good heuristics plus heavy pre-computation (such as contraction hierarchies) so that a route across a country is found in milliseconds.</p></div>
+<div class="quiz" data-q="4"><h4>Mini-quiz · Stop 4</h4></div>
+<div class="nextch"><a href="#ch5">Next stop: the tournament →</a></div>
+</section>
+
+<section class="ch" id="ch5" data-title="5 · Adversarial Search">
+<div class="chead"><div class="stop"><span>Stop 5</span><span>Togyz kumalak tournament</span></div><h2>Adversarial Search and Game Trees</h2><p class="goal">You will learn: types of games, game trees, minimax, alpha-beta pruning, evaluation functions and the horizon effect, expectimax for chance, and (as an extra) constraint satisfaction problems.</p></div>
+<div class="story"><p>In a felt yurt, Ata is playing <i>togyz kumalak</i>, the Kazakh game of nine pits and 162 stones.</p><p><span class="who">Ata:</span> “In the canyon, the rocks did not fight back. Here, every move I make, my opponent answers with the move that hurts me most.”</p><p><span class="who">Tulpar:</span> “Then I must think about his best reply, and my reply to that, and so on. That is <i>minimax</i>.”</p></div>
+<p>Games like chess, Go, togyz kumalak and tic-tac-toe are <b>two-player, zero-sum, deterministic, fully observable</b> games: what one player wins, the other loses. We model them with a <span class="term">game tree</span>: nodes are positions, edges are moves, and leaves have a <span class="term">utility</span> (+1 win, 0 draw, −1 loss).</p>
+<h3>Minimax</h3>
+<p>Player MAX wants the highest value, player MIN the lowest. Minimax computes the value of each node bottom-up:</p>
+<pre>minimax(s) =
+  utility(s)                         if s is terminal
+  max over actions a of minimax(result(s,a))   if MAX to move
+  min over actions a of minimax(result(s,a))   if MIN to move</pre>
+<figure><div class="fig"><svg viewBox="0 0 640 250" role="img" aria-label="Minimax tree: MAX root chooses 3; MIN nodes have values 3, 2 and 2; one branch pruned by alpha-beta">
+<g class="k-mut" stroke-width="1.5">
+<line x1="320" y1="40" x2="130" y2="110"/><line x1="320" y1="40" x2="320" y2="110"/><line x1="320" y1="40" x2="510" y2="110"/>
+<line x1="130" y1="110" x2="70" y2="190"/><line x1="130" y1="110" x2="130" y2="190"/><line x1="130" y1="110" x2="190" y2="190"/>
+<line x1="320" y1="110" x2="260" y2="190"/><line x1="320" y1="110" x2="320" y2="190" stroke-dasharray="4 4"/><line x1="320" y1="110" x2="380" y2="190" stroke-dasharray="4 4"/>
+<line x1="510" y1="110" x2="450" y2="190"/><line x1="510" y1="110" x2="510" y2="190"/><line x1="510" y1="110" x2="570" y2="190"/>
+</g>
+<g font-weight="700" text-anchor="middle" font-size="15">
+<path d="M320 18 L344 56 H296 Z" class="s-golds k-gold" stroke-width="2"/><text x="320" y="50" class="s-ink">3</text>
+<path d="M130 132 L154 94 H106 Z" class="s-skys k-sky" stroke-width="2"/><text x="130" y="118" class="s-ink">3</text>
+<path d="M320 132 L344 94 H296 Z" class="s-skys k-sky" stroke-width="2"/><text x="320" y="118" class="s-ink">≤2</text>
+<path d="M510 132 L534 94 H486 Z" class="s-skys k-sky" stroke-width="2"/><text x="510" y="118" class="s-ink">2</text>
+<g class="s-ink"><text x="70" y="210">3</text><text x="130" y="210">12</text><text x="190" y="210">8</text><text x="260" y="210">2</text><text x="450" y="210">14</text><text x="510" y="210">5</text><text x="570" y="210">2</text></g>
+<g class="s-mut"><text x="320" y="210">4</text><text x="380" y="210">6</text></g>
+</g>
+<text x="20" y="40" class="s-gold" font-size="12.5" font-weight="600">▲ MAX</text><text x="20" y="118" class="s-sky" font-size="12.5" font-weight="600">▼ MIN</text>
+<text x="20" y="242" class="s-mut" font-size="12">Dashed branches are pruned: once MIN finds 2 &lt; 3, MAX will never choose the middle move.</text>
+</svg></div><figcaption>Figure 5.1 · The textbook minimax example. MAX picks the left move, worth 3. Alpha-beta skips two leaves without changing the answer.</figcaption></figure>
+<h3>Alpha-beta pruning</h3>
+<p>Minimax explores the whole tree, which grows as O(b<sup>m</sup>). <span class="term">Alpha-beta pruning</span> keeps two numbers: <b>α</b>, the best value MAX can already guarantee, and <b>β</b>, the best value MIN can guarantee. When a branch cannot change the decision (α ≥ β), it is cut off. The result is exactly the same as minimax. With perfect move ordering the cost drops to about O(b<sup>m/2</sup>), so the program can look about twice as deep in the same time.</p>
+<p>Real games are too big to search to the end: chess has around 10<sup>120</sup> possible games (Shannon's estimate). Programs stop at a depth limit and use an <span class="term">evaluation function</span>, a heuristic score of a position. Usually it is a <b>weighted sum of features</b>:</p>
+<div class="formula">Eval(s) = w₁·f₁(s) + w₂·f₂(s) + … + wₙ·fₙ(s)</div>
+<p>In chess, f₁ might be the material difference and f₂ the number of legal moves. Unlike an A* heuristic, which estimates a cost to the goal, an evaluation function estimates <i>who is winning</i>. A fixed depth limit causes the <span class="term">horizon effect</span>: a disaster that lies just one move beyond the limit is invisible, so the program may make a move that only delays the loss.</p>
+<h3>Expectimax: when dice play too</h3>
+<p>In backgammon or in a dice-based game, the next state depends on <b>chance</b>, not only on an opponent. <span class="term">Expectimax</span> replaces MIN nodes with <b>chance nodes</b> whose value is the <b>expected value</b> (probability-weighted average) of their children:</p>
+<div class="formula">V(chance node) = Σ P(outcome) · V(outcome)</div>
+<p>Example: a move leads to a coin flip with outcomes worth 10 and 0 (each 50%), so its value is 5. Another move gives a sure 4. Expectimax picks the coin flip (5 &gt; 4), while minimax, which assumes the worst outcome, would pick the sure 4. Use minimax for a smart adversary and expectimax for randomness or an opponent who plays carelessly. Because chance nodes need all children, alpha-beta pruning does not apply directly.</p>
+<div class="lab" id="lab-ttt">
+<div class="lh">Experiment 2 · Tic-tac-toe on the sand against Tulpar</div>
+<div class="lb">
+<p>Togyz kumalak is too big to show here, so Tulpar teaches on a 3×3 board. You are <b style="color:var(--felt)">X</b>. Tulpar uses full minimax search, so it never loses. The counters show how many positions it examined with plain minimax and with alpha-beta for the same move.</p>
+<div class="ttt" id="ttt"></div>
+<div class="msg" id="tttMsg">Your move.</div>
+<div class="stats" id="tttStats" style="justify-content:center"><span>Minimax nodes: <b>–</b></span><span>Alpha-beta nodes: <b>–</b></span></div>
+<div class="row" style="justify-content:center"><button class="btn ghost" id="tttReset">New game</button><button class="btn ghost" id="tttFirst">Let Tulpar start</button></div>
+</div></div>
+<h3>Constraint satisfaction problems (CSP)</h3>
+<div class="story"><p><span class="who">Ata:</span> “After the tournament there is a <i>toi</i>, a feast. Guests who argue must not sit at the same table. Can your machine plan the seating?”</p></div>
+<p>A <span class="term">CSP</span> has <b>variables</b> X₁…Xₙ, a <b>domain</b> of possible values for each, and <b>constraints</b> that say which combinations are allowed. A solution assigns every variable a value with no constraint violated. Examples: map colouring, Sudoku, exam timetables, seating plans.</p>
+<figure><div class="fig"><svg viewBox="0 0 640 220" role="img" aria-label="Constraint graph of five guests with three table colours assigned so that connected guests differ">
+<g class="k-mut" stroke-width="2"><line x1="120" y1="60" x2="300" y2="50"/><line x1="120" y1="60" x2="200" y2="170"/><line x1="300" y1="50" x2="200" y2="170"/><line x1="300" y1="50" x2="420" y2="150"/><line x1="200" y1="170" x2="420" y2="150"/><line x1="420" y1="150" x2="540" y2="70"/><line x1="300" y1="50" x2="540" y2="70"/></g>
+<g font-size="13" font-weight="600" text-anchor="middle">
+<circle cx="120" cy="60" r="26" class="s-felts k-felt" stroke-width="2.5"/><text x="120" y="65" class="s-ink">Asel</text>
+<circle cx="300" cy="50" r="26" class="s-skys k-sky" stroke-width="2.5"/><text x="300" y="55" class="s-ink">Berik</text>
+<circle cx="200" cy="170" r="26" class="s-golds k-gold" stroke-width="2.5"/><text x="200" y="175" class="s-ink">Dana</text>
+<circle cx="420" cy="150" r="26" class="s-felts k-felt" stroke-width="2.5"/><text x="420" y="155" class="s-ink">Erlan</text>
+<circle cx="540" cy="70" r="26" class="s-golds k-gold" stroke-width="2.5"/><text x="540" y="75" class="s-ink">Gulnar</text>
+</g>
+<text x="20" y="212" class="s-mut" font-size="12">Lines = “must sit at different tables”. Colours = tables {red, blue, gold}. No line joins two circles of the same colour.</text>
+</svg></div><figcaption>Figure 5.2 · Seating at the toi as graph colouring, the classic CSP.</figcaption></figure>
+<p>CSPs are solved with <span class="term">backtracking search</span>: assign one variable at a time and undo (backtrack) as soon as a constraint is broken. Smart tricks make it much faster:</p>
+<ul class="tight">
+<li><b>MRV (minimum remaining values)</b>: choose the variable with the fewest legal values left (“fail first”).</li>
+<li><b>Degree heuristic</b>: break ties by choosing the variable involved in the most constraints.</li>
+<li><b>Least constraining value</b>: try the value that rules out the fewest options for neighbours.</li>
+<li><b>Forward checking</b> and <b>arc consistency (AC-3)</b>: after each assignment, remove values from neighbours' domains that can no longer work, and detect dead ends early.</li>
+</ul>
+<div class="quiz" data-q="5"><h4>Mini-quiz · Stop 5</h4></div>
+<div class="nextch"><a href="#ch6">Next stop: the Altai eagle hunters →</a></div>
+</section>
+
+<section class="ch" id="ch6" data-title="6 · MDPs & Reinforcement Learning">
+<div class="chead"><div class="stop"><span>Stop 6</span><span>Eagle hunters of the Altai</span></div><h2>Markov Decision Processes and Reinforcement Learning</h2><p class="goal">You will learn: MDPs, return and discounting, V and Q, the Bellman equation, value and policy iteration, Monte Carlo and TD learning, Q-learning, SARSA, exploration, and deep RL.</p></div>
+<div class="story"><p>A <i>berkutchi</i>, an eagle hunter, trains a golden eagle. He never explains the rules. When the eagle does well, it gets meat; when it fails, it gets nothing.</p><p><span class="who">Tulpar:</span> “That is how I can learn to act too: by trial, error and reward.”</p></div>
+<p>In <span class="term">reinforcement learning (RL)</span> an agent interacts with an environment. At each step it observes a <b>state</b> s, takes an <b>action</b> a, receives a <b>reward</b> r and moves to a new state s′. Its goal is to learn a <span class="term">policy</span> π(s) that maximises the total <b>discounted reward</b> r₀ + γr₁ + γ²r₂ + …, where the discount factor 0 ≤ γ &lt; 1 makes near rewards worth more than far ones.</p>
+<p>Search (Chapters 3–4) assumed every action has a certain result. In the steppe, a gust of wind can push the eagle off course. For <b>sequential decisions under uncertainty</b> we use a <span class="term">Markov decision process (MDP)</span>:</p>
+<ul class="tight">
+<li><b>S</b>: set of states; <b>A</b>: set of actions</li>
+<li><b>P(s′ | s, a)</b>: transition probabilities (actions can have random results)</li>
+<li><b>R(s, a, s′)</b>: reward for each transition</li>
+<li><b>γ</b>: discount factor. With γ = 0.9, a reward of 10 that arrives in 3 steps is worth 10 · 0.9³ ≈ 7.3 today.</li>
+</ul>
+<p>“Markov” means the next state depends only on the current state and action, not on the full history. Note that <b>reward ≠ value</b>: the reward is the immediate signal, the value is the total discounted return expected from now on.</p>
+<h3>Value functions and the Bellman equation</h3>
+<ul class="tight">
+<li><b>V<sup>π</sup>(s)</b>, the state-value: expected return starting in s and following policy π.</li>
+<li><b>Q<sup>π</sup>(s, a)</b>, the action-value: expected return after doing a in s, then following π. They are linked by V(s) = max<sub>a</sub> Q(s, a) for the optimal policy.</li>
+</ul>
+<p>The <span class="term">Bellman optimality equation</span> says the value of a state is the best immediate reward plus the discounted value of where you end up:</p>
+<div class="formula">V*(s) = maxₐ Σₛ′ P(s′|s,a) · [ R(s,a,s′) + γ · V*(s′) ]</div>
+<h3>Planning when the model is known</h3>
+<ul class="tight">
+<li><b>Value iteration</b>: start with V = 0 everywhere and apply the Bellman equation to every state again and again until the values stop changing. Then take the best action in each state.</li>
+<li><b>Policy iteration</b>: alternate <i>policy evaluation</i> (compute V<sup>π</sup> for the current policy) and <i>policy improvement</i> (make the policy greedy with respect to V<sup>π</sup>) until the policy stops changing. It often needs fewer iterations.</li>
+</ul>
+<p>If P and R are known, this is <b>planning</b> (model-based). If they are unknown, the agent must act, observe and learn: that is <span class="term">reinforcement learning (RL)</span>. Unlike supervised learning, nobody gives the correct action; the agent gets only a reward, often delayed.</p>
+<h3>Learning from experience: Monte Carlo and TD</h3>
+<ul class="tight">
+<li><b>Monte Carlo</b>: play a whole episode, then average the actual returns seen from each state.</li>
+<li><b>Temporal-Difference (TD) learning</b>: update after every step using the current estimate of the next state: V(s) ← V(s) + α[r + γV(s′) − V(s)]. TD learns faster and does not need the episode to end.</li>
+</ul>
+<h3>Q-learning</h3>
+<p>Q-learning (Watkins, 1989) learns Q(s, a): the expected future reward of doing action a in state s and acting well afterwards. After every step it nudges the estimate:</p>
+<div class="formula">Q(s,a) ← Q(s,a) + α [ r + γ · maxₐ′ Q(s′,a′) − Q(s,a) ]</div>
+<p>α is the learning rate. The part in brackets is the “surprise”: the difference between what happened and what the agent expected. Q-learning does not need a model of the environment (it is <i>model-free</i>).</p>
+<p>A complete numerical update: Q(s,a) = 2, reward r = −1, the best Q in the next state is 6, α = 0.5, γ = 0.9. Target = −1 + 0.9·6 = 4.4. New Q = 2 + 0.5·(4.4 − 2) = 3.2.</p>
+<p>Three numbers are easy to mix up: <b>α</b> (learning rate: how far to move towards the new estimate), <b>γ</b> (discount: how much the future matters) and <b>ε</b> (exploration rate).</p>
+<p><b>Exploration vs exploitation:</b> should the eagle use the best route it knows (exploit) or try something new that might be better (explore)? A common answer is <b>ε-greedy</b>: with probability ε pick a random action, otherwise the best known one.</p>
+<p><span class="term">SARSA</span> is a close relative. It updates with the action the agent <i>actually takes next</i>, Q(s,a) ← Q(s,a) + α[r + γQ(s′,a′) − Q(s,a)], so it is <b>on-policy</b>, while Q-learning, which uses the max, is <b>off-policy</b>. Near a cliff, SARSA learns a safer path because it accounts for its own random exploring moves.</p>
+<h3>Beyond tables</h3>
+<p>A Q-table needs one row per state, which is impossible for images or large worlds. <b>Deep Q-Networks (DQN)</b> replace the table with a neural network that estimates Q(s, a). <b>Policy-gradient</b> methods learn the policy directly, and <b>actor–critic</b> methods combine both: the actor chooses actions, the critic estimates their value. In real deployments (battery energy management, predictive maintenance of machines) RL also needs safety limits, careful state design and testing in simulation first.</p>
+<div class="lab" id="lab-ql">
+<div class="lh">Experiment 3 · Teach the eagle with Q-learning</div>
+<div class="lb">
+<p>The eagle starts bottom-left. The fox (top-right) gives +10. Cliffs give −10 and end the flight. Every move costs −1, so short routes are better. Train and watch the arrows (the learned policy) and the colours (how valuable each cell is) appear.</p>
+<canvas id="qlCanvas" width="700" height="460" aria-label="Q-learning grid world"></canvas>
+<div class="row"><button class="btn" id="qlTrain">Train 25 flights</button><button class="btn ghost" id="qlFly">Fly the learned route</button><button class="btn ghost" id="qlReset">Forget everything</button></div>
+<div class="stats" id="qlStats"></div>
+</div></div>
+<div class="box case"><h4>Real-world case</h4><p>DeepMind combined Q-learning with a deep network (DQN, 2015) and learned to play dozens of Atari games from raw pixels. AlphaGo (2016) combined RL, neural networks and tree search. RL with human feedback (RLHF) is also used to fine-tune chat assistants.</p></div>
+<div class="quiz" data-q="10"><h4>Mini-quiz · Stop 6</h4></div>
+<div class="nextch"><a href="#ch7">Next stop: the shepherd's camp →</a></div>
+</section>
+
+<section class="ch" id="ch7" data-title="7 · Probability & Bayesian Networks">
+<div class="chead"><div class="stop"><span>Stop 7</span><span>Shepherd's camp</span></div><h2>Reasoning under Uncertainty</h2><p class="goal">You will learn: probability basics, conditional probability, Bayes' rule, the base-rate trap, naive Bayes, Bayesian networks, chains, forks and colliders, exact inference and sampling.</p></div>
+<div class="story"><p>A vet's quick test says one of Ata's lambs has a rare illness.</p><p><span class="who aru">Aru:</span> “The test is 90% accurate, so the lamb is 90% likely to be sick, right?”</p><p><span class="who">Tulpar:</span> “Not at all! Logic said true or false. The real world says <i>probably</i>. Let me reason with probabilities.”</p></div>
+<p>Real agents rarely know everything: sensors are noisy and the world is random. <span class="term">Probability</span> gives a degree of belief between 0 and 1.</p>
+<ul class="tight">
+<li><b>Prior</b> P(A): belief before seeing evidence.</li>
+<li><b>Conditional probability</b> P(A | B) = P(A ∧ B) / P(B): belief in A once we know B.</li>
+<li><b>Independence</b>: A and B are independent if P(A | B) = P(A).</li>
+</ul>
+<h3>Bayes' rule</h3>
+<div class="formula">P(Sick | +) = P(+ | Sick) · P(Sick) / P(+)</div>
+<p>where P(+) = P(+ | Sick)·P(Sick) + P(+ | Healthy)·P(Healthy). Bayes' rule turns “how likely is the evidence if the cause is true” into “how likely is the cause given the evidence”. It is the main tool for updating beliefs.</p>
+<div class="lab" id="lab-bayes">
+<div class="lh">Experiment 4 · 1,000 lambs and one test</div>
+<div class="lb">
+<p>Each dot is one lamb. <b style="color:var(--felt)">Red</b> = sick and tests positive, <b style="color:var(--gold)">gold</b> = healthy but tests positive (false alarm), faded = tests negative. Move the sliders.</p>
+<div class="sliders">
+<label>How common is the illness? <b id="bPrevV"></b><input type="range" id="bPrev" min="1" max="200" value="10"></label>
+<label>Sensitivity P(+ | sick) <b id="bSensV"></b><input type="range" id="bSens" min="50" max="100" value="90"></label>
+<label>False-positive rate P(+ | healthy) <b id="bFprV"></b><input type="range" id="bFpr" min="0" max="30" value="9"></label>
+</div>
+<canvas id="bayesCanvas" width="700" height="290" aria-label="1000 dot icon array"></canvas>
+<div class="msg" id="bayesMsg"></div>
+</div></div>
+<p>With the default numbers, only about 9% of positive lambs are really sick, because healthy lambs are so much more common that their false alarms outnumber the true cases. Ignoring the prior like this is called the <span class="term">base-rate fallacy</span>, and doctors, judges and AI engineers all have to watch out for it.</p>
+<h3>Naive Bayes and Bayesian networks</h3>
+<p>A <span class="term">naive Bayes classifier</span> assumes every feature is independent given the class: P(Class | f₁…fₙ) ∝ P(Class) · ∏ P(fᵢ | Class). The assumption is “naive”, but it works well for text. Early spam filters used it: words like “prize” and “click” raise P(spam).</p>
+<figure><div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Bayesian network: Storm and Wolf both influence Sheep scattered; Sheep scattered influences Dog barks and Ata worried">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" class="s-ink"/></marker></defs>
+<g class="k-ink" stroke-width="1.8" marker-end="url(#ar)" fill="none"><path d="M175 66 L283 104"/><path d="M465 66 L357 104"/><path d="M296 142 L198 176"/><path d="M344 142 L442 176"/></g>
+<g font-size="13" font-weight="600" text-anchor="middle">
+<rect x="80" y="30" width="140" height="40" rx="20" class="s-skys k-sky" stroke-width="2"/><text x="150" y="55" class="s-ink">Storm</text>
+<rect x="420" y="30" width="140" height="40" rx="20" class="s-skys k-sky" stroke-width="2"/><text x="490" y="55" class="s-ink">Wolf nearby</text>
+<rect x="245" y="104" width="150" height="40" rx="20" class="s-golds k-gold" stroke-width="2"/><text x="320" y="129" class="s-ink">Sheep scattered</text>
+<rect x="80" y="176" width="140" height="40" rx="20" class="s-felts k-felt" stroke-width="2"/><text x="150" y="201" class="s-ink">Dog barks</text>
+<rect x="420" y="176" width="140" height="40" rx="20" class="s-felts k-felt" stroke-width="2"/><text x="490" y="201" class="s-ink">Ata worried</text>
+</g></svg></div><figcaption>Figure 7.1 · A Bayesian network. Each arrow means “directly influences”; each node stores a table P(node | parents). Hearing the dog bark raises our belief in both a storm and a wolf.</figcaption></figure>
+<p>A <span class="term">Bayesian network</span> is a directed acyclic graph where each node is a random variable with a <span class="term">conditional probability table (CPT)</span> given its parents. The full joint distribution factorises into a product of these local tables:</p>
+<div class="formula">P(X₁, …, Xₙ) = Π P(Xᵢ | Parents(Xᵢ))</div>
+<p>This saves a lot of space. A full joint table over 30 yes/no variables needs 2³⁰ − 1 ≈ 1 billion numbers. If each variable has at most 3 parents, the network needs at most 30 · 2³ = 240.</p>
+<h3>Three basic shapes</h3>
+<div class="tbl"><table>
+<tr><th>Shape</th><th>Example</th><th>What happens</th></tr>
+<tr><td><b>Chain</b> A → B → C</td><td>Storm → Sheep scattered → Ata worried</td><td>A and C are linked, but once B is known, A tells us nothing more about C.</td></tr>
+<tr><td><b>Fork</b> A ← B → C</td><td>Dog barks ← Sheep scattered → Ata worried</td><td>A common cause links the two effects; knowing B makes them independent.</td></tr>
+<tr><td><b>Collider</b> A → B ← C</td><td>Storm → Sheep scattered ← Wolf</td><td>A and C are independent, <i>until</i> B is observed. Then they become linked.</td></tr>
+</table></div>
+<p>The collider produces <span class="term">explaining away</span>: if the sheep are scattered and we learn there was a storm, our belief that a wolf came goes <i>down</i>, because the storm already explains the evidence.</p>
+<h3>Inference: exact and approximate</h3>
+<ul class="tight">
+<li><b>Exact inference by enumeration</b>: to get P(Query | evidence), sum the joint probability over all values of the hidden variables, then normalise. It is exact but grows exponentially with the number of hidden variables.</li>
+<li><b>Sampling is counting</b>: generate many random “worlds” from the network, top to bottom, following the CPTs.</li>
+<li><b>Rejection sampling</b>: throw away samples that disagree with the evidence and count the rest. Simple, but wasteful when the evidence is rare.</li>
+<li><b>Likelihood weighting</b>: fix the evidence variables to their observed values and give each sample a weight equal to how likely that evidence was. No samples are wasted.</li>
+</ul>
+<div class="box case"><h4>Real-world case</h4><p>Predictive maintenance: a network links hidden causes (bearing wear, overheating) to sensor readings (vibration, temperature, alarm). Given today's readings, inference gives the probability of each fault, so engineers can repair a machine before it breaks.</p></div>
+<div class="quiz" data-q="7"><h4>Mini-quiz · Stop 7</h4></div>
+<div class="nextch"><a href="#ch8">Next stop: the old well →</a></div>
+</section>
+
+<section class="ch" id="ch8" data-title="8 · Hidden Markov Models">
+<div class="chead"><div class="stop"><span>Stop 8</span><span>The old well pump</span></div><h2>Hidden Markov Models</h2><p class="goal">You will learn: hidden states vs. observations, Markov chains and transition matrices, emission tables, filtering, prediction, smoothing and the Viterbi algorithm.</p></div>
+<div class="story"><p>The camp's water comes from an old pump. Nobody can see inside it, but a small sensor shows its temperature: <i>Normal</i> or <i>High</i>.</p><p><span class="who aru">Aru:</span> “The sensor says High. So the pump is broken?”</p><p><span class="who">Tulpar:</span> “Not necessarily. Sensors give false alarms, and a fault can exist before any alarm. The pump's true condition is <i>hidden</i>. I have to reason about it over time.”</p></div>
+<p>Many problems have a <b>hidden state</b> that changes over time and produces <b>noisy observations</b>: a machine's health and its sensor readings, the words someone says and the sound we hear, the weather and whether people carry umbrellas.</p>
+<h3>Markov chains</h3>
+<p>A <span class="term">Markov chain</span> describes how a state changes from one time step to the next. The <b>Markov assumption</b> says the next state depends only on the current one:</p>
+<div class="formula">P(Xₜ₊₁ | Xₜ, Xₜ₋₁, …) = P(Xₜ₊₁ | Xₜ)</div>
+<p>The changes are stored in a <b>transition matrix T</b>; each row adds up to 1.</p>
+<div class="tbl"><table>
+<tr><th>Now ↓ / next →</th><th>Healthy</th><th>Faulty</th></tr>
+<tr><th>Healthy</th><td>0.90</td><td>0.10</td></tr>
+<tr><th>Faulty</th><td>0.20</td><td>0.80</td></tr>
+</table></div>
+<p>To predict one step ahead, multiply the belief vector by T: if today P = [0.80, 0.20], then tomorrow P(Healthy) = 0.80·0.90 + 0.20·0.20 = <b>0.76</b> and P(Faulty) = 0.80·0.10 + 0.20·0.80 = <b>0.24</b>.</p>
+<h3>The three ingredients of an HMM</h3>
+<figure><div class="fig"><svg viewBox="0 0 640 210" role="img" aria-label="HMM: hidden states X1 to X4 in a row with transition arrows; each emits an observation E1 to E4 below">
+<defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" class="s-mut"/></marker></defs>
+<g class="k-mut" stroke-width="2" marker-end="url(#ar2)" fill="none"><path d="M152 60 H228"/><path d="M292 60 H368"/><path d="M432 60 H508"/><path d="M120 86 V128"/><path d="M260 86 V128"/><path d="M400 86 V128"/><path d="M540 86 V128"/></g>
+<g font-size="14" font-weight="700" text-anchor="middle">
+<circle cx="120" cy="60" r="26" class="s-skys k-sky" stroke-width="2"/><text x="120" y="65" class="s-ink">X₁</text>
+<circle cx="260" cy="60" r="26" class="s-skys k-sky" stroke-width="2"/><text x="260" y="65" class="s-ink">X₂</text>
+<circle cx="400" cy="60" r="26" class="s-skys k-sky" stroke-width="2"/><text x="400" y="65" class="s-ink">X₃</text>
+<circle cx="540" cy="60" r="26" class="s-skys k-sky" stroke-width="2"/><text x="540" y="65" class="s-ink">X₄</text>
+<rect x="92" y="132" width="56" height="40" rx="8" class="s-golds k-gold" stroke-width="2"/><text x="120" y="157" class="s-ink">E₁</text>
+<rect x="232" y="132" width="56" height="40" rx="8" class="s-golds k-gold" stroke-width="2"/><text x="260" y="157" class="s-ink">E₂</text>
+<rect x="372" y="132" width="56" height="40" rx="8" class="s-golds k-gold" stroke-width="2"/><text x="400" y="157" class="s-ink">E₃</text>
+<rect x="512" y="132" width="56" height="40" rx="8" class="s-golds k-gold" stroke-width="2"/><text x="540" y="157" class="s-ink">E₄</text>
+</g>
+<text x="20" y="22" class="s-sky" font-size="12.5" font-weight="600">hidden states (pump condition) · horizontal arrows = transitions T</text>
+<text x="20" y="200" class="s-gold" font-size="12.5" font-weight="600">observations (sensor readings) · vertical arrows = emissions O</text>
+</svg></div><figcaption>Figure 8.1 · An HMM is two connected sequences: hidden states we want to know, and observations we can measure.</figcaption></figure>
+<ol class="tight">
+<li><b>Initial probabilities π</b>: P(Healthy) = 0.80, P(Faulty) = 0.20 at the start.</li>
+<li><b>Transition probabilities T</b>: the table above.</li>
+<li><b>Emission probabilities O</b>: how likely each reading is in each state.</li>
+</ol>
+<div class="tbl"><table>
+<tr><th>State ↓ / reading →</th><th>Normal</th><th>High</th></tr>
+<tr><th>Healthy</th><td>0.80</td><td>0.20</td></tr>
+<tr><th>Faulty</th><td>0.30</td><td>0.70</td></tr>
+</table></div>
+<p>Careful: P(High | Faulty) = 0.70 is <b>not</b> P(Faulty | High). To reverse it we need Bayes' rule from the previous chapter.</p>
+<h3>Filtering: what is happening now?</h3>
+<p><span class="term">Filtering</span> estimates the current hidden state from all readings so far. Each step has four parts: <b>predict</b> (move the belief forward with T), <b>observe</b> a reading, <b>correct</b> (multiply by the emission likelihood) and <b>normalise</b> (make it sum to 1).</p>
+<div class="formula">beliefₜ(j) ∝ Oⱼ(eₜ) · Σᵢ beliefₜ₋₁(i) · Tᵢⱼ</div>
+<p>Worked example with readings High, High:</p>
+<ul class="tight">
+<li><b>Time 1</b> (no transition yet): Healthy 0.80·0.20 = 0.16, Faulty 0.20·0.70 = 0.14. Normalise by 0.30 → <b>[53.3%, 46.7%]</b>.</li>
+<li><b>Time 2, predict</b>: Healthy 0.533·0.90 + 0.467·0.20 ≈ 0.573; Faulty ≈ 0.427.</li>
+<li><b>Time 2, correct</b>: [0.573·0.20, 0.427·0.70] = [0.115, 0.299]. Normalise by 0.413 → <b>[27.7%, 72.3%]</b>.</li>
+</ul>
+<p><b>Prediction</b> looks into the future with no new readings: pₜ₊ₖ = pₜ · Tᵏ. One step after [0.277, 0.723] gives Healthy ≈ 39.4%.</p>
+<h3>Smoothing and Viterbi: what happened before?</h3>
+<p><span class="term">Smoothing</span> re-estimates a <i>past</i> state using later readings too, with the <b>forward–backward</b> method: P(Xₜ | e₁…e_T) ∝ forwardₜ × backwardₜ. In our example, after the second High, the estimate that the pump was already Faulty at time 1 rises from 46.7% to <b>67.7%</b>, because a second High is much more likely if the pump was faulty earlier (0.60 vs. 0.25).</p>
+<p>The <span class="term">Viterbi algorithm</span> answers a different question: which <b>complete sequence</b> of hidden states is most likely? It uses dynamic programming: at each step it keeps only the best path into each state. For High, High the four paths score HH = 0.0288, HF = 0.0112, FH = 0.0056, FF = 0.0784, so the most likely story is <b>Faulty, Faulty</b>.</p>
+<div class="lab" id="lab-hmm">
+<div class="lh">Experiment 5 · Listen to the pump</div>
+<div class="lb">
+<p>Add sensor readings one by one. For each time step Tulpar shows the filtered belief (bar) and, at the bottom, the Viterbi path: the single most likely sequence of hidden states. The model uses the tables above.</p>
+<div class="row"><button class="btn" id="hmmN">Reading: Normal</button><button class="btn" id="hmmH" style="background:var(--felt);border-color:var(--felt)">Reading: High</button><button class="btn ghost" id="hmmR">Clear</button></div>
+<div id="hmmOut" class="tbl" style="margin:0"></div>
+<div class="msg" id="hmmMsg"></div>
+</div></div>
+<div class="box case"><h4>Real-world case</h4><p>HMMs powered speech recognition for decades (hidden words, observed sounds). They are still used for gene finding in DNA, part-of-speech tagging, and machine-health monitoring.</p></div>
+<div class="quiz" data-q="hmm"><h4>Mini-quiz · Stop 8</h4></div>
+<div class="nextch"><a href="#ch9">Next stop: the great flock →</a></div>
+</section>
+
+<section class="ch" id="ch9" data-title="9 · Rational Decisions & ML">
+<div class="chead"><div class="stop"><span>Stop 9</span><span>The great flock</span></div><h2>Rational Decisions and Classical Machine Learning</h2><p class="goal">You will learn: rational action and expected utility, decision thresholds, rules vs. learning, the three types of learning, linear and logistic regression, decision trees and random forests, k-means, and how to evaluate a model before trusting its decisions.</p></div>
+<div class="story"><p>Ata can tell a Kazakh fat-tailed sheep from a merino at a glance, but he cannot write down the rule.</p><p><span class="who">Tulpar:</span> “Then I won't ask for rules. Show me thousands of examples, and I'll find the pattern myself. That is <i>machine learning</i>.”</p></div>
+<h3>Part 1 · Rational decisions</h3>
+<div class="story"><p>Winter is coming. Ata must decide: repair the well pump now, or wait and hope it survives until spring?</p><p><span class="who">Tulpar:</span> “A rational choice is not a guaranteed good outcome. It is the action with the best <i>expected</i> result, given what we know now.”</p></div>
+<p>A <b>rational agent</b> uses the evidence available now and handles uncertainty explicitly. It can still be unlucky. An <b>omniscient</b> agent would know the real outcome in advance, which is impossible. So we judge a decision by its expected outcome, not by what happened afterwards.</p>
+<p>Probability alone is not enough: a 90% chance of success says nothing about how bad the other 10% is. A <span class="term">utility</span> gives each outcome a preference score. The <span class="term">expected utility</span> of an action weights each outcome's utility by its probability:</p>
+<div class="formula">EU(a) = Σᵢ P(oᵢ | a) · U(oᵢ)          a* = argmaxₐ EU(a)</div>
+<p>This is the principle of <span class="term">Maximum Expected Utility (MEU)</span>. Worked example:</p>
+<div class="tbl"><table>
+<tr><th>Option</th><th>Success</th><th>Failure</th><th>Expected utility</th></tr>
+<tr><td>Project A</td><td>90% × (+100)</td><td>10% × (−20)</td><td>0.9·100 + 0.1·(−20) = <b>88</b></td></tr>
+<tr><td>Project B</td><td>60% × (+200)</td><td>40% × (−50)</td><td>0.6·200 + 0.4·(−50) = <b>100</b></td></tr>
+</table></div>
+<p>Project B is riskier, yet it is the rational choice on this utility scale. People are not always <b>risk neutral</b>: a <b>risk-averse</b> person (concave utility) dislikes big losses and might prefer A, while a <b>risk-seeking</b> person accepts uncertainty for a chance of a big win.</p>
+<h3>From belief to action: the maintenance threshold</h3>
+<p>Bayes' rule (Chapter 7) turns an alarm into an updated probability of failure. Utilities then turn that probability into an action. If continuing costs p<sub>failure</sub> · C<sub>failure</sub> on average, and maintenance costs C<sub>maint</sub> and prevents the failure:</p>
+<div class="formula">Maintain if  p_failure &gt; C_maint / C_failure</div>
+<p>Example from the lecture: failure probability 15%, failure loss $20,000, maintenance $2,000. Expected cost of waiting = 0.15 × 20,000 = $3,000 &gt; $2,000, so <b>repair now</b>.</p>
+<div class="lab" id="lab-eu">
+<div class="lh">Experiment 6 · Repair the pump now or wait?</div>
+<div class="lb">
+<p>Move the sliders. Tulpar compares the expected cost of waiting with the cost of repairing and picks the cheaper action.</p>
+<div class="sliders">
+<label>Probability of failure <b id="euPV"></b><input type="range" id="euP" min="0" max="60" value="15"></label>
+<label>Cost if it fails <b id="euFV"></b><input type="range" id="euF" min="2" max="40" value="20"></label>
+<label>Cost of repair now <b id="euMV"></b><input type="range" id="euM" min="1" max="10" value="2"></label>
+</div>
+<canvas id="euCanvas" width="700" height="170" aria-label="Expected cost comparison bars"></canvas>
+<div class="msg" id="euMsg"></div>
+</div></div>
+<h3>Part 2 · Why learn from data?</h3>
+<p>In <b>traditional programming</b> a person writes the rules: <code>IF temperature &gt; 80 THEN alarm</code>. Data + rules → answers. But real data are noisy: a single hand-written threshold cannot separate overlapping “healthy” and “faulty” readings. In <b>machine learning</b>, data + answers → rules: the algorithm learns a model ŷ = f<sub>θ</sub>(x), where x are the input features and θ the learned parameters.</p>
+<p>The ML workflow: <b>collect</b> labelled examples → <b>split</b> into training and test data → <b>fit</b> the parameters → <b>evaluate</b> on unseen data → <b>decide</b> and act.</p>
+<p>Tom Mitchell's classic definition: a program <b>learns</b> from experience E with respect to task T and performance measure P if its performance at T, measured by P, improves with E.</p>
+<div class="tbl"><table>
+<tr><th>Type</th><th>Data</th><th>Goal</th><th>Example</th></tr>
+<tr><td><b>Supervised</b></td><td>Inputs with correct labels</td><td>Learn a mapping input → label</td><td>Photo → “fat-tailed” or “merino”; house features → price</td></tr>
+<tr><td><b>Unsupervised</b></td><td>Inputs only, no labels</td><td>Find structure: groups, patterns</td><td>Group customers by behaviour</td></tr>
+<tr><td><b>Reinforcement</b></td><td>Rewards from acting</td><td>Learn a policy that maximises reward</td><td>Training an eagle or a game bot (Chapter 6)</td></tr>
+</table></div>
+<p>The same machine data can support all three: <b>supervised</b> (with failure labels, predict “will this machine fail?”), <b>unsupervised</b> (without labels, discover groups of normal and unusual behaviour) and <b>reinforcement</b> (learn when to schedule maintenance from rewards).</p>
+<p>Supervised learning has two main tasks: <span class="term">regression</span> predicts a continuous number (energy demand, price, lifetime; measured with MAE, RMSE, R²) and <span class="term">classification</span> predicts a class or a probability (failure, fraud, spam; measured with accuracy, precision, recall, F1).</p>
+<h3>Linear regression and gradient descent</h3>
+<p>Linear regression fits a line ŷ = w·x + b. We measure error with the <b>mean squared error</b> and minimise it with <span class="term">gradient descent</span>: repeatedly take a small step (the <b>learning rate</b> η) against the gradient, the direction in which error grows fastest.</p>
+<div class="formula">MSE = (1/n) Σ (yᵢ − ŷᵢ)²        w ← w − η · ∂MSE/∂w</div>
+<h3>Logistic regression: from score to probability</h3>
+<p>Despite its name, logistic regression is a <b>classifier</b>. It computes a linear score z = wᵀx + b and passes it through the <span class="term">sigmoid</span> function, which turns any number into a probability between 0 and 1:</p>
+<div class="formula">σ(z) = 1 / (1 + e^(−z))          P(y = 1 | x) = σ(wᵀx + b)</div>
+<div class="tbl"><table><tr><th>z</th><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr><tr><th>σ(z)</th><td>11.9%</td><td>26.9%</td><td>50%</td><td>73.1%</td><td>88.1%</td></tr></table></div>
+<p>We predict “failure” if P(failure | x) ≥ τ. The default threshold τ = 0.5 is not always best: when a missed failure is very expensive, the rational threshold is lower (see the maintenance rule above).</p>
+<h3>Decision trees</h3>
+<p>A decision tree asks questions about features until it reaches a leaf with an answer. To choose the best question, ID3/C4.5 use <span class="term">entropy</span> and <span class="term">information gain</span>; CART uses Gini impurity.</p>
+<div class="formula">H(S) = − Σ pᵢ log₂ pᵢ        Gain(S, A) = H(S) − Σ (|Sᵥ|/|S|) · H(Sᵥ)</div>
+<p>Example: a flock of 8 sheep with 4 of each breed has H = 1 bit (maximum uncertainty). If the question “Has a fat tail?” splits it into two pure groups, both children have H = 0, so the gain is 1 bit, the best possible question.</p>
+<figure><div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Decision tree: has fat tail? yes leads to Kazakh fat-tailed; no leads to wool longer than 8 cm? yes merino, no other">
+<g class="k-mut" stroke-width="1.5" fill="none"><path d="M320 62 L170 120"/><path d="M320 62 L460 120"/><path d="M460 158 L380 186"/><path d="M460 158 L560 186"/></g>
+<g font-size="13" text-anchor="middle">
+<rect x="230" y="24" width="180" height="38" rx="8" class="s-skys k-sky" stroke-width="2"/><text x="320" y="48" class="s-ink" font-weight="600">Has a fat tail?</text>
+<rect x="80" y="120" width="180" height="38" rx="19" class="s-golds k-gold" stroke-width="2"/><text x="170" y="144" class="s-ink" font-weight="600">Kazakh fat-tailed</text>
+<rect x="370" y="120" width="180" height="38" rx="8" class="s-skys k-sky" stroke-width="2"/><text x="460" y="144" class="s-ink" font-weight="600">Wool longer than 8 cm?</text>
+<rect x="310" y="186" width="140" height="36" rx="18" class="s-golds k-gold" stroke-width="2"/><text x="380" y="209" class="s-ink" font-weight="600">Merino</text>
+<rect x="500" y="186" width="120" height="36" rx="18" class="s-golds k-gold" stroke-width="2"/><text x="560" y="209" class="s-ink" font-weight="600">Other breed</text>
+<text x="230" y="96" class="s-mut" font-size="12">yes</text><text x="400" y="96" class="s-mut" font-size="12">no</text><text x="405" y="180" class="s-mut" font-size="12">yes</text><text x="520" y="180" class="s-mut" font-size="12">no</text>
+</g></svg></div><figcaption>Figure 9.1 · A small decision tree. It is easy for people to read, which is one of its biggest advantages.</figcaption></figure>
+<p>The lecture's machine example works the same way: <i>Temperature &gt; 70 °C?</i> If no → Normal. If yes → <i>Vibration &gt; 3?</i> If no → Normal, if yes → Failure. Trees are interpretable, model non-linear relationships and need little preprocessing, but deep trees overfit and small changes in data can change the whole tree.</p>
+<p>A <span class="term">random forest</span> fixes much of this: (1) <b>bootstrap</b>: train each tree on a random sample of rows; (2) <b>random features</b>: each split considers only a random subset of features; (3) train many diverse trees; (4) <b>aggregate</b>: vote (classification) or average (regression). The forest usually generalises better than one tree, but it is harder to explain.</p>
+<h3>k-nearest neighbours (k-NN)</h3>
+<p>To classify a new sheep, find the <i>k</i> most similar sheep in the training data (by a distance such as Euclidean) and take a majority vote. There is no training phase, but prediction can be slow on large data. Small <i>k</i> follows noise; large <i>k</i> smooths too much.</p>
+<h3>k-means clustering (unsupervised)</h3>
+<ol class="tight">
+<li>Choose <i>k</i> and place <i>k</i> centroids randomly.</li>
+<li><b>Assign</b>: each point joins its nearest centroid.</li>
+<li><b>Update</b>: move each centroid to the mean of its points.</li>
+<li>Repeat steps 2–3 until nothing changes.</li>
+</ol>
+<p>k-means minimises the <b>within-cluster sum of squared distances</b> (the SSE shown in the experiment):</p>
+<div class="formula">J = Σₖ Σ_(x ∈ Cₖ) ‖x − μₖ‖²</div>
+<p>Other unsupervised tasks are dimensionality reduction and anomaly detection.</p>
+<div class="lab" id="lab-km">
+<div class="lh">Experiment 7 · k-means: let Tulpar sort the flock</div>
+<div class="lb">
+<p>The dots are sheep in a pasture with no labels. Choose k and press <b>Step</b> to watch assign → update repeat. Tap the field to add a sheep. Crosses are the centroids.</p>
+<canvas id="kmCanvas" width="700" height="380" aria-label="k-means clustering canvas"></canvas>
+<div class="row"><label style="grid-auto-flow:column;align-items:center;gap:8px">k = <select id="kmK"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><button class="btn" id="kmStep">Step</button><button class="btn ghost" id="kmRun">Run to the end</button><button class="btn ghost" id="kmNew">New flock</button></div>
+<div class="stats" id="kmStats"></div>
+</div></div>
+<h3>Overfitting, data splits and evaluation</h3>
+<p>A model that memorises training data, noise included, <span class="term">overfits</span>: it scores well on training data and badly on new data. A model too simple to capture the pattern <span class="term">underfits</span>. This is the <b>bias–variance trade-off</b>. To detect overfitting we split data into a <b>training set</b> (to learn), a <b>validation set</b> (to tune settings, or use <i>k-fold cross-validation</i>) and a <b>test set</b> (touched only once, at the end). Regularisation, more data and simpler models all reduce overfitting.</p>
+<div class="tbl"><table>
+<tr><th></th><th>Predicted: sick</th><th>Predicted: healthy</th></tr>
+<tr><th>Actually sick</th><td>True positive (TP) = 40</td><td>False negative (FN) = 10</td></tr>
+<tr><th>Actually healthy</th><td>False positive (FP) = 20</td><td>True negative (TN) = 930</td></tr>
+</table></div>
+<ul class="tight">
+<li><b>Accuracy</b> = (TP + TN) / all = 970 / 1000 = 97%</li>
+<li><b>Precision</b> = TP / (TP + FP) = 40 / 60 ≈ 67% (of lambs flagged sick, how many really are)</li>
+<li><b>Recall</b> = TP / (TP + FN) = 40 / 50 = 80% (of sick lambs, how many we caught)</li>
+<li><b>F1</b> = 2 · P · R / (P + R) ≈ 73%</li>
+</ul>
+<div class="box myth"><h4>Myth vs fact</h4><p><b>Myth:</b> 97% accuracy means the model is great.<br><b>Fact:</b> If only 5% of lambs are sick, a model that always says “healthy” already gets 95% accuracy while catching zero sick lambs. On unbalanced data, look at precision and recall.</p></div>
+<h3>From prediction to rational action</h3>
+<p>The two halves of this chapter fit together: the model predicts P(failure | sensors), a cost model says what each outcome costs, and the agent chooses the action with the lowest expected cost:</p>
+<div class="formula">a* = argminₐ Σₒ P(o | x, a) · C(o, a)</div>
+<p>This is why <b>high accuracy ≠ good decisions</b>. Model A: 95% accuracy but 60% failure recall. Model B: 92% accuracy but 90% recall. If missed failures are expensive, Model B is the better choice. Other risks: <b>data leakage</b> (training on information not available at prediction time), <b>distribution shift</b> (new conditions differ from training data) and <b>poor calibration</b> (predicted probabilities that do not match real frequencies).</p>
+<div class="quiz" data-q="8"><h4>Mini-quiz · Stop 9</h4></div>
+<div class="nextch"><a href="#ch10">Next stop: Baikonur →</a></div>
+</section>
+
+<section class="ch" id="ch10" data-title="10 · Perceptrons & Neural Networks">
+<div class="chead"><div class="stop"><span>Stop 10</span><span>Baikonur Cosmodrome</span></div><h2>Perceptrons and Neural Networks</h2><p class="goal">You will learn: the artificial neuron and perceptron, how a perceptron learns from an error, linear separability, hidden layers and activation functions, gradient descent and backpropagation, train/validation/test, overfitting and generalisation, CNNs and modern deep learning.</p></div>
+<div class="story"><p>At Baikonur, where Yuri Gagarin's rocket launched in 1961, engineers are testing a camera that spots damaged rocket tiles.</p><p><span class="who">Tulpar:</span> “Nobody can write rules for every crack. So the engineers built a network of simple units, a bit like neurons in a brain, and let it learn from photos.”</p></div>
+<h3>The artificial neuron</h3>
+<p>An artificial neuron multiplies each input by a <b>weight</b>, adds a <b>bias</b>, and passes the sum through an <span class="term">activation function</span>:</p>
+<div class="formula">output = f( w₁x₁ + w₂x₂ + … + wₙxₙ + b )</div>
+<p>Common activations: <b>step</b> (perceptron), <b>sigmoid</b> 1/(1 + e<sup>−z</sup>) (squashes to 0…1), <b>tanh</b>, and <b>ReLU</b> max(0, z), the default in modern deep networks. Without a non-linear activation, stacking layers would still only give a linear function.</p>
+<h3>Worked example: is the ground safe for the robot?</h3>
+<p>A mobile robot must classify a surface as <b>STABLE (1)</b> or <b>UNSTABLE (0)</b>, a classification task, from two sensors: <i>Grip</i> (how well the wheels grip) and <i>Slip</i> (how much they slide). The perceptron uses a <b>step activation</b>: output 1 if z ≥ 0, otherwise 0.</p>
+<div class="formula">z = w₁·Grip + w₂·Slip + b,   with w₁ = +2, w₂ = −3, b = −0.5</div>
+<ul class="tight">
+<li>Grip = 0.8, Slip = 0.2: z = 2(0.8) − 3(0.2) − 0.5 = 1.6 − 0.6 − 0.5 = <b>+0.5 → STABLE</b></li>
+<li>Grip = 0.8, Slip = 0.8: z = 1.6 − 2.4 − 0.5 = <b>−1.3 → UNSTABLE</b></li>
+</ul>
+<p><b>Learning from an error.</b> Suppose that second surface was actually STABLE (y = 1). The error is y − ŷ = 1 − 0 = +1. With learning rate η = 0.1 the rule w<sub>new</sub> = w<sub>old</sub> + η·(y − ŷ)·x gives:</p>
+<ul class="tight">
+<li>Grip weight: 2 + 0.1·1·0.8 = <b>2.08</b></li>
+<li>Slip weight: −3 + 0.1·1·0.8 = <b>−2.92</b></li>
+<li>Bias: −0.5 + 0.1·1 = <b>−0.4</b></li>
+</ul>
+<p>Weights decide how much each input matters; the bias shifts the threshold. Each correction nudges the boundary towards the right answer.</p>
+<h3>The perceptron and the XOR problem</h3>
+<p>Rosenblatt's perceptron learns with a simple rule: after each example, w ← w + η (y − ŷ) x. It is guaranteed to converge if the classes can be separated by a straight line. AND and OR can be; <b>XOR cannot</b>. Try it:</p>
+<div class="lab" id="lab-pc">
+<div class="lh">Experiment 8 · Train a single neuron</div>
+<div class="lb">
+<p>Four points: filled = output 1, hollow = output 0. Pick a logic gate and train. The line is the neuron's decision boundary.</p>
+<canvas id="pcCanvas" width="700" height="360" aria-label="Perceptron decision boundary canvas"></canvas>
+<div class="row"><select id="pcGate" aria-label="Logic gate"><option>AND</option><option>OR</option><option>XOR</option></select><button class="btn" id="pcTrain">Train 1 epoch</button><button class="btn ghost" id="pcTrain20">Train 20 epochs</button><button class="btn ghost" id="pcReset">Reset weights</button></div>
+<div class="stats" id="pcStats"></div>
+<div class="msg" id="pcMsg"></div>
+</div></div>
+<h3>Multi-layer networks and backpropagation</h3>
+<p>Adding a <b>hidden layer</b> solves XOR: the hidden neurons draw two lines, and the output neuron combines them. A <span class="term">multi-layer perceptron (MLP)</span> has an input layer, one or more hidden layers and an output layer. In theory, one hidden layer with enough neurons can approximate any continuous function (the universal approximation theorem).</p>
+<figure><div class="fig"><svg viewBox="0 0 640 260" role="img" aria-label="Neural network with 3 inputs, 4 hidden neurons, 2 outputs; forward pass arrow and backpropagation arrow">
+<g id="nn-lines" class="k-line" stroke-width="1.3"></g>
+<g id="nn-nodes"></g>
+<text x="120" y="250" text-anchor="middle" class="s-mut" font-size="12.5">input layer</text><text x="320" y="250" text-anchor="middle" class="s-mut" font-size="12.5">hidden layer</text><text x="520" y="250" text-anchor="middle" class="s-mut" font-size="12.5">output layer</text>
+<path d="M150 14 H490" class="k-sky" stroke-width="2"/><path d="M484 8 L496 14 L484 20 Z" class="s-sky"/><text x="320" y="10" text-anchor="middle" class="s-sky" font-size="12" font-weight="600">forward pass: compute prediction</text>
+<path d="M490 232 H150" class="k-felt" stroke-width="2"/><path d="M156 226 L144 232 L156 238 Z" class="s-felt"/><text x="320" y="226" text-anchor="middle" class="s-felt" font-size="12" font-weight="600">backpropagation: send error back, adjust weights</text>
+</svg></div><figcaption>Figure 10.1 · A fully connected network. Every line is a weight that training adjusts.</figcaption></figure>
+<p>Activation functions add <b>non-linearity</b>: without them, a deep network would still draw only a straight boundary. Training uses <span class="term">gradient descent</span> on a loss L, where the learning rate η controls the step size:</p>
+<div class="formula">w_new = w_old − η · ∂L/∂w</div>
+<p><span class="term">Backpropagation</span> trains the network. (1) Forward pass: compute the output. (2) Compute the <b>loss</b>, e.g. cross-entropy for classification. (3) Backward pass: use the <b>chain rule</b> of calculus to find how much each weight contributed to the error. (4) Update every weight with gradient descent. One pass over the whole training set is an <b>epoch</b>; in practice we update on small <b>mini-batches</b> (stochastic gradient descent).</p>
+<h3>Does it generalise, or just memorise?</h3>
+<p>Use three separate sets: <b>train</b> (learn the weights), <b>validate</b> (choose settings and compare models) and <b>test</b> (final check on unseen data). The same example must never be in both training and test sets.</p>
+<div class="tbl"><table><tr><th></th><th>Training accuracy</th><th>Test accuracy</th><th>Verdict</th></tr>
+<tr><td>Model A</td><td>98%</td><td>65%</td><td>Overfitting: memorised the training data</td></tr>
+<tr><td>Model B</td><td>91%</td><td>89%</td><td>Generalises: trust this one</td></tr></table></div>
+<p>It is like a student who memorises 18 answers and scores 18/18 in practice, then gets only 2/6 on new questions. Watch the loss curves: if training loss keeps falling while validation loss starts rising, the network is starting to overfit.</p>
+<p><b>Not all mistakes cost the same.</b> For the robot, predicting STABLE when the ground is actually UNSTABLE is dangerous; the opposite is only a false alarm. A safety-critical system should be tuned for high recall on the dangerous class. Always compare with a simple <b>baseline</b> (in the lecture's illustration, a decision tree reached 82% accuracy and F1 0.79 in 1 second; the neural network 88% and 0.86 in 12 seconds), and inspect individual errors instead of only counting them.</p>
+<pre>from sklearn.neural_network import MLPClassifier
+model = MLPClassifier(hidden_layer_sizes=(3,), random_state=42, max_iter=1000)
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+accuracy = model.score(X_test, y_test)</pre>
+<div class="box myth"><h4>Memorising, learning, understanding</h4><p>A network that recognises 100 cat photos it has seen has <b>memorised</b>. One that recognises a new cat in a different pose or light has <b>learned</b> patterns: it generalises. Whether it <b>understands</b> what a cat is remains an open question. High accuracy alone does not prove understanding.</p></div>
+<h3>Deep architectures</h3>
+<ul class="tight">
+<li><b>Convolutional neural networks (CNNs)</b> go from pixels → edges and textures → shapes and patterns → a class such as “cat”. They slide small filters over an image to detect edges, then shapes, then objects. Weight sharing and pooling make them efficient for vision. LeNet (1998) read handwritten digits; AlexNet (2012) started the deep-learning boom.</li>
+<li><b>Recurrent neural networks (RNNs, LSTMs)</b> process sequences step by step with a memory of what came before. They were used for speech and translation, but struggle with very long sequences.</li>
+<li><b>Transformers</b> (2017) use <span class="term">self-attention</span>: every word looks at every other word and decides which ones matter. They train in parallel and scale well.</li>
+<li><b>Large language models (LLMs)</b> such as GPT, Claude and Gemini are huge Transformers trained to <b>predict the next token</b> on large amounts of text, then fine-tuned (e.g. with human feedback) to be helpful assistants.</li>
+<li><b>Generative AI</b> also includes diffusion models, which create images by learning to remove noise step by step.</li>
+</ul>
+<div class="box know"><h4>Did you know?</h4><p>A “parameter” is one weight or bias. LeNet-5 had about 60,000 parameters; AlexNet about 60 million; today's largest language models have hundreds of billions.</p></div>
+<div class="box myth"><h4>Myth vs fact</h4><p><b>Myth:</b> Neural networks work just like the human brain.<br><b>Fact:</b> They were inspired by neurons, but real neurons are far more complex, the brain does not learn with backpropagation as far as we know, and a human brain uses about 20 watts.</p></div>
+<div class="quiz" data-q="9"><h4>Mini-quiz · Stop 10</h4></div>
+<div class="nextch"><a href="#bonus">Bonus stop: the Library of Otrar →</a></div>
+</section>
+
+<section class="ch" id="bonus" data-title="Bonus · Logic & Knowledge">
+<div class="chead"><div class="stop"><span>Bonus stop</span><span>Library of Otrar</span></div><h2>Logic and Knowledge Representation</h2><p class="goal">You will learn: knowledge-based agents, propositional logic, truth tables, entailment, inference rules, forward and backward chaining, first-order logic and expert systems.</p></div>
+<div class="story"><p>Among the ruins of Otrar, the city of al-Farabi, Aru finds old pages about reasoning.</p><p><span class="who">Tulpar:</span> “Search tells me <i>how</i> to reach a goal. Logic lets me <i>know</i> things and <i>prove</i> new things from what I know.”</p></div>
+<p>A <span class="term">knowledge-based agent</span> has a <b>knowledge base (KB)</b>: a set of sentences in a formal language. It can TELL the KB new facts and ASK it questions. An <b>inference engine</b> derives new sentences from old ones.</p>
+<h3>Propositional logic</h3>
+<p>Sentences are built from <b>propositions</b> (statements that are true or false, like <code>Rain</code>) and connectives:</p>
+<div class="tbl"><table>
+<tr><th>P</th><th>Q</th><th>¬P (not)</th><th>P ∧ Q (and)</th><th>P ∨ Q (or)</th><th>P ⇒ Q (implies)</th><th>P ⇔ Q (iff)</th></tr>
+<tr><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td></tr>
+<tr><td>T</td><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td></tr>
+<tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+</table></div>
+<p>Note the surprise in the implication column: “P ⇒ Q” is only false when P is true and Q is false. “If it rains, the steppe is wet” is not broken on a dry, sunny day.</p>
+<p>A <span class="term">model</span> is one assignment of true/false to every proposition. KB <span class="term">entails</span> α (written KB ⊨ α) if α is true in <b>every</b> model where KB is true. An inference procedure is <b>sound</b> if it only derives entailed sentences, and <b>complete</b> if it can derive every entailed sentence.</p>
+<h3>Inference rules</h3>
+<ul class="tight">
+<li><b>Modus ponens</b>: from P ⇒ Q and P, conclude Q.</li>
+<li><b>And-elimination</b>: from P ∧ Q, conclude P.</li>
+<li><b>Resolution</b>: from (P ∨ Q) and (¬Q ∨ R), conclude (P ∨ R). Resolution alone is complete for propositional logic when sentences are in conjunctive normal form (CNF).</li>
+</ul>
+<pre>KB:  Clouds ∧ Wind ⇒ Storm
+     Storm ⇒ BringSheepHome
+     Clouds
+     Wind
+Forward chaining:
+  Clouds, Wind        ⇒ Storm            (modus ponens)
+  Storm               ⇒ BringSheepHome   (modus ponens)
+Answer: bring the sheep home.</pre>
+<p><b>Forward chaining</b> starts from known facts and fires rules until nothing new appears (data-driven). <b>Backward chaining</b> starts from the question and works back to find facts that support it (goal-driven, used in Prolog).</p>
+<h3>First-order logic (FOL)</h3>
+<p>Propositional logic cannot say “all sheep eat grass” without one proposition per sheep. <span class="term">First-order logic</span> adds <b>objects</b>, <b>predicates</b>, <b>functions</b>, <b>variables</b> and <b>quantifiers</b>:</p>
+<pre>∀x  Sheep(x) ⇒ EatsGrass(x)        "every sheep eats grass"
+∃x  Eagle(x) ∧ Hunts(x, Fox)       "some eagle hunts a fox"
+Sheep(Akbas)                       "Akbas is a sheep"
+⊢   EatsGrass(Akbas)               (universal instantiation + modus ponens)</pre>
+<div class="box case"><h4>Real-world case</h4><p><b>Expert systems</b> store expert knowledge as IF–THEN rules plus an inference engine. MYCIN (Stanford, 1970s) used about 600 rules to suggest antibiotics for blood infections and performed about as well as specialists in tests. Expert systems are easy to explain but hard to maintain, because every rule must be written by hand.</p></div>
+<div class="box myth"><h4>Myth vs fact</h4><p><b>Myth:</b> Modern AI no longer uses logic.<br><b>Fact:</b> Logic lives on in database query engines, chip and software verification, planning systems, knowledge graphs, and rule engines for law and tax. Research on “neuro-symbolic” AI combines logic with neural networks.</p></div>
+<div class="quiz" data-q="6"><h4>Mini-quiz · Bonus stop</h4></div>
+<div class="nextch"><a href="#epi">Final stop: Astana →</a></div>
+</section>
+
+<section class="ch" id="epi" data-title="Epilogue · Ethics & Future">
+<div class="chead"><div class="stop"><span>Epilogue</span><span>Astana</span></div><h2>Ethics, Safety and the Future of AI</h2><p class="goal">You will learn: the main ethical risks of AI, principles for responsible AI, how regulation works, and how AI compares with human intelligence.</p></div>
+<div class="story"><p>At the end of the journey, Ata looks at Tulpar for a long time.</p><p><span class="who">Ata:</span> “A strong horse without a good rider is dangerous. You are clever now, Tulpar. But are you fair? Are you honest? Who answers for your mistakes?”</p><p><span class="who aru">Aru:</span> “Those questions are our job, Ata. Not only the machine's.”</p></div>
+<h3>Key risks</h3>
+<ul class="tight">
+<li><b>Bias and fairness.</b> Models learn from historical data and can copy its unfairness. The <i>Gender Shades</i> study (Buolamwini & Gebru, 2018) found commercial face-analysis systems had error rates up to 34.7% for darker-skinned women but under 1% for lighter-skinned men.</li>
+<li><b>Privacy.</b> Training data and face recognition can expose personal information.</li>
+<li><b>Transparency and explainability.</b> Deep networks are “black boxes”. Explainable AI (XAI) methods such as feature-importance maps try to show why a model decided something.</li>
+<li><b>Accountability.</b> If a self-driving car crashes, who is responsible: the maker, the programmer or the owner?</li>
+<li><b>Misinformation.</b> Deepfakes and generated text make false content cheap. LLMs can also “hallucinate”: state false things confidently.</li>
+<li><b>Jobs.</b> AI automates some tasks and creates new ones. Workers need re-skilling.</li>
+<li><b>Safety and alignment.</b> Making sure powerful systems actually pursue the goals people intend, and stay under meaningful human control.</li>
+</ul>
+<h3>Principles and regulation</h3>
+<p>The UNESCO <i>Recommendation on the Ethics of AI</i> (2021), adopted by all 193 member states, calls for human rights, fairness, transparency, human oversight and sustainability. The <b>EU AI Act</b> (2024) is the first broad AI law. It sorts systems by risk: <b>unacceptable</b> (banned, e.g. social scoring), <b>high</b> (strict rules, e.g. hiring, medical devices), <b>limited</b> (transparency duties, e.g. chatbots must say they are AI) and <b>minimal</b> (e.g. spam filters, no extra rules).</p>
+<h3>AI vs human</h3>
+<div class="tbl"><table>
+<tr><th></th><th>AI today</th><th>Humans</th></tr>
+<tr><td>Speed and scale</td><td>Processes millions of records in seconds</td><td>Slow, but needs little data to learn</td></tr>
+<tr><td>Learning</td><td>Usually needs huge datasets</td><td>Learns from a few examples, transfers knowledge easily</td></tr>
+<tr><td>Common sense</td><td>Weak; can fail in surprising ways</td><td>Strong, built from life experience</td></tr>
+<tr><td>Consistency</td><td>Does not get tired</td><td>Gets tired, emotional, distracted</td></tr>
+<tr><td>Values and responsibility</td><td>Has none of its own; reflects data and design</td><td>Can be held accountable, can judge what is right</td></tr>
+</table></div>
+<h3>Myth or fact? Tap a card</h3>
+<div class="flips">
+<button class="flip"><span class="front"><span class="tag m">MYTH?</span>AI understands the world exactly like we do.</span><span class="back"><span class="tag f">FACT</span>Current AI finds statistical patterns. It can be very capable while lacking real-world experience and common sense.</span></button>
+<button class="flip"><span class="front"><span class="tag m">MYTH?</span>Algorithms are neutral because they are maths.</span><span class="back"><span class="tag f">FACT</span>Models inherit bias from their data and from the choices of their designers. Fairness has to be tested.</span></button>
+<button class="flip"><span class="front"><span class="tag m">MYTH?</span>AI is a recent invention.</span><span class="back"><span class="tag f">FACT</span>The field started in 1956, and the ideas go back to Turing (1950) and earlier logic.</span></button>
+<button class="flip"><span class="front"><span class="tag m">MYTH?</span>If a chatbot says it, it must be true.</span><span class="back"><span class="tag f">FACT</span>LLMs can hallucinate. Always check important facts in reliable sources.</span></button>
+</div>
+<div class="story"><p><span class="who">Tulpar:</span> “I began as a few lines of code that could not find a spring in a canyon. Now I can search, play, reason, doubt, learn and be trained. But Ata is right: what I become depends on the people who build and use me.”</p></div>
+<div class="quiz" data-q="11"><h4>Final quiz · Epilogue</h4></div>
+</section>
+
+<section class="ch" id="extras" data-title="Glossary & Sources">
+<div class="chead"><div class="stop"><span>Appendix</span><span>For the road</span></div><h2>Glossary, Sources and Credits</h2></div>
+<div class="gloss">
+<h3>Glossary</h3>
+<input id="gq" type="search" placeholder="Search a term, e.g. heuristic" aria-label="Search glossary">
+<dl id="gl"></dl>
+</div>
+<h3>Sources and further reading</h3>
+<ol class="refs">
+<li>Russell, S., & Norvig, P. (2021). <i>Artificial Intelligence: A Modern Approach</i> (4th ed.). Pearson.</li>
+<li>Turing, A. M. (1950). Computing machinery and intelligence. <i>Mind</i>, 59(236), 433–460.</li>
+<li>McCarthy, J., Minsky, M., Rochester, N., & Shannon, C. (1955). <i>A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence</i>.</li>
+<li>Hart, P. E., Nilsson, N. J., & Raphael, B. (1968). A formal basis for the heuristic determination of minimum cost paths. <i>IEEE Transactions on Systems Science and Cybernetics</i>, 4(2), 100–107.</li>
+<li>Shannon, C. E. (1950). Programming a computer for playing chess. <i>Philosophical Magazine</i>, 41(314).</li>
+<li>Pearl, J. (1988). <i>Probabilistic Reasoning in Intelligent Systems</i>. Morgan Kaufmann.</li>
+<li>Mitchell, T. M. (1997). <i>Machine Learning</i>. McGraw-Hill.</li>
+<li>Rosenblatt, F. (1958). The perceptron. <i>Psychological Review</i>, 65(6), 386–408.</li>
+<li>Minsky, M., & Papert, S. (1969). <i>Perceptrons</i>. MIT Press.</li>
+<li>Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. <i>Nature</i>, 323, 533–536.</li>
+<li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <i>Deep Learning</i>. MIT Press.</li>
+<li>Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. <i>NeurIPS</i>.</li>
+<li>Vaswani, A., et al. (2017). Attention is all you need. <i>NeurIPS</i>.</li>
+<li>Sutton, R. S., & Barto, A. G. (2018). <i>Reinforcement Learning: An Introduction</i> (2nd ed.). MIT Press.</li>
+<li>Watkins, C. J. C. H., & Dayan, P. (1992). Q-learning. <i>Machine Learning</i>, 8, 279–292.</li>
+<li>Mnih, V., et al. (2015). Human-level control through deep reinforcement learning. <i>Nature</i>, 518, 529–533.</li>
+<li>Silver, D., et al. (2016). Mastering the game of Go with deep neural networks and tree search. <i>Nature</i>, 529, 484–489.</li>
+<li>Buolamwini, J., & Gebru, T. (2018). Gender shades. <i>Proceedings of Machine Learning Research</i>, 81, 77–91.</li>
+<li>UNESCO (2021). <i>Recommendation on the Ethics of Artificial Intelligence</i>.</li>
+<li>European Union (2024). Regulation (EU) 2024/1689 (Artificial Intelligence Act).</li>
+</ol>
+<h3>The team</h3>
+<div class="team">
+<div>Esmankhan Baizhanov<small>Team member</small></div>
+<div>Sultanhan Temirtasov<small>Team member</small></div>
+<div>Temirlan Altynbekuly<small>Team member</small></div>
+<div>Madiyar Nisanbayev<small>Team member</small></div>
+</div>
+<p style="font-family:var(--display);font-size:15px">Course: AI Fundamentals, QAIRU · Lecturer: Aizhan Sydykova · Instructor: Dlinura Alikyzy</p>
+<div class="box"><h4>AI use declaration</h4><p>We used Claude (Anthropic) as a supporting tool throughout the project. It assisted us in refining explanations, creating illustrations and diagrams, and developing interactive experiments. However, the ideas, story, characters, and overall structure were developed by our team. We also carefully reviewed all explanations, formulas, dates, and examples to ensure their accuracy using course lectures and the sources listed above.</p></div>
+</section>
+
+<footer>Tulpar and the Thinking Machine · AI Fundamentals Endterm · QAIRU 2026</footer>
+</main>
+
+<script>
+(function(){
+var css=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()};
+var C={};function readColors(){["paper","page","ink","muted","line","sky","sky-soft","gold","gold-soft","felt","felt-soft","ok","bad"].forEach(function(k){C[k]=css("--"+k)})}
+readColors();
+var redraws=[];
+var mq=window.matchMedia("(prefers-color-scheme: dark)");
+function recolor(){readColors();redraws.forEach(function(f){f()})}
+if(mq.addEventListener)mq.addEventListener("change",recolor);
+new MutationObserver(recolor).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+
+function canvasPoint(cv,e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}}
+
+var secs=[].slice.call(document.querySelectorAll("section[id]"));
+var where=document.getElementById("where"),prog=document.getElementById("prog"),jump=document.getElementById("jump");
+function onScroll(){var y=window.scrollY+90,cur=null;secs.forEach(function(s){if(s.offsetTop<=y)cur=s});
+where.textContent=cur?(cur.dataset.title||"The Route"):"Cover";
+var opt=cur?cur.id:"top";if(jump.value!==opt)jump.value=opt;
+var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?Math.min(100,window.scrollY/h*100):0)+"%"}
+window.addEventListener("scroll",onScroll,{passive:true});onScroll();
+jump.addEventListener("change",function(){var t=document.getElementById(jump.value);if(t)t.scrollIntoView();location.hash=jump.value==="top"?"":jump.value});
+
+var nn=document.getElementById("nn-lines"),nd=document.getElementById("nn-nodes");
+var L=[[120,[70,125,180]],[320,[50,100,150,200]],[520,[95,155]]],ns="http://www.w3.org/2000/svg";
+for(var li=0;li<2;li++)L[li][1].forEach(function(y1){L[li+1][1].forEach(function(y2){var l=document.createElementNS(ns,"line");l.setAttribute("x1",L[li][0]);l.setAttribute("y1",y1);l.setAttribute("x2",L[li+1][0]);l.setAttribute("y2",y2);nn.appendChild(l)})});
+L.forEach(function(c,i){c[1].forEach(function(y){var e=document.createElementNS(ns,"circle");e.setAttribute("cx",c[0]);e.setAttribute("cy",y);e.setAttribute("r",16);e.setAttribute("class",["s-skys k-sky","s-golds k-gold","s-felts k-felt"][i]);e.setAttribute("stroke-width","2");nd.appendChild(e)})});
+
+var Q={
+1:[["Which approach to AI does most modern AI follow?",["Thinking humanly","Acting humanly","Acting rationally (rational agents)","Thinking like a calculator"],2,"Modern AI mostly builds rational agents: systems that act to achieve the best expected outcome."],
+["What did Turing propose instead of asking “Can machines think?”",["The imitation game","The Dartmouth workshop","The perceptron","Deep Blue"],0,"In 1950 Turing proposed the imitation game, now called the Turing test."],
+["A face-unlock system on a phone is an example of…",["AGI","Narrow AI","Superintelligence","An expert system only"],1,"It performs one specific task well, so it is narrow (weak) AI."]],
+2:[["In PEAS, what does the “S” stand for?",["Software","Sensors","States","Search"],1,"PEAS = Performance measure, Environment, Actuators, Sensors."],
+["Poker is a partially observable environment because…",["Cards are random","Opponents' cards are hidden","There are two players","It is played in rounds"],1,"The agent cannot see the whole state: the other players' cards are hidden."],
+["Which agent compares how desirable different outcomes are?",["Simple reflex","Model-based reflex","Goal-based","Utility-based"],3,"A utility-based agent uses a utility function to measure how good each outcome is."]],
+3:[["Which data structure does BFS use for its frontier?",["Stack (LIFO)","Queue (FIFO)","Priority queue by h(n)","Hash table only"],1,"BFS expands the oldest node first, which is a FIFO queue."],
+["Which strategy is optimal when step costs differ?",["DFS","BFS","Uniform-cost search","Depth-limited search"],2,"UCS always expands the node with the lowest path cost g(n), so it is optimal for any positive step costs."],
+["Why use iterative deepening instead of BFS?",["It finds longer paths","It uses much less memory: O(bd)","It needs no goal test","It is never complete"],1,"IDS keeps BFS's completeness and optimality (for equal costs) with DFS-like memory."]],
+4:[["A* chooses the frontier node with the smallest…",["g(n)","h(n)","g(n) + h(n)","depth"],2,"A* uses f(n) = g(n) + h(n): cost so far plus estimated cost to go."],
+["A heuristic is admissible if it…",["Always overestimates","Never overestimates the true cost","Is always zero","Is computed by BFS"],1,"Admissible means optimistic: h(n) ≤ true cost to the goal."],
+["Simulated annealing escapes local maxima by…",["Never moving","Sometimes accepting worse moves","Storing the whole tree","Using a FIFO queue"],1,"At high temperature it may accept worse moves, which lets it leave local peaks."]],
+5:[["What does alpha-beta pruning change compared with minimax?",["The final decision","Only how many nodes are examined","The utility values","The rules of the game"],1,"Alpha-beta gives exactly the same answer as minimax, just faster."],
+["When a game tree is too deep to search fully, programs use…",["An evaluation function at a depth limit","Random moves","BFS","A truth table"],0,"They stop at a limited depth and estimate the position with a heuristic evaluation function."],
+["The MRV heuristic in a CSP chooses the variable…",["With the most values","With the fewest legal values left","Alphabetically first","Chosen randomly"],1,"Minimum remaining values: pick the most constrained variable first (fail first)."]],
+6:[["P ⇒ Q is false only when…",["P is false","Q is true","P is true and Q is false","Both are false"],2,"An implication is broken only if the premise holds and the conclusion does not."],
+["From “Rain ⇒ WetGrass” and “Rain”, we conclude “WetGrass”. This rule is…",["Resolution","Modus ponens","And-elimination","Backtracking"],1,"Modus ponens: from P ⇒ Q and P, infer Q."],
+["What can first-order logic express that propositional logic cannot easily?",["True and false","Statements about all objects using quantifiers (∀, ∃)","Negation","Truth tables"],1,"FOL adds variables and quantifiers, e.g. ∀x Sheep(x) ⇒ EatsGrass(x)."]],
+7:[["Bayes' rule computes…",["P(A ∧ B) only","P(cause | evidence) from P(evidence | cause)","The mean of data","The shortest path"],1,"It reverses the conditional using the prior: P(H|E) = P(E|H)P(H)/P(E)."],
+["A rare illness (1%) and a test with 9% false positives: a positive result means…",["About 90% chance of illness","About 9% chance of illness","Certain illness","No information"],1,"False positives from the many healthy cases outnumber true positives, so the posterior is only about 9%."],
+["Why is naive Bayes called “naive”?",["It is very old","It assumes features are independent given the class","It ignores the prior","It uses no data"],1,"It assumes conditional independence of features, which is rarely true but often works well."]],
+8:[["Project A: 0.9×100 + 0.1×(−20). Project B: 0.6×200 + 0.4×(−50). Under MEU you choose…",["A, because it is safer","B, because EU(B) = 100 > EU(A) = 88","Neither","Both are equal"],1,"EU(A) = 88, EU(B) = 100, so B maximises expected utility."],["Repair costs $2,000 and a failure costs $20,000. Above which failure probability should you repair?",["5%","10%","20%","50%"],1,"Repair if p > C_maint / C_failure = 2,000 / 20,000 = 10%."],["Grouping customers without any labels is…",["Supervised learning","Unsupervised learning","Reinforcement learning","Regression"],1,"No labels, just finding structure: that is unsupervised learning, e.g. k-means."],
+["A model with 99% training accuracy and 60% test accuracy is probably…",["Underfitting","Overfitting","Perfect","Using RL"],1,"A big gap between training and test performance is the classic sign of overfitting."],
+["Recall measures…",["TP / (TP + FP)","TP / (TP + FN)","(TP + TN) / all","FP / all"],1,"Recall: of all actual positives, how many did we catch?"]],
+9:[["In the robot example (w₁ = 2, w₂ = −3, b = −0.5), Grip = 0.8 and Slip = 0.8 give z = −1.3. The output is…",["STABLE, because z is negative","UNSTABLE, because z < 0","Exactly 0.5","Undefined"],1,"With a step activation, z < 0 gives output 0 = UNSTABLE."],["Why can't a single perceptron learn XOR?",["XOR has too many inputs","XOR is not linearly separable","The learning rate is too small","XOR needs a decision tree"],1,"No single straight line separates XOR's classes, so a hidden layer is needed."],
+["Backpropagation computes gradients using…",["The chain rule","Bayes' rule","Modus ponens","Minimax"],0,"It applies the chain rule layer by layer, from the output back to the input."],
+["What is a large language model trained to do at its core?",["Sort numbers","Predict the next token","Play chess","Cluster images"],1,"LLMs are Transformers trained to predict the next token on large text datasets."]],
+10:[["In RL, the policy π is…",["The reward","A mapping from states to actions","The environment","The discount factor"],1,"A policy tells the agent which action to take in each state."],
+["The ε in ε-greedy controls…",["The learning rate","How often a random action is explored","The discount","The number of states"],1,"With probability ε the agent explores a random action."],
+["What does γ = 0 make the agent care about?",["Only the immediate reward","Only far-future rewards","Nothing","All rewards equally"],0,"With γ = 0 future rewards are multiplied by 0, so only the next reward counts."]],
+hmm:[["In an HMM, what do emission probabilities describe?",["How the hidden state changes over time","How likely each observation is in each hidden state","The starting state","The reward"],1,"Emissions O link hidden states to observations, e.g. P(High | Faulty) = 0.70."],
+["Filtering answers which question?",["What is the most likely whole path?","What is the current hidden state, given readings so far?","What will happen in 10 steps with no readings?","Which action is best?"],1,"Filtering estimates the present state; smoothing revisits the past; Viterbi finds the best full path."],
+["The order of one filtering step is…",["Correct, then predict","Predict with T, correct with O, then normalise","Normalise, then predict","Only multiply by T"],1,"Prediction first, Bayes correction second, normalisation at the end."]],
+11:[["Under the EU AI Act, AI used for hiring decisions is…",["Minimal risk","Limited risk","High risk","Not covered"],2,"Employment and hiring systems are listed as high-risk and face strict requirements."],
+["An LLM confidently stating a false fact is called…",["Overfitting","Hallucination","Pruning","Backtracking"],1,"This is known as hallucination; important facts must be checked."],
+["Bias in AI mainly comes from…",["Mathematics being unfair","Training data and design choices","The speed of computers","Using Python"],1,"Models reflect patterns, including unfair ones, in their data and in the choices of their designers."]]
+};
+[].forEach.call(document.querySelectorAll(".quiz"),function(box){var arr=Q[box.dataset.q];if(!arr)return;
+arr.forEach(function(it,qi){var d=document.createElement("div");d.className="q";var p=document.createElement("p");p.textContent=(qi+1)+". "+it[0];d.appendChild(p);
+var o=document.createElement("div");o.className="opts";var why=document.createElement("div");why.className="why";why.hidden=true;why.textContent=it[3];
+it[1].forEach(function(t,i){var b=document.createElement("button");b.type="button";b.textContent=String.fromCharCode(65+i)+") "+t;
+b.addEventListener("click",function(){if(i===it[2]){b.classList.add("right");why.hidden=false;why.textContent="Correct. "+it[3]}else{b.classList.add("wrong");why.hidden=false;why.textContent="Not quite, try another option."}});o.appendChild(b)});
+d.appendChild(o);d.appendChild(why);box.appendChild(d)})});
+
+[].forEach.call(document.querySelectorAll(".flip"),function(f){f.addEventListener("click",function(){f.classList.toggle("on")})});
+
+var G=[["Agent","Anything that perceives its environment through sensors and acts on it through actuators."],["Rational agent","An agent that chooses actions expected to maximise its performance measure."],["PEAS","Performance, Environment, Actuators, Sensors: a template for describing an agent's task."],["State space","The set of all states reachable from the initial state."],["Frontier","The set of generated but not yet expanded nodes in a search."],["Breadth-first search (BFS)","Expands the shallowest node first using a FIFO queue."],["Depth-first search (DFS)","Expands the deepest node first using a LIFO stack."],["Uniform-cost search (UCS)","Expands the node with the lowest path cost g(n)."],["Iterative deepening","Repeated depth-limited DFS with increasing limits."],["Heuristic","An estimate h(n) of the cost from n to the goal."],["Admissible heuristic","A heuristic that never overestimates the true cost."],["A* search","Best-first search on f(n) = g(n) + h(n); optimal with an admissible (tree) or consistent (graph) heuristic."],["Hill climbing","Local search that always moves to a better neighbour."],["Simulated annealing","Local search that sometimes accepts worse moves, less often as temperature drops."],["Genetic algorithm","Evolves a population of solutions using selection, crossover and mutation."],["Minimax","Game search where MAX maximises and MIN minimises the utility."],["Alpha-beta pruning","Skips branches that cannot affect the minimax decision."],["Evaluation function","A heuristic score of a non-terminal game position."],["CSP","Constraint satisfaction problem: variables, domains and constraints."],["Backtracking","Depth-first assignment of variables that undoes choices that break constraints."],["Arc consistency","Every value in a variable's domain has a compatible value in each neighbour's domain."],["Knowledge base","A set of sentences in a formal language that an agent knows."],["Entailment","KB ⊨ α: α is true in every model where KB is true."],["Modus ponens","From P ⇒ Q and P, infer Q."],["First-order logic","Logic with objects, predicates, variables and quantifiers ∀, ∃."],["Bayes' rule","P(H|E) = P(E|H)·P(H) / P(E)."],["Bayesian network","A directed acyclic graph of variables with conditional probability tables."],["Naive Bayes","A classifier assuming features are independent given the class."],["Utility","A number that scores how desirable an outcome is."],["Expected utility","EU(a) = Σ P(o|a)·U(o): the probability-weighted average utility of an action."],["Maximum Expected Utility (MEU)","Choose the action with the highest expected utility."],["Decision threshold","The probability above which an action becomes worthwhile, e.g. repair if p > C_maint / C_failure."],["Logistic regression","A classifier that passes a linear score through the sigmoid to output a probability."],["Sigmoid","σ(z) = 1/(1+e^(−z)); maps any number to a value between 0 and 1."],["Random forest","An ensemble of decision trees trained on random samples and features, combined by voting or averaging."],["Data leakage","Training with information that would not be available when the model is used."],["Generalisation","Performing well on new, unseen data, not just on training data."],["Supervised learning","Learning from labelled input–output examples."],["Unsupervised learning","Finding structure in data without labels."],["Classification","Predicting a category."],["Regression","Predicting a number."],["Gradient descent","Minimising a loss by stepping against its gradient."],["Entropy","A measure of uncertainty: H = −Σ p log₂ p."],["k-NN","Classifies by majority vote of the k nearest training examples."],["k-means","Clustering by repeatedly assigning points to the nearest centroid and moving centroids to the mean."],["Overfitting","Fitting training data, noise included, so well that the model generalises poorly."],["Precision","TP / (TP + FP)."],["Recall","TP / (TP + FN)."],["Perceptron","A single neuron with a step activation and a simple learning rule."],["Activation function","A non-linear function applied to a neuron's weighted sum, e.g. ReLU, sigmoid."],["Backpropagation","Computing gradients of the loss for every weight using the chain rule."],["CNN","Convolutional neural network, specialised for images."],["Transformer","A neural architecture based on self-attention."],["Large language model (LLM)","A very large Transformer trained to predict the next token."],["Reinforcement learning","Learning a policy from rewards by interacting with an environment."],["MDP","Markov decision process: states, actions, transitions and rewards."],["Policy","A mapping from states to actions."],["Q-learning","Model-free RL that learns action values Q(s, a)."],["Discount factor γ","How much future rewards count compared with immediate ones."],["Hallucination","When a generative model produces confident but false content."],["Explainable AI (XAI)","Methods that make a model's decisions understandable to people."]];
+var gl=document.getElementById("gl"),gq=document.getElementById("gq");
+function drawGloss(){var q=gq.value.trim().toLowerCase();gl.innerHTML="";var n=0;G.forEach(function(g){if(q&&(g[0]+" "+g[1]).toLowerCase().indexOf(q)<0)return;n++;var dt=document.createElement("dt");dt.textContent=g[0];var dd=document.createElement("dd");dd.textContent=g[1];gl.appendChild(dt);gl.appendChild(dd)});if(!n){var dd=document.createElement("dd");dd.textContent="No term matches. Try a shorter word.";gl.appendChild(dd)}}
+gq.addEventListener("input",drawGloss);drawGloss();
+
+(function(){
+var cv=document.getElementById("pathCanvas"),ctx=cv.getContext("2d"),COLS=25,ROWS=15,cs=28;
+var start=[1,ROWS-2],goal=[COLS-2,1],walls,seen,path,timer=null,rnd;
+function seed(s){return function(){s=(s*1103515245+12345)%2147483648;return s/2147483648}}
+rnd=seed(42);
+function maze(){walls=[];for(var y=0;y<ROWS;y++){walls.push([]);for(var x=0;x<COLS;x++)walls[y].push(false)}
+for(var k=0;k<7;k++){var x0=3+k*3;var gap=1+Math.floor(rnd()*(ROWS-3));var up=k%2===0;for(var y=0;y<ROWS;y++){if(up?(y<ROWS-3&&Math.abs(y-gap)>1):(y>2&&Math.abs(y-gap)>1))walls[y][x0]=true}}
+for(var i=0;i<30;i++){var x=Math.floor(rnd()*COLS),y=Math.floor(rnd()*ROWS);walls[y][x]=true}
+walls[start[1]][start[0]]=false;walls[goal[1]][goal[0]]=false;seen={};path=[];draw()}
+function draw(){ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);
+for(var y=0;y<ROWS;y++)for(var x=0;x<COLS;x++){var px=x*cs,py=y*cs;
+if(walls[y][x]){ctx.fillStyle=C.felt;ctx.globalAlpha=.85;ctx.fillRect(px+1,py+1,cs-2,cs-2);ctx.globalAlpha=1}
+else if(seen[x+","+y]){ctx.fillStyle=C["sky-soft"];ctx.fillRect(px+1,py+1,cs-2,cs-2)}
+else{ctx.fillStyle=C.page;ctx.fillRect(px+1,py+1,cs-2,cs-2)}}
+if(path.length){ctx.strokeStyle=C.gold;ctx.lineWidth=6;ctx.lineJoin="round";ctx.beginPath();path.forEach(function(p,i){var cx=p[0]*cs+cs/2,cy=p[1]*cs+cs/2;i?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy)});ctx.stroke()}
+dot(start,C.felt);dot(goal,C.sky)}
+function dot(p,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(p[0]*cs+cs/2,p[1]*cs+cs/2,cs*.36,0,7);ctx.fill();ctx.strokeStyle=C.page;ctx.lineWidth=2;ctx.stroke()}
+function h(p){return Math.abs(p[0]-goal[0])+Math.abs(p[1]-goal[1])}
+function run(){if(timer)clearInterval(timer);seen={};path=[];var alg=document.getElementById("pathAlg").value;
+var fr=[{p:start,g:0,par:null}],closed={},count=0,done=false,inF={};inF[start+""]=true;
+function pick(){if(alg==="bfs")return fr.shift();if(alg==="dfs")return fr.pop();var bi=0;for(var i=1;i<fr.length;i++){var a=fr[i],b=fr[bi];var fa=alg==="greedy"?h(a.p):a.g+h(a.p),fb=alg==="greedy"?h(b.p):b.g+h(b.p);if(fa<fb||(fa===fb&&h(a.p)<h(b.p)))bi=i}return fr.splice(bi,1)[0]}
+function step(){for(var s=0;s<3;s++){if(!fr.length){finish(null);return}var n=pick(),k=n.p+"";if(closed[k])continue;closed[k]=true;seen[n.p[0]+","+n.p[1]]=true;count++;
+if(n.p[0]===goal[0]&&n.p[1]===goal[1]){finish(n);return}
+var dirs=[[0,-1],[1,0],[0,1],[-1,0]];if(alg==="dfs")dirs=[[-1,0],[0,1],[1,0],[0,-1]];
+dirs.forEach(function(d){var q=[n.p[0]+d[0],n.p[1]+d[1]];if(q[0]<0||q[1]<0||q[0]>=COLS||q[1]>=ROWS||walls[q[1]][q[0]]||closed[q+""])return;if(alg!=="dfs"&&inF[q+""])return;inF[q+""]=true;fr.push({p:q,g:n.g+1,par:n})})}
+draw();stats(count,"…")}
+function finish(n){clearInterval(timer);timer=null;if(n){var c=n;while(c){path.unshift(c.p);c=c.par}}draw();stats(count,n?path.length-1:"no path")}
+timer=setInterval(step,16)}
+function stats(e,p){document.getElementById("pathStats").innerHTML="<span>Expanded: <b>"+e+"</b></span><span>Path length: <b>"+p+"</b></span>"}
+cv.addEventListener("click",function(e){var pt=canvasPoint(cv,e),x=Math.floor(pt.x/cs),y=Math.floor(pt.y/cs);if(x<0||y<0||x>=COLS||y>=ROWS)return;if((x===start[0]&&y===start[1])||(x===goal[0]&&y===goal[1]))return;walls[y][x]=!walls[y][x];seen={};path=[];draw()});
+document.getElementById("pathGo").onclick=run;
+document.getElementById("pathMaze").onclick=function(){if(timer)clearInterval(timer);maze()};
+document.getElementById("pathClear").onclick=function(){if(timer)clearInterval(timer);walls.forEach(function(r){r.fill(false)});seen={};path=[];draw()};
+maze();redraws.push(draw);
+})();
+
+(function(){
+var el=document.getElementById("ttt"),msg=document.getElementById("tttMsg"),B,over,btns=[];
+var lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+function win(b){for(var i=0;i<8;i++){var l=lines[i];if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]])return b[l[0]]}return b.indexOf("")<0?"D":null}
+var nodes;
+function mm(b,turn,d){nodes++;var w=win(b);if(w==="O")return 10-d;if(w==="X")return d-10;if(w==="D")return 0;var best=turn==="O"?-99:99;for(var i=0;i<9;i++)if(!b[i]){b[i]=turn;var v=mm(b,turn==="O"?"X":"O",d+1);b[i]="";best=turn==="O"?Math.max(best,v):Math.min(best,v)}return best}
+function ab(b,turn,d,a,be){nodes++;var w=win(b);if(w==="O")return 10-d;if(w==="X")return d-10;if(w==="D")return 0;
+if(turn==="O"){var v=-99;for(var i=0;i<9;i++)if(!b[i]){b[i]="O";v=Math.max(v,ab(b,"X",d+1,a,be));b[i]="";a=Math.max(a,v);if(a>=be)break}return v}
+var v2=99;for(var j=0;j<9;j++)if(!b[j]){b[j]="X";v2=Math.min(v2,ab(b,"O",d+1,a,be));b[j]="";be=Math.min(be,v2);if(a>=be)break}return v2}
+function ai(){var bestV=-99,bestI=-1;nodes=0;for(var i=0;i<9;i++)if(!B[i]){B[i]="O";var v=mm(B,"X",1);B[i]="";if(v>bestV){bestV=v;bestI=i}}var n1=nodes;nodes=0;ab(B.slice(),"O",0,-99,99);var n2=nodes;
+document.getElementById("tttStats").innerHTML="<span>Minimax nodes: <b>"+n1.toLocaleString("en-US")+"</b></span><span>Alpha-beta nodes: <b>"+n2.toLocaleString("en-US")+"</b></span>";
+B[bestI]="O";render();check()}
+function check(){var w=win(B);if(!w){msg.textContent="Your move.";return false}over=true;msg.textContent=w==="O"?"Tulpar wins. Minimax never misses a threat.":w==="X"?"You win! (This should be impossible…)":"Draw. Against perfect play, a draw is the best you can get.";return true}
+function render(){btns.forEach(function(b,i){b.textContent=B[i];b.className=B[i]==="X"?"x":B[i]==="O"?"o":"";b.setAttribute("aria-label","Cell "+(i+1)+(B[i]?" "+B[i]:" empty"))})}
+for(var i=0;i<9;i++){(function(i){var b=document.createElement("button");b.type="button";b.addEventListener("click",function(){if(over||B[i])return;B[i]="X";render();if(check())return;msg.textContent="Tulpar is thinking…";setTimeout(ai,30)});btns.push(b);el.appendChild(b)})(i)}
+function reset(){B=["","","","","","","","",""];over=false;render();msg.textContent="Your move.";document.getElementById("tttStats").innerHTML="<span>Minimax nodes: <b>–</b></span><span>Alpha-beta nodes: <b>–</b></span>"}
+document.getElementById("tttReset").onclick=reset;
+document.getElementById("tttFirst").onclick=function(){reset();msg.textContent="Tulpar is thinking…";setTimeout(ai,30)};
+reset();
+})();
+
+(function(){
+var cv=document.getElementById("bayesCanvas"),ctx=cv.getContext("2d");
+var P=document.getElementById("bPrev"),S=document.getElementById("bSens"),F=document.getElementById("bFpr");
+function draw(){var prev=P.value/1000,sens=S.value/100,fpr=F.value/100;
+document.getElementById("bPrevV").textContent=(prev*100).toFixed(1)+"%";document.getElementById("bSensV").textContent=Math.round(sens*100)+"%";document.getElementById("bFprV").textContent=Math.round(fpr*100)+"%";
+var sick=Math.round(1000*prev),tp=Math.round(sick*sens),fp=Math.round((1000-sick)*fpr);
+ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);
+var cols=50,cw=cv.width/cols,ch=cv.height/20;
+for(var i=0;i<1000;i++){var x=(i%cols)*cw+cw/2,y=Math.floor(i/cols)*ch+ch/2,c,a=1;
+if(i<tp)c=C.felt;else if(i<sick){c=C.felt;a=.25}else if(i<sick+fp)c=C.gold;else{c=C.muted;a=.22}
+ctx.globalAlpha=a;ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,Math.min(cw,ch)*.36,0,7);ctx.fill()}
+ctx.globalAlpha=1;
+var post=(prev*sens)/(prev*sens+(1-prev)*fpr);
+document.getElementById("bayesMsg").innerHTML=(tp+fp)+" lambs test positive, but only "+tp+" are sick.<br>P(sick | positive) = "+(isFinite(post)?(post*100).toFixed(1):"0")+"%";}
+[P,S,F].forEach(function(r){r.addEventListener("input",draw)});draw();redraws.push(draw);
+})();
+
+(function(){
+var cv=document.getElementById("kmCanvas"),ctx=cv.getContext("2d"),pts,cen,asg,phase,iter,kSel=document.getElementById("kmK");
+function gauss(){return(Math.random()+Math.random()+Math.random()-1.5)/1.5}
+function flock(){pts=[];var centers=[[170,110],[520,120],[330,280],[600,300]];centers.forEach(function(c,ci){var n=ci===3?18:30;for(var i=0;i<n;i++)pts.push([c[0]+gauss()*85,c[1]+gauss()*60])});pts=pts.filter(function(p){return p[0]>10&&p[0]<cv.width-10&&p[1]>10&&p[1]<cv.height-10});init()}
+function init(){var k=+kSel.value;cen=[];var idx=pts.map(function(_,i){return i}).sort(function(){return Math.random()-.5});for(var i=0;i<k;i++)cen.push(pts[idx[i]].slice());asg=pts.map(function(){return -1});phase="assign";iter=0;draw()}
+function cols(){return[C.felt,C.sky,C.gold,C.ok,C.ink]}
+function sse(){var s=0;pts.forEach(function(p,i){if(asg[i]<0)return;var c=cen[asg[i]];s+=(p[0]-c[0])*(p[0]-c[0])+(p[1]-c[1])*(p[1]-c[1])});return s}
+function step(){if(phase==="done")return false;if(phase==="assign"){var ch=false;pts.forEach(function(p,i){var b=0,bd=1e9;cen.forEach(function(c,j){var d=(p[0]-c[0])*(p[0]-c[0])+(p[1]-c[1])*(p[1]-c[1]);if(d<bd){bd=d;b=j}});if(asg[i]!==b){asg[i]=b;ch=true}});iter++;phase=ch||iter===1?"update":"done"}
+else{cen=cen.map(function(c,j){var sx=0,sy=0,n=0;pts.forEach(function(p,i){if(asg[i]===j){sx+=p[0];sy+=p[1];n++}});return n?[sx/n,sy/n]:c});phase="assign"}draw();return phase!=="done"}
+function draw(){ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);var cl=cols();
+pts.forEach(function(p,i){ctx.fillStyle=asg[i]<0?C.muted:cl[asg[i]];ctx.beginPath();ctx.arc(p[0],p[1],6,0,7);ctx.fill()});
+cen.forEach(function(c,j){ctx.strokeStyle=C.ink;ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(c[0]-11,c[1]-11);ctx.lineTo(c[0]+11,c[1]+11);ctx.moveTo(c[0]+11,c[1]-11);ctx.lineTo(c[0]-11,c[1]+11);ctx.stroke();ctx.strokeStyle=cl[j];ctx.lineWidth=4;ctx.stroke()});
+var label=phase==="done"?"converged":phase==="assign"?"next: assign sheep to nearest centroid":"next: move centroids to the mean";
+document.getElementById("kmStats").innerHTML="<span>Sheep: <b>"+pts.length+"</b></span><span>Iteration: <b>"+iter+"</b></span><span>Within-cluster SSE: <b>"+Math.round(sse()).toLocaleString("en-US")+"</b></span><span>Status: <b>"+label+"</b></span>"}
+document.getElementById("kmStep").onclick=step;
+document.getElementById("kmRun").onclick=function(){var g=0;(function loop(){if(step()&&g++<60)setTimeout(loop,220)})()};
+document.getElementById("kmNew").onclick=flock;kSel.onchange=init;
+cv.addEventListener("click",function(e){var p=canvasPoint(cv,e);pts.push([p.x,p.y]);asg.push(-1);if(phase==="done")phase="assign";draw()});
+flock();redraws.push(draw);
+})();
+
+(function(){
+var cv=document.getElementById("pcCanvas"),ctx=cv.getContext("2d"),gate=document.getElementById("pcGate"),w,b,ep,eta=.2;
+var X=[[0,0],[0,1],[1,0],[1,1]],T={AND:[0,0,0,1],OR:[0,1,1,1],XOR:[0,1,1,0]};
+function reset(){w=[-.4,.7];b=.1;ep=0;draw()}
+function out(x){return w[0]*x[0]+w[1]*x[1]+b>0?1:0}
+function acc(){var y=T[gate.value],c=0;X.forEach(function(x,i){if(out(x)===y[i])c++});return c}
+function epoch(){var y=T[gate.value];X.forEach(function(x,i){var e=y[i]-out(x);w[0]+=eta*e*x[0];w[1]+=eta*e*x[1];b+=eta*e});ep++}
+function sx(v){return 90+v*(cv.width-180)}function sy(v){return cv.height-60-v*(cv.height-120)}
+function draw(){ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);
+ctx.strokeStyle=C.line;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sx(-.1),sy(0));ctx.lineTo(sx(1.1),sy(0));ctx.moveTo(sx(0),sy(-.1));ctx.lineTo(sx(0),sy(1.1));ctx.stroke();
+ctx.save();ctx.beginPath();ctx.rect(0,0,cv.width,cv.height);ctx.clip();
+var x0=-1,x1=2;if(Math.abs(w[1])>1e-9){ctx.strokeStyle=C.gold;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(sx(x0),sy((-b-w[0]*x0)/w[1]));ctx.lineTo(sx(x1),sy((-b-w[0]*x1)/w[1]));ctx.stroke()}else if(Math.abs(w[0])>1e-9){var xv=-b/w[0];ctx.strokeStyle=C.gold;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(sx(xv),0);ctx.lineTo(sx(xv),cv.height);ctx.stroke()}
+ctx.restore();
+var y=T[gate.value];X.forEach(function(x,i){var ok=out(x)===y[i];ctx.lineWidth=4;ctx.strokeStyle=ok?C.sky:C.felt;ctx.fillStyle=y[i]?(ok?C.sky:C.felt):C.paper;ctx.beginPath();ctx.arc(sx(x[0]),sy(x[1]),17,0,7);ctx.fill();ctx.stroke();
+ctx.fillStyle=C.ink;ctx.font="600 15px Poppins, sans-serif";ctx.textAlign="center";ctx.fillText("("+x[0]+","+x[1]+") → "+y[i],sx(x[0]),sy(x[1])+(x[1]?-28:40))});
+var a=acc();document.getElementById("pcStats").innerHTML="<span>Epochs: <b>"+ep+"</b></span><span>w₁ = <b>"+w[0].toFixed(2)+"</b></span><span>w₂ = <b>"+w[1].toFixed(2)+"</b></span><span>bias = <b>"+b.toFixed(2)+"</b></span><span>Correct: <b>"+a+" / 4</b></span>";
+var m=document.getElementById("pcMsg");if(a===4)m.textContent="Learned! One straight line separates the classes.";else if(gate.value==="XOR"&&ep>=8)m.textContent="Stuck. No single line can separate XOR, so a hidden layer is needed.";else m.textContent=ep?"Still learning…":"Press Train.";}
+document.getElementById("pcTrain").onclick=function(){epoch();draw()};
+document.getElementById("pcTrain20").onclick=function(){for(var i=0;i<20;i++)epoch();draw()};
+document.getElementById("pcReset").onclick=reset;gate.onchange=reset;reset();redraws.push(draw);
+})();
+
+(function(){
+var cv=document.getElementById("qlCanvas"),ctx=cv.getContext("2d"),N=6,cs=cv.width/N,ch=cv.height/N;
+var start=[0,5],fox=[5,0],cliffs={"2,5":1,"3,5":1,"4,5":1,"1,2":1,"2,2":1,"4,1":1,"4,3":1},Qt,eps=0,flight=null,trail=[];
+var A=[[0,-1],[1,0],[0,1],[-1,0]],alpha=.5,gamma=.9,eps0=.2;
+function key(s){return s[0]+","+s[1]}
+function reset(){Qt={};for(var x=0;x<N;x++)for(var y=0;y<N;y++)Qt[x+","+y]=[0,0,0,0];eps=0;trail=[];draw()}
+function stepEnv(s,a){var n=[s[0]+A[a][0],s[1]+A[a][1]];if(n[0]<0||n[1]<0||n[0]>=N||n[1]>=N)n=s.slice();var k=key(n);if(k===key(fox))return[n,10,true];if(cliffs[k])return[n,-10,true];return[n,-1,false]}
+function best(s){var q=Qt[key(s)],b=0;for(var i=1;i<4;i++)if(q[i]>q[b])b=i;return b}
+function episode(){var s=start.slice();for(var t=0;t<100;t++){var a=Math.random()<eps0?Math.floor(Math.random()*4):best(s);var r=stepEnv(s,a),q=Qt[key(s)];var target=r[1]+(r[2]?0:gamma*Math.max.apply(null,Qt[key(r[0])]));q[a]+=alpha*(target-q[a]);s=r[0];if(r[2])break}eps++}
+function draw(){ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);
+var mx=0.0001;for(var k in Qt){var v=Math.max.apply(null,Qt[k]);if(Math.abs(v)>mx)mx=Math.abs(v)}
+for(var x=0;x<N;x++)for(var y=0;y<N;y++){var k2=x+","+y,px=x*cs,py=y*ch;
+if(cliffs[k2]){ctx.fillStyle=C.felt;ctx.fillRect(px+2,py+2,cs-4,ch-4);ctx.fillStyle=C.page;ctx.font="600 15px Poppins, sans-serif";ctx.textAlign="center";ctx.fillText("cliff −10",px+cs/2,py+ch/2+5);continue}
+ctx.fillStyle=C.page;ctx.fillRect(px+2,py+2,cs-4,ch-4);
+var v2=Math.max.apply(null,Qt[k2]);if(eps&&k2!==key(fox)){ctx.globalAlpha=Math.min(.75,Math.abs(v2)/mx*.75);ctx.fillStyle=v2>=0?C.sky:C.gold;ctx.fillRect(px+2,py+2,cs-4,ch-4);ctx.globalAlpha=1}
+if(k2===key(fox)){ctx.fillStyle=C.gold;ctx.fillRect(px+2,py+2,cs-4,ch-4);ctx.fillStyle=C.ink;ctx.font="700 16px Poppins, sans-serif";ctx.textAlign="center";ctx.fillText("fox +10",px+cs/2,py+24);continue}
+if(eps){var a=best([x,y]),cx=px+cs/2,cy=py+ch/2,dx=A[a][0],dy=A[a][1];ctx.strokeStyle=C.ink;ctx.fillStyle=C.ink;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx-dx*18,cy-dy*18);ctx.lineTo(cx+dx*18,cy+dy*18);ctx.stroke();ctx.beginPath();ctx.moveTo(cx+dx*26,cy+dy*26);ctx.lineTo(cx+dx*14-dy*9,cy+dy*14-dx*9);ctx.lineTo(cx+dx*14+dy*9,cy+dy*14+dx*9);ctx.fill()}}
+if(trail.length){ctx.strokeStyle=C.felt;ctx.lineWidth=5;ctx.globalAlpha=.8;ctx.beginPath();trail.forEach(function(p,i){var cx=p[0]*cs+cs/2,cy=p[1]*ch+ch/2;i?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy)});ctx.stroke();ctx.globalAlpha=1}
+var e=trail.length?trail[trail.length-1]:start;ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(e[0]*cs+cs/2,e[1]*ch+ch/2,15,0,7);ctx.fill();ctx.fillStyle=C.page;ctx.font="700 13px Poppins, sans-serif";ctx.textAlign="center";ctx.fillText("E",e[0]*cs+cs/2,e[1]*ch+ch/2+5);
+document.getElementById("qlStats").innerHTML="<span>Training flights: <b>"+eps+"</b></span><span>α = <b>0.5</b></span><span>γ = <b>0.9</b></span><span>ε = <b>0.2</b></span><span>Value of start: <b>"+Math.max.apply(null,Qt[key(start)]).toFixed(1)+"</b></span>"}
+document.getElementById("qlTrain").onclick=function(){for(var i=0;i<25;i++)episode();trail=[];draw()};
+document.getElementById("qlReset").onclick=reset;
+document.getElementById("qlFly").onclick=function(){if(flight)clearInterval(flight);var s=start.slice(),t=0;trail=[s.slice()];flight=setInterval(function(){var r=stepEnv(s,best(s));s=r[0];trail.push(s.slice());draw();if(r[2]||++t>20){clearInterval(flight);flight=null}},180)};
+reset();redraws.push(draw);
+})();
+
+(function(){
+var pi=[.8,.2],T=[[.9,.1],[.2,.8]],O={N:[.8,.3],H:[.2,.7]},obs=[];
+var out=document.getElementById("hmmOut"),msg=document.getElementById("hmmMsg");
+function filter(){var res=[],b=null;obs.forEach(function(e,t){var p=t===0?pi.slice():[b[0]*T[0][0]+b[1]*T[1][0],b[0]*T[0][1]+b[1]*T[1][1]];var s=[p[0]*O[e][0],p[1]*O[e][1]],z=s[0]+s[1];b=[s[0]/z,s[1]/z];res.push(b)});return res}
+function viterbi(){if(!obs.length)return[];var d=[pi[0]*O[obs[0]][0],pi[1]*O[obs[0]][1]],bp=[];for(var t=1;t<obs.length;t++){var nd=[],nb=[];for(var j=0;j<2;j++){var a=d[0]*T[0][j],c=d[1]*T[1][j];nb.push(a>=c?0:1);nd.push(Math.max(a,c)*O[obs[t]][j])}d=nd;bp.push(nb)}var s=d[0]>=d[1]?0:1,path=[s];for(var k=bp.length-1;k>=0;k--){s=bp[k][s];path.unshift(s)}return path}
+function render(){if(!obs.length){out.innerHTML="";msg.textContent="No readings yet. Start with “High”, then “High” again, to reproduce the lecture example.";return}
+var f=filter(),v=viterbi(),h="<table><tr><th>Time</th><th>Reading</th><th>P(Healthy)</th><th>P(Faulty)</th><th>Viterbi state</th></tr>";
+f.forEach(function(b,t){h+="<tr><td>"+(t+1)+"</td><td>"+(obs[t]==="H"?"<b style='color:var(--felt)'>High</b>":"Normal")+"</td><td><div style='display:flex;align-items:center;gap:8px'><span style='display:inline-block;height:10px;border-radius:5px;background:var(--sky);width:"+Math.round(b[0]*90)+"px'></span>"+(b[0]*100).toFixed(1)+"%</div></td><td><div style='display:flex;align-items:center;gap:8px'><span style='display:inline-block;height:10px;border-radius:5px;background:var(--felt);width:"+Math.round(b[1]*90)+"px'></span>"+(b[1]*100).toFixed(1)+"%</div></td><td><b>"+(v[t]?"Faulty":"Healthy")+"</b></td></tr>"});
+out.innerHTML=h+"</table>";var last=f[f.length-1];msg.textContent="Now: "+(last[1]>.5?"the pump is probably faulty":"the pump is probably healthy")+" ("+(last[1]*100).toFixed(1)+"% faulty). Next step prediction: "+((last[0]*T[0][1]+last[1]*T[1][1])*100).toFixed(1)+"% faulty."}
+document.getElementById("hmmN").onclick=function(){if(obs.length<10){obs.push("N");render()}};
+document.getElementById("hmmH").onclick=function(){if(obs.length<10){obs.push("H");render()}};
+document.getElementById("hmmR").onclick=function(){obs=[];render()};
+render();
+})();
+(function(){
+var cv=document.getElementById("euCanvas"),ctx=cv.getContext("2d"),P=document.getElementById("euP"),F=document.getElementById("euF"),M=document.getElementById("euM");
+function draw(){var p=P.value/100,f=F.value*1000,m=M.value*1000,wait=p*f;
+document.getElementById("euPV").textContent=Math.round(p*100)+"%";document.getElementById("euFV").textContent="$"+f.toLocaleString("en-US");document.getElementById("euMV").textContent="$"+m.toLocaleString("en-US");
+ctx.fillStyle=C.paper;ctx.fillRect(0,0,cv.width,cv.height);var mx=Math.max(wait,m,1),W=cv.width-250;
+[["Wait",wait,C.felt],["Repair now",m,C.sky]].forEach(function(r,i){var y=28+i*70,best=(i===0?wait<m:m<=wait);
+ctx.fillStyle=C.ink;ctx.font="600 17px Poppins, sans-serif";ctx.textAlign="left";ctx.fillText(r[0],14,y+26);
+ctx.fillStyle=r[2];ctx.globalAlpha=best?1:.35;ctx.fillRect(130,y,Math.max(4,r[1]/mx*W),40);ctx.globalAlpha=1;
+ctx.fillStyle=C.ink;ctx.fillText("$"+Math.round(r[1]).toLocaleString("en-US")+(best?"  ✓":""),140+Math.max(4,r[1]/mx*W),y+26)});
+document.getElementById("euMsg").textContent="Expected cost of waiting = "+Math.round(p*100)+"% × $"+f.toLocaleString("en-US")+" = $"+Math.round(wait).toLocaleString("en-US")+". Threshold = $"+m.toLocaleString("en-US")+" / $"+f.toLocaleString("en-US")+" = "+(m/f*100).toFixed(1)+"%. Rational choice: "+(wait>m?"repair now.":"wait.")}
+[P,F,M].forEach(function(r){r.addEventListener("input",draw)});draw();redraws.push(draw);
+})();
+})();
+</script>
+
+</body>
+</html>
